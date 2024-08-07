@@ -1,0 +1,85 @@
+body {
+  margin: 0;
+}
+
+.sb-title {
+  /* position: relative; */
+  /* top: -12px; */
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+}
+
+.sb-title-icon {
+  /* position: relative; */
+  /* top: -5px; */
+}
+
+.card-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 300px;
+  width: 900px;
+}
+
+.panel {
+  background: white;
+  width: 300px;
+  padding-right: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 300px;
+  width: 300px;
+}
+
+.half-input-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.half-input {
+  max-width: 120px;
+}
+
+.map {
+  height: 300px;
+  width: 800px;
+}
+
+h2 {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+}
+
+input {
+  height: 30px;
+}
+
+input {
+  border: 0;
+  border-bottom: 1px solid black;
+  font-size: 14px;
+  font-family: Roboto, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+}
+
+input:focus::placeholder {
+  color: white;
+}
+@media all and (max-width: 900px) {
+  .map
+  {
+  width: 500px;
+  }
+  #kontrola
+  {
+    height: 30px;
+    width: 300px;
+  }
+  .panel{
+  width: 500px;
+  }
+  }
+
