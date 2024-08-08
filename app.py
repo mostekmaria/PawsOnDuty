@@ -14,6 +14,7 @@ db_config = {
 }
 
 app = Flask(__name__)
+app.secret_key = 'super_secret_key'
 
 # Połączenie z bazą danych
 try:
@@ -70,6 +71,10 @@ except mysql.connector.Error as err:
 finally:
         print("Połączenie z bazą danych zostało zamknięte.")
 
+@app.route('/')
+def main():
+    return redirect(url_for('przekierowanieZgloszenie'))
+
 @app.route('/index.html')
 def przekierowanieZgloszenie():
     try:
@@ -102,7 +107,7 @@ def register():
         # Dodanie danych do tabeli użytkownicy
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
-        insert_query = "INSERT INTO `Users` (`login`, `password, `role`, `email`, `name`, `surname`) VALUES (%s, %s, %s, %s, %s, %s)"
+        insert_query = "INSERT INTO `Users` (`login`, `password`, `role`, `email`, `name`, `surname`) VALUES (%s, %s, %s, %s, %s, %s)"
         insert_values = (login, haslo, rola, email, imie, nazwisko)
         cursor.execute(insert_query, insert_values)
         cnx.commit()
@@ -201,7 +206,7 @@ def sprawdz_dane_logowania(login, haslo):
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
 
-    query = "SELECT COUNT(*) FROM `Users` WHERE `login` = %s AND `hasło` = %s"
+    query = "SELECT COUNT(*) FROM `Users` WHERE `login` = %s AND `password` = %s"
     values = (login, haslo)
 
     cursor.execute(query, values)
@@ -214,6 +219,7 @@ def sprawdz_dane_logowania(login, haslo):
         return True
     else:
         return False
+
     
 @app.route('/wyloguj', methods=['GET'])
 def wyloguj():
