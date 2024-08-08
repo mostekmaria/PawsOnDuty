@@ -201,7 +201,7 @@ def sprawdz_dane_logowania(login, haslo):
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
 
-    query = "SELECT COUNT(*) FROM `Users` WHERE `login` = %s AND `password` = %s"
+    query = "SELECT COUNT(*) FROM `Users` WHERE `login` = %s AND `hasło` = %s"
     values = (login, haslo)
 
     cursor.execute(query, values)
@@ -214,6 +214,14 @@ def sprawdz_dane_logowania(login, haslo):
         return True
     else:
         return False
+    
+@app.route('/wyloguj', methods=['GET'])
+def wyloguj():
+    # Usunięcie flagi zalogowania z sesji
+    session.pop('zalogowany', None)
+    session.pop('user_id', None)  # Usunięcie również user_id z sesji
+    session.pop('role', None) #usunięcie roli z sesji
+    return redirect(url_for('logowanie'))
 
 if __name__ == '__main__':
     app.run()
