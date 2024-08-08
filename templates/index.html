@@ -51,7 +51,7 @@
     {% endif %}
 </nav>
 <main>
-
+<div class = "form-section">
     <div class="important">
         <img class="info-icon" src="static/form.png" width="50" height="50">
         Jesteś świadkiem bądź ofiarą przestępstwa lub wykroczenia? Zauważyłeś coś niepokojącego? Uważasz, że Policja powinna zająć się Twoją sprawą? Wypełnij znajdujący się poniżej formularz!
@@ -120,6 +120,13 @@
     </div>
         <br><br><input id="button1" class="button" type="submit" value="Wyślij zgłoszenie" ><div class="tooltip"></div>
     </form>
+</div>
+
+<div class="chatbot-section">
+    <!-- Ładowanie formularza z chatbot.html -->
+    <iframe src="chatbot.html" width="100%" height="100%" style="border:none;"></iframe>
+</div>
+
 </main>
 <!-- OBSŁUGA TOOLTIPÓW -->
 <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
