@@ -41,17 +41,20 @@
     </div>
 </header>
 <nav>
-    {% if not zalogowany %}
-    <a id="link1" class="has-tooltip" data-tooltip="Zarejestruj się" href=rejestracja.html>Zarejestruj się</a>
-    <a id="link2" class="has-tooltip" data-tooltip="Zaloguj się" href=logowanie.html>Zaloguj się</a>
-    {% else %}
-    <span id="name">{{ imie }}</span>
-    <a id="link2" class="has-tooltip" data-tooltip="Moje zgłoszenia" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>   
-    <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
-    {% endif %}
+    <nav>
+        {% if not zalogowany %}
+        <a id="link1" class="has-tooltip" data-tooltip="Zarejestruj się" href=rejestracja.html>Zarejestruj się</a>
+        <a id="link2" class="has-tooltip" data-tooltip="Zaloguj się" href=logowanie.html>Zaloguj się</a>
+        {% else %}
+        <span id="name">{{ imie }}</span>
+        <a id="link2" class="has-tooltip" data-tooltip="Moje zgłoszenia" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>   
+        <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+        {% endif %}
+        <!-- Nowy przycisk do chatbota -->
+        <a id="link3" class="has-tooltip" data-tooltip="Chatbot" href="{{ url_for('chatbot') }}">Chatbot</a>
+    </nav>    
 </nav>
 <main>
-<div class = "form-section">
     <div class="important">
         <img class="info-icon" src="static/form.png" width="50" height="50">
         Jesteś świadkiem bądź ofiarą przestępstwa lub wykroczenia? Zauważyłeś coś niepokojącego? Uważasz, że Policja powinna zająć się Twoją sprawą? Wypełnij znajdujący się poniżej formularz!
@@ -115,17 +118,11 @@
 
           <!-- OBSŁUGA DODAWANIA SPRAWCÓW -->
           <script src="{{ url_for('static', filename='js/sprawcy.js') }}"></script>
-          
-        </div> 
     </div>
         <br><br><input id="button1" class="button" type="submit" value="Wyślij zgłoszenie" ><div class="tooltip"></div>
     </form>
 </div>
 
-<div class="chatbot-section">
-    <!-- Ładowanie formularza z chatbot.html -->
-    <iframe src="chatbot.html" width="100%" height="100%" style="border:none;"></iframe>
-</div>
 
 </main>
 <!-- OBSŁUGA TOOLTIPÓW -->

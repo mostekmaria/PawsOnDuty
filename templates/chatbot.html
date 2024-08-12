@@ -1,24 +1,23 @@
+<!-- templates/chatbot.html -->
 <!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>PawsOnDuty - zgłoś zdarzenie</title>
-    <link rel="shortcut icon" href="static/logo.png"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
-    <!-- OBSŁUGA MAP -->
-    <script src="{{ url_for('static', filename='js/mapscript.js') }}" alt=""></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
 </head>
+<body>
+    <h1>Chatbot</h1>
+<!-- chatbot.html -->
+<form id="chatForm" action="{{ url_for('chatbot') }}" method="post">
+    <input type="text" name="user_input" placeholder="Type your message here">
+    <button type="submit">Send</button>
+</form>
 
-<main>
-Content soon
-</main>
-</body>
-</html>
-<div id="div"></div>
-<footer>
-  <p id="footer">Aplikacja webowa stworzona jako projekt z kursu Języki Programowania Aplikacji Internetowych AGH.</p>
-  <p id="footer">© Maria Mostek, Patrycja Ruda, Filip Kuś. Kraków 2023.</p>
-</footer>
+{% if response %}
+    <p>Chatbot: {{ response }}</p>
+{% endif %}
+
+    </div>
 </body>
 </html>

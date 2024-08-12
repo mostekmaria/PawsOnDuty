@@ -1,3 +1,4 @@
+# chatbot_rozmowa.py
 import random
 import json
 import torch
@@ -47,52 +48,52 @@ def get_response(intents, intent_tag):
         if intent['tag'] == intent_tag:
             return random.choice(intent['responses'])
 
-# Inicjalizacja struktury do przechowywania danych
-report_data = {
-    "title": "",
-    "event_desc": "",
-    "address": "",
-    "event_time": "",
-    "appearance": "",
-    "info_contact": ""
-}
+# Funkcja do interaktywnego testowania w terminalu (tylko do uruchomienia lokalnie)
+def interactive_chat():
+    report_data = {
+        "title": "",
+        "event_desc": "",
+        "address": "",
+        "event_time": "",
+        "appearance": "",
+        "info_contact": ""
+    }
 
-# Test działania
-first_message = True
-last_tag = None
-while True:
-    message = input("Ty: ")
-    
-    # Przypisanie tytułu na podstawie pierwszej wiadomości
-    if first_message:
-        report_data['title'] = message
-        first_message = False
-    
-    intent_tag = predict_class(message)
-    response = get_response(intents, intent_tag)
-    print(f"Chatbot: {response}")
-    
-    # Zbieranie danych w zależności od tagu odpowiedzi
-    if intent_tag == "address":
-        report_data['address'] = message
-    elif intent_tag == "date":
-        report_data['event_time'] = message
-    elif intent_tag == "number_of_perpetrators":
-        report_data['appearance'] = message + ", "  # Dodanie przecinka na późniejsze połączenie
-    elif intent_tag == "perpetrators_apperance":
-        report_data['appearance'] += message  # Dodanie opisu wyglądu sprawców
-    elif intent_tag == "witnesses":
-        report_data['info_contact'] = message
-        print("Kończymy rozmowę, ponieważ otrzymano tag 'witness'.")
-        break  # Przerwanie pętli, gdy chatbot odpowie na pytanie o świadków
-    else:
-        if last_tag != None:
-        # Dodanie kolejnych pytań i odpowiedzi do event_desc
-            report_data['event_desc'] += f"{last_tag}: {message}; "
-        last_tag = response
+    first_message = True
+    last_tag = None
+    while True:
+        message = input("Ty: ")
 
-# Zapis do pliku JSON
-with open('report.json', 'w', encoding='utf-8') as json_file:
-    json.dump(report_data, json_file, ensure_ascii=False, indent=4)
+        if first_message:
+            report_data['title'] = message
+            first_message = False
 
-print("Raport zapisany do report.json")
+        intent_tag = predict_class(message)
+        response = get_response(intents, intent_tag)
+        print(f"Chatbot: {response}")
+
+        if intent_tag == "address":
+            report_data['address'] = message
+        elif intent_tag == "date":
+            report_data['event_time'] = message
+        elif intent_tag == "number_of_perpetrators":
+            report_data['appearance'] = message + ", "
+        elif intent_tag == "perpetrators_apperance":
+            report_data['appearance'] += message
+        elif intent_tag == "witnesses":
+            report_data['info_contact'] = message
+            print("Kończymy rozmowę, ponieważ otrzymano tag 'witness'.")
+            break
+        else:
+            if last_tag is not None:
+                report_data['event_desc'] += f"{last_tag}: {message}; "
+            last_tag = response
+
+    with open('report.json', 'w', encoding='utf-8') as json_file:
+        json.dump(report_data, json_file, ensure_ascii=False, indent=4)
+
+    print("Raport zapisany do report.json")
+
+# Uruchamianie tylko jeśli plik jest uruchamiany bezpośrednio
+if __name__ == "__main__":
+    interactive_chat()

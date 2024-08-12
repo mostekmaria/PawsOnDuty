@@ -1,8 +1,9 @@
 import mysql.connector
 import json
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 from datetime import datetime
 import hashlib
+from chatbot_rozmowa import predict_class, get_response, intents
 
 # Konfiguracja połączenia z bazą danych
 db_config = {
@@ -228,6 +229,16 @@ def wyloguj():
     session.pop('user_id', None)  # Usunięcie również user_id z sesji
     session.pop('role', None) #usunięcie roli z sesji
     return redirect(url_for('logowanie'))
+
+@app.route('/chatbot', methods=['GET', 'POST'])
+def chatbot():
+    response = None
+    if request.method == 'POST':
+        user_input = request.form['user_input']
+        intent_tag = predict_class(user_input)
+        response = get_response(intents, intent_tag)
+    return render_template('chatbot.html', response=response)
+
 
 if __name__ == '__main__':
     app.run()
