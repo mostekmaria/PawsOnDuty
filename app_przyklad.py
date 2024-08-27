@@ -13,6 +13,15 @@ db_config = {
     'raise_on_warnings': True
 }
 
+@app.route('/chatbot', methods=['GET', 'POST'])
+def chatbot():
+    response = None
+    if request.method == 'POST':
+        user_input = request.form['user_input']
+        intent_tag = predict_class(user_input)
+        response = get_response(intents, intent_tag)
+    return render_template('chatbot.html', response=response)
+
 @app.route('/', methods=['GET', 'POST'])
 def zgloszenie():
     if request.method == 'POST':
@@ -73,4 +82,4 @@ def zgloszenie():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
