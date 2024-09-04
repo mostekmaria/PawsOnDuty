@@ -271,6 +271,7 @@ def chatbot():
 
 
 
+
 def insert_report_into_db():
     try:
         with open('report.json', 'r', encoding='utf-8') as file:

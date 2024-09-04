@@ -1,41 +1,23 @@
+<!-- templates/chatbot.html -->
 <!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot</title>
-    <style>
-        .chat-box {
-            border: 1px solid #ddd;
-            padding: 10px;
-            max-width: 600px;
-            margin: 0 auto;
-            height: 400px;
-            overflow-y: scroll;
-        }
-        .message {
-            margin: 5px 0;
-        }
-        .message.user {
-            text-align: right;
-        }
-        .message.bot {
-            text-align: left;
-        }
-    </style>
 </head>
 <body>
     <h1>Chatbot</h1>
-    <div class="chat-box">
-        {% for msg in chat_history %}
-            <div class="message {{ msg.sender }}">
-                <strong>{{ msg.sender | capitalize }}:</strong> {{ msg.message }}
-            </div>
-        {% endfor %}
+<!-- chatbot.html -->
+<form id="chatForm" action="{{ url_for('chatbot') }}" method="post">
+    <input type="text" name="user_input" placeholder="Type your message here">
+    <button type="submit">Send</button>
+</form>
+
+{% if response %}
+    <p>Chatbot: {{ response }}</p>
+{% endif %}
+
     </div>
-    <form id="chatForm" action="{{ url_for('chatbot') }}" method="post">
-        <input type="text" name="user_input" placeholder="Type your message here" required>
-        <button type="submit">Send</button>
-    </form>
 </body>
 </html>

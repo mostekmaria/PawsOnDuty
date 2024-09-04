@@ -107,6 +107,7 @@ def append_to_report(intent_tag, message, response=None):
 
 
 
+
 initialize_report_file()
 # Funkcja do interaktywnego testowania w terminalu (tylko do uruchomienia lokalnie)
 def interactive_chat():
