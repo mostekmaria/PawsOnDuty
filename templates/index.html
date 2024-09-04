@@ -42,7 +42,7 @@
 </header>
 <nav>
     {% if not zalogowany %}
-    <a id="link3" href = "chatbot.html">Chatbot</a>
+    <a id="link3" href = "{{ url_for('chatbot') }}">Chatbot</a>
     <a id="link1" class="has-tooltip" data-tooltip="Zarejestruj się" href=rejestracja.html>Zarejestruj się</a>
     <a id="link2" class="has-tooltip" data-tooltip="Zaloguj się" href=logowanie.html>Zaloguj się</a>
     {% else %}
