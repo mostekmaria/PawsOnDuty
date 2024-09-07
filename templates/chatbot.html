@@ -1,0 +1,23 @@
+<!-- templates/chatbot.html -->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+</head>
+<body>
+    <h1>Chatbot</h1>
+<!-- chatbot.html -->
+<form id="chatForm" action="{{ url_for('chatbot') }}" method="post">
+    <input type="text" name="user_input" placeholder="Type your message here">
+    <button type="submit">Send</button>
+</form>
+
+{% if response %}
+    <p>Chatbot: {{ response }}</p>
+{% endif %}
+
+    </div>
+</body>
+</html>

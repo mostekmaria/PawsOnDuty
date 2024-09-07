@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>PawsOnDuty - rejestracja</title>
+    <link rel="shortcut icon" href="static/logo.png"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+</head>
+<body>
+    {% if 'error_message' in session %}
+    <div class="error-message">{{ session['error_message'] }}</div>
+    {% set _ = session.pop('error_message', None) %}
+    {% endif %}
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <br><br>
+        <br><br>
+        <a class="bar" id="bar" href="index.html">PawsOnDuty</a>
+        <br><br>
+        {% if not zalogowany %}
+        <a id="baroption" href="rejestracja.html">Zarejestruj się</a>
+        <a id="baroption" href="logowanie.html">Zaloguj się</a>
+        {% else %}
+        <a class ="bar" id="barname">{{ imie }}</span>
+            <br><br>
+            <a id="baroption" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>
+            <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+        {% endif %}
+      </div>
+    {% if komunikat %}
+    <div class="komunikat">{{ komunikat }}</div>
+{% endif %}
+<header>
+    <div id="logo">
+    <a href = "index.html"><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="150" height="150"></a><br>
+    </div>
+    <img id="menu" src="static/menu.png" onclick="openNav()">
+        <!-- OBSŁUGA SIDEBAR MENU -->
+        <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
+    
+    <div id="header">
+    <a href = "index.html"><h1 class="title has-tooltip" data-tooltip="Przejdź do strony głównej">PawsOnDuty</h1></a>
+    <h5>Powered by Core-Oho-Duh</h5>
+    </div>
+</header>
+<nav>
+    {% if not zalogowany %}
+    <a id="link1" href=rejestracja.html class="has-tooltip" data-tooltip="Zarejestruj się">Zarejestruj się</a>
+    <a id="link2" href=logowanie.html class="has-tooltip" data-tooltip="Zaloguj się">Zaloguj się</a>
+    {% else %}
+    <span id="name">{{ imie }}</span>
+    <a id="link2" class="has-tooltip" data-tooltip="Moje zgłoszenia" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>   
+    <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>         
+    {% endif %}
+</nav>
+<main id="mainlog">
+    <h1 id="log">Zarejestruj się</h1>
+    <br>
+    {% if komunikat %}
+    <p style="color: red;">{{ komunikat }}</p>
+    {% endif %}
+   
+    <form method="POST">
+        <div id="toleft">
+        <div class="sign">
+            <label for="imie">Imię:</label>
+            <input type="text" id="imie" name="imie" required><br><br>
+        </div>
+        <br>
+        <div class="sign">
+            <label for="nazwisko">Nazwisko:</label>
+            <input type="text" id="nazwisko" name="nazwisko" required><br><br>
+        </div>
+
+        <br>
+        <div class="sign" id="emailDiv">
+            <label for="email" id="emailLabel">Adres e-mail:</label>
+            <input type="email" id="email" name="email" required><br><br>
+        </div>
+
+        <br>
+        <div class="sign">
+            <label for="login">Login:</label>
+            <input type="text" id="login" name="login" required><br><br>
+        </div>
+
+        <br>
+        <div class="sign">
+            <label for="hasło">Hasło:</label>
+            <input type="password" id="hasło" name="hasło" required><br><br>
+        </div>
+
+        <br>
+        </div>
+        </div>
+
+        <br><br>
+        <br><br><br>
+        <input id="button" class="button" type="submit" value="Zarejestruj się">
+    </form>
+    <br>
+    <div id="rejestracja">Masz już konto?   <a id="link3" href=logowanie.html>Zaloguj się</a></div> 
+</main> <div class="tooltip"></div>
+    <!-- OBSŁUGA TOOLTIPÓW -->
+    <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
+<div id="div"></div>
+<footer>
+    <p id="footer">Aplikacja webowa stworzona jako projekt z kursu Języki Programowania Aplikacji Internetowych AGH.</p>
+    <p id="footer">© Maria Mostek, Patrycja Ruda, Filip Kuś. Kraków 2023.</p>
+</footer>
+</body>
+</html>

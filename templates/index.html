@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>PawsOnDuty - zgłoś zdarzenie</title>
+    <link rel="shortcut icon" href="static/logo.png"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+    <!-- OBSŁUGA MAP -->
+    <script src="{{ url_for('static', filename='js/mapscript.js') }}" alt=""></script>
+</head>
+<body onload="areas()">
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <br><br>
+        <br><br>
+        <a class="bar" id="bar" href="index.html">PawsOnDuty</a>
+        <br><br>
+        {% if not zalogowany %}
+        <a id="baroption" href="rejestracja.html">Zarejestruj się</a>
+        <a id="baroption" href="logowanie.html">Zaloguj się</a>
+        {% else %}
+        <a class ="bar" id="barname">{{ imie }}</span>
+        <br><br>
+        <a id="baroption" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>
+        <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+
+        {% endif %}
+      </div>
+    {% if komunikat %}
+    <div class="komunikat">{{ komunikat }}</div>
+{% endif %}
+<header>
+   <a href = ><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="150" height="150"></a><br>
+    <img id="menu" src="static/menu.png" onclick="openNav()">
+        <!-- OBSŁUGA SIDEBAR MENU -->
+        <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
+    <div id="header">
+    <a href = ><h1 class="title has-tooltip" data-tooltip="Przejdź do strony głównej">PawsOnDuty</h1></a> 
+    <h5>Powered by Core-Oho-Duh</h5>
+    </div>
+</header>
+<nav>
+    {% if not zalogowany %}
+    <a id="link3" href = "{{ url_for('chatbot') }}">Chatbot</a>
+    <a id="link1" class="has-tooltip" data-tooltip="Zarejestruj się" href=rejestracja.html>Zarejestruj się</a>
+    <a id="link2" class="has-tooltip" data-tooltip="Zaloguj się" href=logowanie.html>Zaloguj się</a>
+    {% else %}
+    <span id="name">{{ imie }}</span>
+    <a id="link3" href = "{{ url_for('chatbot') }}">Chatbot</a>
+    <a id="link2" class="has-tooltip" data-tooltip="Moje zgłoszenia" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>   
+    <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+    {% endif %}
+</nav>
+<main>
+<div class = "form-section">
+    <div class="important">
+        <img class="info-icon" src="static/form.png" width="50" height="50">
+        Jesteś świadkiem bądź ofiarą przestępstwa lub wykroczenia? Zauważyłeś coś niepokojącego? Uważasz, że Policja powinna zająć się Twoją sprawą? Wypełnij znajdujący się poniżej formularz!
+    </div>
+    <div class="important">
+        <img class="info-icon" src="static/policeman.png" width="50" height="50">
+        Twoje zgłoszenie zostanie rozpatrzone przez dyżurnego policjanta, który zdecyduje, jakie podjąć kroki w celu naprawy sytuacji.
+    </div>
+    <div class="important" id="uwaga">
+        <img class="info-icon" src="static/phone.png" width="50" height="50">
+        Pamiętaj! W przypadkach pilnych, sytuacjach zagrożenia zdrowia lub życia niezwłocznie dzwoń pod numer 112!
+    </div> <br>
+    <form method="POST">
+    <div class="formularz">
+        <!-- <div class="card-container"> -->
+            <div class="panel">
+              <div class="titleicon">
+                <img class="sb-title-icon" src="https://fonts.gstatic.com/s/i/googlematerialicons/location_pin/v5/24px.svg" alt="">
+                <span class="sb-title">Miejsce</span>
+              </div>
+              <input type="text" class="full-input" placeholder="Adres" id="location-input" name="location-input"/>
+              <input type="text" class="full-input" placeholder="Numer lokalu (opcjonalnie)" id="numer_lokalu" name = "numer_lokalu"/>
+              <input type="text" class="full-input" placeholder="Miasto" id="locality-input" name = "locality-input"/>
+              <div class="half-input-container">
+                <input type="text" class="half-input" placeholder="Województwo" id="administrative_area_level_1-input" name = "administrative_area_level_1-input"/>
+                <input type="text" class="half-input" placeholder="Kod pocztowy" id="postal_code-input" name = "postal_code-input" pattern="[0-9]{2}-[0-9]{3}"/>
+              </div>
+            </div>
+            <div class="map" id="gmp-map"></div>
+            <div id="kontrola"></div>
+        <!-- OBSŁUGA MAPY -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAum8iT83b1MrAEQaLt0joIK6Rdb-3uqWE&libraries=places&callback=initMap&solution_channel=GMP_QB_addressselection_v1_cABC" async defer></script>
+        
+        <div class="form">
+            <div class="titleicon">
+                <img class="sb-title-icon" src="{{ url_for('static', filename='date.png') }}" alt="">
+                <span class="sb-title">Data i godzina</span>
+            </div>
+            <br><br>
+            <input type="date" placeholder="DD/MM/YYYY" onfocus="this.type='date'" onblur="this.type='text'" id="data" name="data" required><br><br><br>
+            <input type="time" id="godzina" name="godzina" required>
+        </div> <br>
+
+        <div class="form">
+            <div class="titleicon">
+                <img class="sb-title-icon" src="{{ url_for('static', filename='info.png') }}" alt="">
+                <span class="sb-title">Opis zdarzenia</span>
+            </div>
+            <br><br>
+            <textarea placeholder="W tym miejscu opisz, co się stało..." id="opis" name="opis" rows="10" cols="70" required></textarea>
+        </div> <br>
+
+        <div class="form">
+            <div class="titleicon">
+                <img class="sb-title-icon" src="{{ url_for('static', filename='user.png') }}" alt="">
+                <span class="sb-title">Sprawcy</span>
+            </div>
+            <br><br>
+            <input placeholder="Liczba sprawców" type="number" id="liczba" name="liczba" min="0" max="10" oninput="this.value = Math.round(this.value);" required><br><br>
+            <div id="divek"></div>
+
+          <!-- OBSŁUGA DODAWANIA SPRAWCÓW -->
+          <script src="{{ url_for('static', filename='js/sprawcy.js') }}"></script>
+          
+        </div> 
+    </div>
+        <br><br><input id="button1" class="button" type="submit" value="Wyślij zgłoszenie" ><div class="tooltip"></div>
+    </form>
+</div>
+
+<div class="chatbot-section">
+    <!-- Ładowanie formularza z chatbot.html -->
+    <iframe src="chatbot.html" width="100%" height="100%" style="border:none;"></iframe>
+</div>
+
+</main>
+<!-- OBSŁUGA TOOLTIPÓW -->
+<script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
+  
+  </body>
+  </html>
+<div id="div"></div>
+<footer>
+    <p id="footer">Aplikacja webowa stworzona jako projekt z kursu Języki Programowania Aplikacji Internetowych AGH.</p>
+    <p id="footer">© Maria Mostek, Patrycja Ruda, Filip Kuś. Kraków 2023.</p>
+</footer>
+</body>
+</html>
