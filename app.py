@@ -10,7 +10,7 @@ db_config = {
     'user': 'administrator',
     'password': 'haslo',
     'host': '127.0.0.1',
-    'database': 'baza_zgloszen',
+    'database': 'crimedb',
     'raise_on_warnings': True
 }
 
@@ -108,7 +108,7 @@ def register():
         # Dodanie danych do tabeli użytkownicy
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
-        insert_query = "INSERT INTO `Users` (`login`, `password`, `role`, `email`, `name`, `surname`) VALUES (%s, %s, %s, %s, %s, %s)"
+        insert_query = "INSERT INTO `users` (`login`, `password`, `role`, `email`, `name`, `surname`) VALUES (%s, %s, %s, %s, %s, %s)"
         insert_values = (login, haslo, rola, email, imie, nazwisko)
         cursor.execute(insert_query, insert_values)
         cnx.commit()
@@ -121,7 +121,7 @@ def register():
 def login_istnieje(login):
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
-    query = "SELECT COUNT(*) FROM `Users` WHERE `login` = %s"
+    query = "SELECT COUNT(*) FROM `users` WHERE `login` = %s"
     cursor.execute(query, (login,))
     result = cursor.fetchone()[0]
     cnx.close()
@@ -161,7 +161,7 @@ def logowanie():
 def pobierz_user_id(login):
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
-    query = "SELECT user_id FROM `Users` WHERE `login` = %s"
+    query = "SELECT user_id FROM `users` WHERE `login` = %s"
     cursor.execute(query, (login,))
     result = cursor.fetchone()
     cnx.close()
@@ -173,7 +173,7 @@ def pobierz_user_id(login):
 def pobierz_imie_uzytkownika(login):
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
-    query = "SELECT imię FROM `Users` WHERE `login` = %s"
+    query = "SELECT imię FROM `users` WHERE `login` = %s"
     cursor.execute(query, (login,))
     result = cursor.fetchone()
     cnx.close()
@@ -186,7 +186,7 @@ def pobierz_imie_uzytkownika(login):
 def pobierz_role_uzytkownika(login):
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
-    query = "SELECT rola FROM `Users` WHERE `login` = %s"
+    query = "SELECT rola FROM `users` WHERE `login` = %s"
     cursor.execute(query, (login,))
     result = cursor.fetchone()
     cnx.close()
@@ -207,7 +207,7 @@ def sprawdz_dane_logowania(login, haslo):
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
 
-    query = "SELECT COUNT(*) FROM `Users` WHERE `login` = %s AND `password` = %s"
+    query = "SELECT COUNT(*) FROM `users` WHERE `login` = %s AND `password` = %s"
     values = (login, haslo)
 
     cursor.execute(query, values)
@@ -281,36 +281,37 @@ def insert_report_into_db():
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
 
-        # Wstawienie danych do tabeli witnesses
-        witness_insert = ("INSERT INTO witnesses (info_contact) VALUES (%s)")
-        cursor.execute(witness_insert, (report_data['info_contact'],))
-        witness_id = cursor.lastrowid
 
-        # Wstawienie danych do tabeli perpetrators
-        perpetrator_insert = ("INSERT INTO perpetrators (appearance) VALUES (%s)")
-        cursor.execute(perpetrator_insert, (report_data['appearance'],))
-        perp_id = cursor.lastrowid
+        report_insert = ("INSERT INTO reports (title) VALUES (%s)")
+        cursor.execute(report_insert, (
+            report_data['title'],  # Zwróć uwagę na przecinek
+        ))
+
+        report_id = cursor.lastrowid
 
         # Wstawienie danych do tabeli event_features
         event_features_insert = (
-            "INSERT INTO event_features (event_desc, address, event_time, witness_id, perp_id) "
-            "VALUES (%s, %s, %s, %s, %s)"
+            "INSERT INTO event_features (report_id, event_description, address, event_time) "
+            "VALUES (%s, %s, %s, %s)"
         )
         cursor.execute(event_features_insert, (
+            report_id,
             report_data['event_desc'],
             report_data['address'],
             report_data['event_time'],
-            witness_id,
-            perp_id
         ))
         event_feature_id = cursor.lastrowid
 
-        # Wstawienie danych do tabeli reports
-        report_insert = ("INSERT INTO reports (title, event_feature_id) VALUES (%s, %s)")
-        cursor.execute(report_insert, (
-            report_data['title'],
-            event_feature_id
-        ))
+        # Wstawienie danych do tabeli witnesses
+        witness_insert = ("INSERT INTO witnesses (event_feature_id, info_contact) VALUES (%s, %s)")
+        cursor.execute(witness_insert, (event_feature_id, report_data['info_contact'],))
+        witness_id = cursor.lastrowid
+
+        # Wstawienie danych do tabeli perpetrators
+        perpetrator_insert = ("INSERT INTO perpetrators (event_feature_id, appearance) VALUES (%s, %s)")
+        cursor.execute(perpetrator_insert, (event_feature_id, report_data['appearance'],))
+        perp_id = cursor.lastrowid
+
 
         # Zatwierdzenie transakcji
         cnx.commit()
