@@ -65,6 +65,7 @@ p {
 h1{
   font-size: 40px;
   font-weight: bold;
+  text-align: center;
 }
 
 *, *:before, *:after {
@@ -279,7 +280,7 @@ input {
   margin-top: 15px;
   color: #ffffff;
   display: block;
-  margin-bottom: 15px;
+  margin-bottom: 20%;
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
 }
 
