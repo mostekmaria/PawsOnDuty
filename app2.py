@@ -3,14 +3,14 @@ import json
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 from datetime import datetime
 import hashlib
-from chatbot_rozmowa import predict_class, get_response, intents
+#from chatbot_rozmowa import predict_class, get_response, intents
 
 # Konfiguracja połączenia z bazą danych
 db_config = {
     'user': 'administrator',
     'password': 'haslo',
     'host': '127.0.0.1',
-    'database': 'baza_zgloszen',
+    'database': 'crimedb',
     'raise_on_warnings': True
 }
 

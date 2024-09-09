@@ -1,79 +1,98 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
-    <title>PawsOnDuty - logowanie</title>
     <link rel="shortcut icon" href="static/logo.png"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+    <title>PawsOnDuty - logowanie</title>
 </head>
 <body>
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
         <br><br>
         <br><br>
-        <a class="bar" id="bar" href="index.html">PawsOnDuty</a>
+        <a href = ><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="80"></a>
         <br><br>
         {% if not zalogowany %}
         <a id="baroption" href="rejestracja.html">Zarejestruj się</a>
         <a id="baroption" href="logowanie.html">Zaloguj się</a>
+        <a id="baroption" href="chatbot.html">Chatbot</a>
         {% else %}
         <a class ="bar" id="barname">{{ imie }}</span>
-            <br><br>
-            <a id="baroption" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>
-            <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+        <br><br>
+        <a id="baroption" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>
+        <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+        <a id="baroption" href="chatbot.html">Chatbot</a>
         {% endif %}
       </div>
     {% if komunikat %}
     <div class="komunikat">{{ komunikat }}</div>
 {% endif %}
 <header>
-   <a href = "index.html"><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="150" height="150"></a><br>
+    <div id="logo">
+        <a href = ><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="90" height="90"></a><br>
+    </div>
     <img id="menu" src="static/menu.png" onclick="openNav()">
         <!-- OBSŁUGA SIDEBAR MENU -->
         <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
     <div id="header">
-      <a href = "index.html"><h1 class="title has-tooltip" data-tooltip="Przejdź do strony głównej">PawsOnDuty</h1></a>
-      <h5>Powered by Core-Oho-Duh</h5>
+        <a href = ><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="65"></a><br>
     </div>
-</header>
-<nav>
-    {% if not zalogowany %}
-    <a id="link1" href=rejestracja.html class="has-tooltip" data-tooltip="Zarejestruj się">Zarejestruj się</a>
-    <a id="link2" href=logowanie.html class="has-tooltip" data-tooltip="Zaloguj się">Zaloguj się</a>
-    {% else %}
-    <span id="name">{{ imie }}</span>
-    <a id="link2" class="has-tooltip" data-tooltip="Moje zgłoszenia" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>   
-    <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>         
-    {% endif %}
-</nav>
+    <nav class="navbar navbar-dark bg-primary">
+        {% if not zalogowany %}
+        <a id="link1" class="has-tooltip" data-tooltip="Zarejestruj się" href=rejestracja.html>Zarejestruj się</a>
+        <a id="link2" class="has-tooltip" data-tooltip="Zaloguj się" href=logowanie.html>Zaloguj się</a>
+        {% else %}
+        <span id="name">{{ imie }}</span>
+        <a id="link2" class="has-tooltip" data-tooltip="Moje zgłoszenia" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>   
+        <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+        {% endif %}
+        <!-- Nowy przycisk do chatbota -->
+        <a id="link3" class="has-tooltip" data-tooltip="Chatbot" href="{{ url_for('chatbot') }}">Chatbot</a>
+    </nav>  
+</header>  
+
 <main id="mainlog">
-    <h1 id="log">Zaloguj się</h1>
+    <br><br><br><br>
+    <h1>Zaloguj się</h1>
     <br>
     {% if komunikat %}
     <p class="komunikat" style="color: red;">{{ komunikat }}</p>
     {% endif %}
     <form method="POST">
-        <div class="sign">
-            <label for="login">Login:</label>
-            <input type="text" id="login" name="login" required><br><br>
+        <div class="panel-sign">
+            <div class="titleicon">
+                <span class="sb-title">Login:</span>
+            </div>
+            <input type="text" class="full-input" id="login" name="login" required>
+            <br>
+            <div class="titleicon">
+                <span class="sb-title">Hasło:</span>
+            </div>
+            <input type="password" class="full-input" id="hasło" name="hasło" required><br><br>
+            <br>
+            <div id="rejestracja">Nie masz konta?   <a id="link3" href=rejestracja.html class="has-tooltip" data-tooltip="Zarejestruj się">Zarejestruj się</a> </div> 
+            <br>
+            <div class="button-container2">
+                <input id="button2" class="button" type="submit" value="Zaloguj się"><div class="tooltip"></div>
+            </div>
         </div>
-        <br>
-        <div class="sign">
-            <label for="hasło">Hasło:</label>
-            <input type="password" id="hasło" name="hasło" required><br><br>
-        </div>
-        <br><br>
-        <input id="button" class="button" type="submit" value="Zaloguj się"><div class="tooltip"></div>
+
+
     </form>
     <br>
-    <div id="rejestracja">Nie masz konta?   <a id="link3" href=rejestracja.html class="has-tooltip" data-tooltip="Zarejestruj się">Zarejestruj się</a> </div> 
+    
 </main>
 <!-- OBSŁUGA TOOLTIPÓW -->
 <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
 <div id="div"></div>
 <footer>
-    <p id="footer">Aplikacja webowa stworzona jako projekt z kursu Języki Programowania Aplikacji Internetowych AGH.</p>
-    <p id="footer">© Maria Mostek, Patrycja Ruda, Filip Kuś. Kraków 2023.</p>
+    <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
+    <p id="footer">© Maria Mostek, Patrycja Ruda. Kraków 2024.</p>
 </footer>
 </body>

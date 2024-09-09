@@ -38,9 +38,6 @@ body {
   justify-content: space-between;
 }
 
-.half-input {
-  max-width: 120px;
-}
 
 .map {
   height: 300px;
