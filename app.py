@@ -148,7 +148,7 @@ def logowanie():
             session['role'] = rola
             session['name'] = pobierz_imie_uzytkownika(login)  # Funkcja pobierz_imie_uzytkownika() powinna zwrócić imię użytkownika na podstawie loginu
             if rola == 'cywil':
-                return redirect(url_for('zgloszenie'))
+                return redirect(url_for('przekierowanieZgloszenie'))
             else:
                 return redirect(url_for('przegladanie'))
         else:
@@ -173,7 +173,7 @@ def pobierz_user_id(login):
 def pobierz_imie_uzytkownika(login):
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
-    query = "SELECT imię FROM `users` WHERE `login` = %s"
+    query = "SELECT name FROM `users` WHERE `login` = %s"
     cursor.execute(query, (login,))
     result = cursor.fetchone()
     cnx.close()
@@ -186,7 +186,7 @@ def pobierz_imie_uzytkownika(login):
 def pobierz_role_uzytkownika(login):
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
-    query = "SELECT rola FROM `users` WHERE `login` = %s"
+    query = "SELECT role FROM `users` WHERE `login` = %s"
     cursor.execute(query, (login,))
     result = cursor.fetchone()
     cnx.close()
