@@ -215,7 +215,7 @@ def sprawdz_dane_logowania(login, password):
 @app.route('/wyloguj')
 def wyloguj():
     session.clear()  # Czyści wszystkie dane w sesji
-    return redirect(url_for('logowanie'))  # Przekierowanie do strony logowania
+    return redirect(url_for('main'))  # Przekierowanie do strony logowania
 
 @app.route('/moje_zgloszenia', methods=['GET'])
 def moje_zgloszenia():
