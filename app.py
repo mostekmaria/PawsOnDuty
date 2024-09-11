@@ -79,10 +79,10 @@ def main():
 @app.route('/index.html')
 def przekierowanieZgloszenie():
     try:
-        if session['rola']=='funkcjonariusz':
-            return render_template('przegladanie.html', zalogowany=session.get('zalogowany'), imie=session.get('imie'))
-        else:
-            return render_template('index.html', zalogowany=session.get('zalogowany'), imie=session.get('imie'))
+        if session['role']=='funkcjonariusz':
+            return render_template('przegladanie.html', zalogowany=session.get('zalogowany'), name=session.get('name'))
+        if session['role'] == 'cywil':
+            return render_template('index.html', zalogowany=session.get('zalogowany'), name=session.get('name'))
     except:
         return render_template('index.html')
     
@@ -90,15 +90,15 @@ def przekierowanieZgloszenie():
 def register():
     if request.method == 'POST':
         # Pobranie danych z formularza
-        imie = request.form['imie']
-        nazwisko = request.form['nazwisko']
+        name = request.form['name']
+        surname = request.form['surname']
         email = request.form['email']
         login = request.form['login']
-        haslo = request.form['hasło']
-        rola = 'cywil'
+        password = request.form['password']
+        role = 'cywil'
 
-        haslo = haslo.encode('utf-8')
-        haslo = hashlib.sha256(haslo).hexdigest()
+        password = password.encode('utf-8')
+        password = hashlib.sha256(password).hexdigest()
         
         # Sprawdzenie, czy login już istnieje w bazie danych
         if login_istnieje(login):
@@ -109,7 +109,7 @@ def register():
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
         insert_query = "INSERT INTO `users` (`login`, `password`, `role`, `email`, `name`, `surname`) VALUES (%s, %s, %s, %s, %s, %s)"
-        insert_values = (login, haslo, rola, email, imie, nazwisko)
+        insert_values = (login, password, role, email, name, surname)
         cursor.execute(insert_query, insert_values)
         cnx.commit()
         return redirect(url_for('logowanie'))
@@ -131,29 +131,31 @@ def login_istnieje(login):
 def logowanie():
     if request.method == 'POST':
         login = request.form['login']
-        haslo = request.form['hasło']
-
-        haslo = haslo.encode('utf-8')
-        haslo = hashlib.sha256(haslo).hexdigest()
-        # Szyfrowanie hasła
-
+        password = request.form['password']
+        password = password.encode('utf-8')
+        password = hashlib.sha256(password).hexdigest()
+        
         # Sprawdzenie danych logowania w bazie danych
-        if sprawdz_dane_logowania(login, haslo):
-        # Pobranie user_id z bazy danych
+        if sprawdz_dane_logowania(login, password):
+            # Pobranie user_id z bazy danych
             user_id = pobierz_user_id(login)
-            rola = pobierz_role_uzytkownika(login)
-        # Dodanie user_id do sesji
+            role = pobierz_role_uzytkownika(login)
+            imie = pobierz_imie_uzytkownika(login)
+            
+            # Dodanie informacji do sesji
             session['user_id'] = user_id
             session['zalogowany'] = True
-            session['role'] = rola
-            session['name'] = pobierz_imie_uzytkownika(login)  # Funkcja pobierz_imie_uzytkownika() powinna zwrócić imię użytkownika na podstawie loginu
-            if rola == 'cywil':
+            session['role'] = role
+            session['name'] = imie  # Używamy imienia użytkownika
+            
+            if role == 'cywil':
                 return redirect(url_for('przekierowanieZgloszenie'))
             else:
                 return redirect(url_for('przegladanie'))
         else:
             session['komunikat'] = 'Nieprawidłowy login lub hasło'
             return redirect(url_for('logowanie'))
+
     komunikat = session.pop('komunikat', None)
     return render_template('logowanie.html', komunikat=komunikat)
 
@@ -181,7 +183,7 @@ def pobierz_imie_uzytkownika(login):
         return result[0]
     else:
         return ""
-    
+
 # Funkcja pomocnicza do pobierania roli użytkownika na podstawie loginu
 def pobierz_role_uzytkownika(login):
     cnx = mysql.connector.connect(**db_config)
@@ -195,40 +197,45 @@ def pobierz_role_uzytkownika(login):
     else:
         return None
 
-
 # Funkcja sprawdzająca dane logowania w bazie danych
-def sprawdz_dane_logowania(login, haslo):
-    # Połączenie z bazą danych (tu można dodać odpowiednie dane dostępowe)
-
-    # Przykładowe zapytanie do bazy danych w celu sprawdzenia danych logowania
-    # Należy dostosować zapytanie do struktury swojej bazy danych
-
-
+def sprawdz_dane_logowania(login, password):
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
 
     query = "SELECT COUNT(*) FROM `users` WHERE `login` = %s AND `password` = %s"
-    values = (login, haslo)
+    values = (login, password)
 
     cursor.execute(query, values)
     result = cursor.fetchone()
 
     cnx.commit()
 
-    # Jeśli zapytanie zwraca wartość większą niż 0, to dane logowania są poprawne
-    if result and result[0] > 0:
-        return True
-    else:
-        return False
+    return result and result[0] > 0
 
-    
-@app.route('/wyloguj', methods=['GET'])
+@app.route('/wyloguj')
 def wyloguj():
-    # Usunięcie flagi zalogowania z sesji
-    session.pop('zalogowany', None)
-    session.pop('user_id', None)  # Usunięcie również user_id z sesji
-    session.pop('role', None) #usunięcie roli z sesji
-    return redirect(url_for('logowanie'))
+    session.clear()  # Czyści wszystkie dane w sesji
+    return redirect(url_for('logowanie'))  # Przekierowanie do strony logowania
+
+@app.route('/moje_zgloszenia', methods=['GET'])
+def moje_zgloszenia():
+    if 'zalogowany' not in session or not session['zalogowany']:
+        return redirect(url_for('logowanie'))
+
+    user_id = session.get('user_id')
+
+    cnx = mysql.connector.connect(**db_config)
+    cursor = cnx.cursor()
+    query = "SELECT zg.report_id, zg.event_time, zg.event_description, zg.address, z.status " \
+        "FROM event_features zg " \
+        "INNER JOIN reports z ON zg.report_id = z.report_id " \
+        "WHERE z.user_id = %s " \
+        "ORDER BY zg.event_time DESC"
+    cursor.execute(query, (user_id,))
+    zgloszenia = cursor.fetchall()
+
+    return render_template('moje_zgloszenia.html', zgloszenia=zgloszenia, zalogowany=session.get('zalogowany'), imie=session.get('imie'))
+
 
 @app.route('/chatbot', methods=['GET', 'POST'])
 def chatbot():

@@ -18,21 +18,23 @@
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
         <br><br>
         <br><br>
-        <a href = ><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="80"></a>
+        <a href="#"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="80"></a>
         <br><br>
-        {% if not zalogowany %}
-        <a id="baroption" href="rejestracja.html">Zarejestruj się</a>
-        <a id="baroption" href="logowanie.html">Zaloguj się</a>
-        <a id="baroption" href="chatbot.html">Chatbot</a>
+        
+        {% if not session.get('zalogowany') %}
+        <a id="baroption" href="{{ url_for('register') }}">Zarejestruj się</a>
+        <a id="baroption" href="{{ url_for('logowanie') }}">Zaloguj się</a>
+        <a id="baroption" href="{{ url_for('chatbot') }}">Chatbot</a>
         {% else %}
-        <a class ="bar" id="barname">{{ imie }}</span>
+        <a class="bar" id="barname">{{ session.get('name') }}</a>
         <br><br>
         <a id="baroption" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>
         <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
-        <a id="baroption" href="chatbot.html">Chatbot</a>
-
+        <a id="baroption" href="{{ url_for('chatbot') }}">Chatbot</a>
         {% endif %}
-      </div>
+    </div>
+
+    <!-- Kontynuacja kodu... -->
     {% if komunikat %}
     <div class="komunikat">{{ komunikat }}</div>
 {% endif %}
