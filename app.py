@@ -72,6 +72,53 @@ except mysql.connector.Error as err:
 finally:
         print("Połączenie z bazą danych zostało zamknięte.")
 
+# Funkcja do wstawiania raportu do bazy danych
+def insert_report_into_db():
+    try:
+        with open('report.json', 'r', encoding='utf-8') as file:
+            report_data = json.load(file)
+
+        # Połączenie z bazą danych
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor()
+
+        # Wstawienie danych do tabeli reports
+        report_insert = "INSERT INTO reports (title) VALUES (%s)"
+        cursor.execute(report_insert, (report_data['title'],))
+
+        report_id = cursor.lastrowid
+
+        # Wstawienie danych do tabeli event_features
+        event_features_insert = (
+            "INSERT INTO event_features (report_id, event_description, address, event_time) "
+            "VALUES (%s, %s, %s, %s)"
+        )
+        cursor.execute(event_features_insert, (
+            report_id,
+            report_data['event_desc'],
+            report_data['address'],
+            report_data['event_time'],
+        ))
+        event_feature_id = cursor.lastrowid
+
+        # Wstawienie danych do tabeli witnesses
+        witness_insert = "INSERT INTO witnesses (event_feature_id, info_contact) VALUES (%s, %s)"
+        cursor.execute(witness_insert, (event_feature_id, report_data['info_contact'],))
+
+        # Wstawienie danych do tabeli perpetrators
+        perpetrator_insert = "INSERT INTO perpetrators (event_feature_id, appearance) VALUES (%s, %s)"
+        cursor.execute(perpetrator_insert, (event_feature_id, report_data['appearance'],))
+
+        # Zatwierdzenie transakcji
+        cnx.commit()
+        print("Dane zostały pomyślnie wstawione do bazy danych.")
+    except mysql.connector.Error as err:
+        print(f"Błąd: {err}")
+        cnx.rollback()
+    finally:
+        cursor.close()
+        cnx.close()
+
 @app.route('/')
 def main():
     return redirect(url_for('przekierowanieZgloszenie'))
@@ -125,6 +172,8 @@ def submit_form():
     # Zapis do pliku report.json
     with open('report.json', 'w', encoding='utf-8') as f:
         json.dump(report_data, f, ensure_ascii=False, indent=4)
+
+    insert_report_into_db()
 
     # Ustawienie komunikatu
     session['komunikat'] = "Zgłoszenie zostało zapisane pomyślnie!"
@@ -322,61 +371,6 @@ def chatbot():
 
     print(f"Session data (after request): {session}")
     return render_template('chatbot.html', response=response)
-
-
-
-
-def insert_report_into_db():
-    try:
-        with open('report.json', 'r', encoding='utf-8') as file:
-            report_data = json.load(file)
-
-        # Połączenie z bazą danych
-        cnx = mysql.connector.connect(**db_config)
-        cursor = cnx.cursor()
-
-
-        report_insert = ("INSERT INTO reports (title) VALUES (%s)")
-        cursor.execute(report_insert, (
-            report_data['title'],  # Zwróć uwagę na przecinek
-        ))
-
-        report_id = cursor.lastrowid
-
-        # Wstawienie danych do tabeli event_features
-        event_features_insert = (
-            "INSERT INTO event_features (report_id, event_description, address, event_time) "
-            "VALUES (%s, %s, %s, %s)"
-        )
-        cursor.execute(event_features_insert, (
-            report_id,
-            report_data['event_desc'],
-            report_data['address'],
-            report_data['event_time'],
-        ))
-        event_feature_id = cursor.lastrowid
-
-        # Wstawienie danych do tabeli witnesses
-        witness_insert = ("INSERT INTO witnesses (event_feature_id, info_contact) VALUES (%s, %s)")
-        cursor.execute(witness_insert, (event_feature_id, report_data['info_contact'],))
-        witness_id = cursor.lastrowid
-
-        # Wstawienie danych do tabeli perpetrators
-        perpetrator_insert = ("INSERT INTO perpetrators (event_feature_id, appearance) VALUES (%s, %s)")
-        cursor.execute(perpetrator_insert, (event_feature_id, report_data['appearance'],))
-        perp_id = cursor.lastrowid
-
-
-        # Zatwierdzenie transakcji
-        cnx.commit()
-        print("Dane zostały pomyślnie wstawione do bazy danych.")
-    except mysql.connector.Error as err:
-        print(f"Błąd: {err}")
-        cnx.rollback()
-    finally:
-        cursor.close()
-        cnx.close()
-
 
 
 if __name__ == '__main__':
