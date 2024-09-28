@@ -331,11 +331,9 @@ def moje_zgloszenia():
 
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
-    query = "SELECT zg.report_id, zg.event_time, zg.event_description, zg.address, z.status " \
-        "FROM event_features zg " \
-        "INNER JOIN reports z ON zg.report_id = z.report_id " \
-        "WHERE z.user_id = %s " \
-        "ORDER BY zg.event_time DESC"
+    query = "SELECT r.title, ef.event_description, ef.address, ef.event_time, p.appearance, w.info_contact FROM reports r JOIN event_features ef ON r.report_id = ef.report_id JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id JOIN witnesses w ON ef.event_feature_id = w.event_feature_id " \
+        "WHERE r.user_id = %s " \
+        "ORDER BY ef.event_time DESC"
     cursor.execute(query, (user_id,))
     zgloszenia = cursor.fetchall()
 
@@ -344,7 +342,6 @@ def moje_zgloszenia():
 @app.route('/zgloszenia.html', methods=['GET'])
 def zgloszenia():
     cnx = mysql.connector.connect(**db_config)
-    data = request.args.get('data')
     cursor = cnx.cursor()
     cursor.execute("SELECT r.title, ef.event_description, ef.address, ef.event_time, p.appearance, w.info_contact FROM reports r JOIN event_features ef ON r.report_id = ef.report_id JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id JOIN witnesses w ON ef.event_feature_id = w.event_feature_id")
     zgloszenia = cursor.fetchall()
