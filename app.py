@@ -136,7 +136,7 @@ def przekierowanieZgloszenie():
     
 @app.route('/przegladanie.html')
 def przegladanie():
-    return render_template('przegladanie.html', zalogowany=session.get('zalogowany'), imie=session.get('imie'))
+    return render_template('przegladanie.html', zalogowany=session.get('zalogowany'), imie=session.get('name'))
     
 # Endpoint to handle form submission and save data to report.json
 @app.route('/submit', methods=['POST'])
@@ -343,7 +343,7 @@ def zgloszenia():
     cursor = cnx.cursor()
     cursor.execute("SELECT r.title, ef.event_description, ef.address, ef.event_time, p.appearance, w.info_contact FROM reports r JOIN event_features ef ON r.report_id = ef.report_id JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id JOIN witnesses w ON ef.event_feature_id = w.event_feature_id")
     zgloszenia = cursor.fetchall()
-    return render_template('zgloszenia.html', zgloszenia=zgloszenia, komunikat=None, zalogowany=session.get('zalogowany'), imie=session.get('imie'))
+    return render_template('zgloszenia.html', zgloszenia=zgloszenia, komunikat=None, zalogowany=session.get('zalogowany'), imie=session.get('name'))
 
 
 @app.route('/chatbot', methods=['GET', 'POST'])
