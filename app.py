@@ -82,9 +82,14 @@ def insert_report_into_db():
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
 
+        # Pobranie user_id z sesji, jeśli nie ma, ustawiamy na NULL
+        user_id = session.get('user_id')  # Pobieramy user_id z sesji
+        if user_id is None:
+            user_id = None  # Ustawiamy user_id na None (NULL w bazie danych)
+
         # Wstawienie danych do tabeli reports
-        report_insert = "INSERT INTO reports (title) VALUES (%s)"
-        cursor.execute(report_insert, (report_data['title'],))
+        report_insert = "INSERT INTO reports (title, user_id) VALUES (%s, %s)"  # Dodajemy user_id
+        cursor.execute(report_insert, (report_data['title'], user_id))
 
         report_id = cursor.lastrowid
 
