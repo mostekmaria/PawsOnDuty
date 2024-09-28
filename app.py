@@ -78,13 +78,60 @@ def main():
 
 @app.route('/index.html')
 def przekierowanieZgloszenie():
+    komunikat = session.pop('komunikat', None)
     try:
         if session['role']=='funkcjonariusz':
             return render_template('przegladanie.html', zalogowany=session.get('zalogowany'), name=session.get('name'))
         if session['role'] == 'cywil':
             return render_template('index.html', zalogowany=session.get('zalogowany'), name=session.get('name'))
     except:
-        return render_template('index.html')
+        return render_template('index.html', komunikat=komunikat)
+    
+# Endpoint to handle form submission and save data to report.json
+@app.route('/submit', methods=['POST'])
+def submit_form():
+    # Pobieranie danych z formularza
+    description = request.form.get('opis')
+    title = description[:30] + '...' if description else ''
+    event_desc = description
+
+    address = f"{request.form.get('location-input', '')} {request.form.get('numer_lokalu', '')} {request.form.get('locality-input', '')} {request.form.get('administrative_area_level_1-input', '')} {request.form.get('postal_code-input', '')}"
+
+    event_time = f"{request.form.get('data', '')} {request.form.get('godzina', '')}"
+
+    # Pobranie liczby sprawców
+    liczba_sprawcow = int(request.form.get('liczba', '0'))
+
+    # Pobieranie opisu każdego sprawcy
+    sprawcy_opisy = []
+    for i in range(1, liczba_sprawcow + 1):
+        sprawca_opis = request.form.get(f'sprawca{i}', '')
+        if sprawca_opis:
+            sprawcy_opisy.append(sprawca_opis)
+
+    # Tworzenie opisu sprawców
+    appearance = f"{liczba_sprawcow} - {', '.join(sprawcy_opisy)}"
+
+    # Tworzenie obiektu JSON
+    report_data = {
+        "title": title,
+        "event_desc": event_desc,
+        "address": address.strip(),
+        "event_time": event_time.strip(),
+        "appearance": appearance,
+        "info_contact": "anonimowy"
+    }
+
+    # Zapis do pliku report.json
+    with open('report.json', 'w', encoding='utf-8') as f:
+        json.dump(report_data, f, ensure_ascii=False, indent=4)
+
+    # Ustawienie komunikatu
+    session['komunikat'] = "Zgłoszenie zostało zapisane pomyślnie!"
+
+    # Przekierowanie na stronę główną po zapisaniu danych
+    return redirect(url_for('main'))
+
     
 @app.route('/rejestracja.html', methods=['GET', 'POST'])
 def register():

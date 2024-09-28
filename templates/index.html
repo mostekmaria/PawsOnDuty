@@ -34,10 +34,12 @@
         {% endif %}
     </div>
 
-    <!-- Kontynuacja kodu... -->
+    <!-- Wyświetlanie komunikatu, jeśli istnieje -->
     {% if komunikat %}
-    <div class="komunikat">{{ komunikat }}</div>
-{% endif %}
+        <div class="alert alert-success">
+            {{ komunikat }}
+        </div>
+    {% endif %}
 <header>
     <div id="logo">
         <a href = ><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="90" height="90"></a><br>
@@ -63,7 +65,7 @@
 </header>  
 
 <main>
-    <form method="POST">
+    <form method="POST", action="/submit">
     <div class="formularz">
         <!-- <div class="card-container"> -->
             <div class="important fade-in">
