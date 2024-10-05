@@ -9,10 +9,6 @@ body {
   font-weight: 500;
 }
 
-.sb-title-icon {
-  /* position: relative; */
-  /* top: -5px; */
-}
 
 .card-container {
   display: flex;
@@ -42,9 +38,9 @@ body {
   max-width: 120px;
 }
 
-.map {
-  height: 300px;
-  width: 800px;
+#map {
+  height: 500px; /* Ustaw wysokość */
+  width: 100%;   /* Ustaw szerokość */
 }
 
 h2 {

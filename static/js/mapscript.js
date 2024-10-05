@@ -1,79 +1,40 @@
+function initMap() {
+  const initialLocation = { lat: 40.714224, lng: -73.961452 }; // Ustawienie lokalizacji startowej
+  const map = new google.maps.Map(document.getElementById("map"), { // Zmień 'map' na odpowiedni ID
+      zoom: 12,
+      center: initialLocation,
+  });
 
-        "use strict";
-    
-    function initMap() {
-      const CONFIGURATION = {
-        "ctaTitle": "Ok",
-        "mapOptions": {"center":{"lat":52.235,"lng":21.01},"fullscreenControl":true,"mapTypeControl":false,"streetViewControl":true,"zoom":13,"zoomControl":true,"maxZoom":22,"mapId":""},
-        "mapsApiKey": "AIzaSyDn6z08ngV98L8UZD2jsUPd2PX-YGBblrc",
-        "capabilities": {"addressAutocompleteControl":true,"mapDisplayControl":true,"ctaControl":true}
-      };
-      const componentForm = [
-        'location',
-        'locality',
-        'administrative_area_level_1',
-        'country',
-        'postal_code',
-      ];
-    
-      const getFormInputElement = (component) => document.getElementById(component + '-input');
-      const map = new google.maps.Map(document.getElementById("gmp-map"), {
-        zoom: CONFIGURATION.mapOptions.zoom,
-        center: { lat: 52.235, lng: 21.01},
-        mapTypeControl: false,
-        fullscreenControl: CONFIGURATION.mapOptions.fullscreenControl,
-        zoomControl: CONFIGURATION.mapOptions.zoomControl,
-        streetViewControl: CONFIGURATION.mapOptions.streetViewControl
-      });
-      const marker = new google.maps.Marker({map: map, draggable: false});
-      const autocompleteInput = getFormInputElement('location');
-      const autocomplete = new google.maps.places.Autocomplete(autocompleteInput, {
-        fields: ["address_components", "geometry", "name"],
-        types: ["address"],
-      });
-      autocomplete.addListener('place_changed', function () {
-        marker.setVisible(false);
-        const place = autocomplete.getPlace();
-        if (!place.geometry) {
-          // User entered the name of a Place that was not suggested and
-          // pressed the Enter key, or the Place Details request failed.
-          window.alert('No details available for input: \'' + place.name + '\'');
-          return;
-        }
-        renderAddress(place);
-        fillInAddress(place);
-      });
-    
-      function fillInAddress(place) {  // optional parameter
-        const addressNameFormat = {
-          'street_number': 'short_name',
-          'route': 'long_name',
-          'locality': 'long_name',
-          'administrative_area_level_1': 'short_name',
-          'country': 'long_name',
-          'postal_code': 'short_name',
-        };
-        const getAddressComp = function (type) {
-          for (const component of place.address_components) {
-            if (component.types[0] === type) {
-              return component[addressNameFormat[type]];
-            }
+  const marker = new google.maps.Marker({
+      position: initialLocation,
+      map: map,
+      title: "Wybierz miejsce!",
+      draggable: true, // Marker jest przeciągalny
+  });
+
+  // Dodanie listenera do klikania na mapie
+  map.addListener("click", (event) => {
+      const latLng = event.latLng;
+      const lat = latLng.lat();
+      const lng = latLng.lng();
+      // Wywołanie reverse geocoding
+      reverseGeocode(lat, lng);
+  });
+}
+
+function reverseGeocode(lat, lng) {
+  const geocoder = new google.maps.Geocoder();
+  const latlng = { lat: lat, lng: lng };
+
+  geocoder.geocode({ location: latlng }, (results, status) => {
+      if (status === "OK") {
+          if (results[0]) {
+              document.getElementById("location-input").value = results[0].formatted_address; // Wypełnij adres w polu
+          } else {
+              window.alert("Brak wyników dla podanej lokalizacji.");
           }
-          return '';
-        };
-        getFormInputElement('location').value = getAddressComp('street_number') + ' '
-                  + getAddressComp('route');
-        for (const component of componentForm) {
-          // Location field is handled separately above as it has different logic.
-          if (component !== 'location') {
-            getFormInputElement(component).value = getAddressComp(component);
-          }
-        }
+      } else {
+          window.alert("Geocoder nie mógł znaleźć lokalizacji: " + status);
       }
-    
-      function renderAddress(place) {
-        map.setCenter(place.geometry.location);
-        marker.setPosition(place.geometry.location);
-        marker.setVisible(true);
-      }
-    }
+  });
+}
