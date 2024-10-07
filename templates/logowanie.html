@@ -23,7 +23,7 @@
         <a id="baroption" href="logowanie.html">Zaloguj się</a>
         <a id="baroption" href="chatbot.html">Chatbot</a>
         {% else %}
-        <a class ="bar" id="barname">{{ imie }}</span>
+        <a class ="bar" id="barname">{{ name }}</span>
         <br><br>
         <a id="baroption" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>
         <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
@@ -48,7 +48,7 @@
         <a id="link1" class="has-tooltip" data-tooltip="Zarejestruj się" href=rejestracja.html>Zarejestruj się</a>
         <a id="link2" class="has-tooltip" data-tooltip="Zaloguj się" href=logowanie.html>Zaloguj się</a>
         {% else %}
-        <span id="name">{{ imie }}</span>
+        <span id="name">{{ name }}</span>
         <a id="link2" class="has-tooltip" data-tooltip="Moje zgłoszenia" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>   
         <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
         {% endif %}
@@ -74,7 +74,7 @@
             <div class="titleicon">
                 <span class="sb-title">Hasło:</span>
             </div>
-            <input type="password" class="full-input" id="hasło" name="hasło" required><br><br>
+            <input type="password" class="full-input" id="password" name="password" required><br><br>
             <br>
             <div id="rejestracja">Nie masz konta?   <a id="link3" href=rejestracja.html class="has-tooltip" data-tooltip="Zarejestruj się">Zarejestruj się</a> </div> 
             <br>

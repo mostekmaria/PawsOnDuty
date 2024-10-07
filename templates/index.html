@@ -18,24 +18,28 @@
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
         <br><br>
         <br><br>
-        <a href = ><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="80"></a>
+        <a href="#"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="80"></a>
         <br><br>
-        {% if not zalogowany %}
-        <a id="baroption" href="rejestracja.html">Zarejestruj się</a>
-        <a id="baroption" href="logowanie.html">Zaloguj się</a>
-        <a id="baroption" href="chatbot.html">Chatbot</a>
+        
+        {% if not session.get('zalogowany') %}
+        <a id="baroption" href="{{ url_for('register') }}">Zarejestruj się</a>
+        <a id="baroption" href="{{ url_for('logowanie') }}">Zaloguj się</a>
+        <a id="baroption" href="{{ url_for('chatbot') }}">Chatbot</a>
         {% else %}
-        <a class ="bar" id="barname">{{ imie }}</span>
+        <a class="bar" id="barname">{{ session.get('name') }}</a>
         <br><br>
         <a id="baroption" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>
         <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
-        <a id="baroption" href="chatbot.html">Chatbot</a>
-
+        <a id="baroption" href="{{ url_for('chatbot') }}">Chatbot</a>
         {% endif %}
-      </div>
+    </div>
+
+    <!-- Wyświetlanie komunikatu, jeśli istnieje -->
     {% if komunikat %}
-    <div class="komunikat">{{ komunikat }}</div>
-{% endif %}
+        <div class="alert alert-success">
+            {{ komunikat }}
+        </div>
+    {% endif %}
 <header>
     <div id="logo">
         <a href = ><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="90" height="90"></a><br>
@@ -61,7 +65,7 @@
 </header>  
 
 <main>
-    <form method="POST">
+    <form method="POST", action="/submit">
     <div class="formularz">
         <!-- <div class="card-container"> -->
             <div class="important fade-in">
@@ -88,7 +92,7 @@
             <div class="map fade-in" id="gmp-map"></div>
             <div id="kontrola"></div>
         <!-- OBSŁUGA MAPY -->
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAum8iT83b1MrAEQaLt0joIK6Rdb-3uqWE&libraries=places&callback=initMap&solution_channel=GMP_QB_addressselection_v1_cABC" async defer></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDn6z08ngV98L8UZD2jsUPd2PX-YGBblrc&libraries=places&callback=initMap&solution_channel=GMP_QB_addressselection_v1_cABC" async defer></script>
             
         <div class="panel-time fade-in">
                 <div class="titleicon">

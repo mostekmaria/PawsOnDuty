@@ -57,19 +57,15 @@
       {% endif %}            
       <table class="zgloszenia">
         <thead>
-            <tr>
-  
-                <th>Opis zdarzenia</th>
-                <th>Zgłoszenie ID</th>
-                <th>Adres</th>
-                <th>Godzina zdarzenia</th>
-                <th>Data zdarzenia</th>
-                <th>Miasto</th>
-                <th>Województwo</th>
-                <th>Kod pocztowy</th>
-                <th>Numer lokalu</th>
-                <th>Status</th>
-              </tr>
+          <tr>
+            <th>Tytuł</th>
+            <th>Opis zdarzenia</th>
+            <th>Adres</th>
+            <th>Data</th>
+            <th>Sprawcy</th>
+            <th>Świadkowie</th>
+            <th>Status</th>
+          </tr>
         </thead>
         <tbody>
             {% for zgloszenie in zgloszenia %}
@@ -93,7 +89,7 @@
         <p class="naglowek">Brak zgłoszeń dla wybranej daty.</p>
         {% endif %}
         <br><br>
-        <div><a id="link3" href=rejestracja.html class="has-tooltip" data-tooltip="Wróć do strony głównej">Wróć do strony głównej</a> </div> 
+        <div><a id="link3" href=index.html class="has-tooltip" data-tooltip="Wróć do strony głównej">Wróć do strony głównej</a> </div> 
 		</main> <div class="tooltip"></div>
     <!-- OBSŁUGA TOOLTIPÓW --> 
   <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 

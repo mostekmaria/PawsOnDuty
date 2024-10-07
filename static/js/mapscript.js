@@ -5,7 +5,7 @@
       const CONFIGURATION = {
         "ctaTitle": "Ok",
         "mapOptions": {"center":{"lat":52.235,"lng":21.01},"fullscreenControl":true,"mapTypeControl":false,"streetViewControl":true,"zoom":13,"zoomControl":true,"maxZoom":22,"mapId":""},
-        "mapsApiKey": "AIzaSyAum8iT83b1MrAEQaLt0joIK6Rdb-3uqWE",
+        "mapsApiKey": "AIzaSyDn6z08ngV98L8UZD2jsUPd2PX-YGBblrc",
         "capabilities": {"addressAutocompleteControl":true,"mapDisplayControl":true,"ctaControl":true}
       };
       const componentForm = [
