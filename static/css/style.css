@@ -348,7 +348,7 @@ tr:hover {
   margin-bottom: 50px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 500px) {
   .formularz {
       flex-direction: column; /* Zmieniamy układ na kolumnowy */
   }
@@ -547,7 +547,7 @@ width: 100px;
   width: 300px;
 }
 
-@media all and (max-width: 900px) {
+@media all and (max-width: 1100px) {
 main {
   flex-wrap: wrap;
   padding-left: 10px;
@@ -562,7 +562,18 @@ nav, h5, #header, .title { display: none; }
   align-items: center;
   gap: 20px 10px;
 }
-.sidebar {padding-top: 15px;}
+.sidebar {
+  padding-top: 15px;
+}
+
+@media all and (min-width: 1100px) {
+  .sidebar{
+    display: none;
+    width: 0;
+  }
+}
+
+
 .sidebar a {font-size: 18px;}
 }
 
