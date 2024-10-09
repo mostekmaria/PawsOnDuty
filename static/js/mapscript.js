@@ -62,7 +62,7 @@ function reverseGeocode(lat, lng) {
                 const addressComponents = results[0].address_components;
 
                 let street = "";
-                let streetNumber = "";
+                let streetNumber = ""; // Numer budynku
                 let city = "";
                 let postalCode = "";
                 let administrativeArea = "";
@@ -71,10 +71,10 @@ function reverseGeocode(lat, lng) {
                 addressComponents.forEach(component => {
                     const types = component.types;
                     if (types.includes("street_number")) {
-                        streetNumber = component.long_name;
+                        streetNumber = component.long_name; // Przechowujemy numer budynku
                     }
                     if (types.includes("route")) {
-                        street = component.long_name;
+                        street = component.long_name; // Przechowujemy nazwę ulicy
                     }
                     if (types.includes("locality")) {
                         city = component.long_name;
@@ -88,7 +88,8 @@ function reverseGeocode(lat, lng) {
                 });
 
                 // Aktualizacja odpowiednich pól formularza
-                document.getElementById("location-input").value = `${street} ${streetNumber}`;
+                document.getElementById("location-input").value = street; // Wstawienie tylko nazwy ulicy
+                document.getElementById("numer_lokalu").value = streetNumber; // Wstawienie numeru budynku do pola numer_lokalu
                 document.getElementById("locality-input").value = city;
                 document.getElementById("administrative_area_level_1-input").value = administrativeArea;
                 document.getElementById("postal_code-input").value = postalCode;
@@ -102,3 +103,5 @@ function reverseGeocode(lat, lng) {
         }
     });
 }
+
+
