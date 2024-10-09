@@ -1,79 +1,107 @@
+function initMap() {
+    // Ustawienie mapy na Kraków
+    const krakow = { lat: 50.0647, lng: 19.9450 };
 
-        "use strict";
-    
-    function initMap() {
-      const CONFIGURATION = {
-        "ctaTitle": "Ok",
-        "mapOptions": {"center":{"lat":52.235,"lng":21.01},"fullscreenControl":true,"mapTypeControl":false,"streetViewControl":true,"zoom":13,"zoomControl":true,"maxZoom":22,"mapId":""},
-        "mapsApiKey": "AIzaSyDn6z08ngV98L8UZD2jsUPd2PX-YGBblrc",
-        "capabilities": {"addressAutocompleteControl":true,"mapDisplayControl":true,"ctaControl":true}
-      };
-      const componentForm = [
-        'location',
-        'locality',
-        'administrative_area_level_1',
-        'country',
-        'postal_code',
-      ];
-    
-      const getFormInputElement = (component) => document.getElementById(component + '-input');
-      const map = new google.maps.Map(document.getElementById("gmp-map"), {
-        zoom: CONFIGURATION.mapOptions.zoom,
-        center: { lat: 52.235, lng: 21.01},
-        mapTypeControl: false,
-        fullscreenControl: CONFIGURATION.mapOptions.fullscreenControl,
-        zoomControl: CONFIGURATION.mapOptions.zoomControl,
-        streetViewControl: CONFIGURATION.mapOptions.streetViewControl
-      });
-      const marker = new google.maps.Marker({map: map, draggable: false});
-      const autocompleteInput = getFormInputElement('location');
-      const autocomplete = new google.maps.places.Autocomplete(autocompleteInput, {
-        fields: ["address_components", "geometry", "name"],
-        types: ["address"],
-      });
-      autocomplete.addListener('place_changed', function () {
-        marker.setVisible(false);
-        const place = autocomplete.getPlace();
-        if (!place.geometry) {
-          // User entered the name of a Place that was not suggested and
-          // pressed the Enter key, or the Place Details request failed.
-          window.alert('No details available for input: \'' + place.name + '\'');
-          return;
-        }
-        renderAddress(place);
-        fillInAddress(place);
-      });
-    
-      function fillInAddress(place) {  // optional parameter
-        const addressNameFormat = {
-          'street_number': 'short_name',
-          'route': 'long_name',
-          'locality': 'long_name',
-          'administrative_area_level_1': 'short_name',
-          'country': 'long_name',
-          'postal_code': 'short_name',
-        };
-        const getAddressComp = function (type) {
-          for (const component of place.address_components) {
-            if (component.types[0] === type) {
-              return component[addressNameFormat[type]];
+    // Inicjalizacja mapy
+    const map = new google.maps.Map(document.getElementById("map"), {
+        center: krakow, // Kraków jako domyślny punkt
+        zoom: 12
+    });
+
+    // Marker dla domyślnego punktu
+    const marker = new google.maps.Marker({
+        position: krakow,
+        map: map,
+        title: "Kraków",
+        draggable: true
+    });
+
+    // Aktualizacja inputa latlng na domyślne współrzędne
+    document.getElementById("latlng").value = `${krakow.lat}, ${krakow.lng}`;
+
+    // Reverse geocoding dla domyślnej lokalizacji
+    reverseGeocode(krakow.lat, krakow.lng);
+
+    // Listener na kliknięcia mapy
+    map.addListener("click", (event) => {
+        const clickedLocation = event.latLng;
+        const lat = clickedLocation.lat();
+        const lng = clickedLocation.lng();
+
+        // Przesunięcie markera na kliknięte miejsce
+        marker.setPosition(clickedLocation);
+
+        // Aktualizacja inputa latlng
+        document.getElementById("latlng").value = `${lat}, ${lng}`;
+
+        // Reverse geocoding
+        reverseGeocode(lat, lng);
+    });
+
+    // Listener na przeciąganie markera
+    marker.addListener("dragend", () => {
+        const position = marker.getPosition();
+        const lat = position.lat();
+        const lng = position.lng();
+
+        // Aktualizacja inputa latlng
+        document.getElementById("latlng").value = `${lat}, ${lng}`;
+
+        // Reverse geocoding
+        reverseGeocode(lat, lng);
+    });
+}
+
+function reverseGeocode(lat, lng) {
+    const geocoder = new google.maps.Geocoder();
+    const latlng = { lat: lat, lng: lng };
+
+    geocoder.geocode({ location: latlng }, (results, status) => {
+        if (status === "OK") {
+            if (results[0]) {
+                const addressComponents = results[0].address_components;
+
+                let street = "";
+                let streetNumber = ""; // Numer budynku
+                let city = "";
+                let postalCode = "";
+                let administrativeArea = "";
+
+                // Rozdzielanie komponentów adresu
+                addressComponents.forEach(component => {
+                    const types = component.types;
+                    if (types.includes("street_number")) {
+                        streetNumber = component.long_name; // Przechowujemy numer budynku
+                    }
+                    if (types.includes("route")) {
+                        street = component.long_name; // Przechowujemy nazwę ulicy
+                    }
+                    if (types.includes("locality")) {
+                        city = component.long_name;
+                    }
+                    if (types.includes("administrative_area_level_1")) {
+                        administrativeArea = component.long_name;
+                    }
+                    if (types.includes("postal_code")) {
+                        postalCode = component.long_name;
+                    }
+                });
+
+                // Aktualizacja odpowiednich pól formularza
+                document.getElementById("location-input").value = street; // Wstawienie tylko nazwy ulicy
+                document.getElementById("numer_lokalu").value = streetNumber; // Wstawienie numeru budynku do pola numer_lokalu
+                document.getElementById("locality-input").value = city;
+                document.getElementById("administrative_area_level_1-input").value = administrativeArea;
+                document.getElementById("postal_code-input").value = postalCode;
+            } else {
+                window.alert("Brak wyników dla podanej lokalizacji.");
+                document.getElementById("location-input").value = "";
             }
-          }
-          return '';
-        };
-        getFormInputElement('location').value = getAddressComp('street_number') + ' '
-                  + getAddressComp('route');
-        for (const component of componentForm) {
-          // Location field is handled separately above as it has different logic.
-          if (component !== 'location') {
-            getFormInputElement(component).value = getAddressComp(component);
-          }
+        } else {
+            window.alert("Geocoder nie mógł znaleźć lokalizacji: " + status);
+            document.getElementById("location-input").value = "";
         }
-      }
-    
-      function renderAddress(place) {
-        map.setCenter(place.geometry.location);
-        marker.setPosition(place.geometry.location);
-        marker.setVisible(true);
-      }
-    }
+    });
+}
+
+
