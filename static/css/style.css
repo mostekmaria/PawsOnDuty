@@ -156,20 +156,25 @@ main {
 }
 h5 { margin-top: 5px; }
 
-#link1, #link2, #link3{
+#link1, #link2, #link3, #link4{
 color: #ffffff;
 font-size: 20px;
-justify-content: right;
+justify-content: center;
 }
 
-#link1:hover, #link2:hover, #link3:hover {
+#link1:hover, #link2:hover, #link3:hover, #link4:hover  {
   color: #ffffff; /* Przyciemnienie koloru tekstu */
   font-weight: 600;
 }
 
+.link {
+  text-align: center;
+}
+
 #name{
-  color: black;
-  font-weight: 800;
+  color: #ffffff;
+  font-size: 20px;
+  justify-content: right;
 }
 
 #div {
@@ -211,7 +216,29 @@ input {
 .zgloszenia {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #ddd;
+}
+
+
+.zgloszenia th:first-child {
+  border-top-left-radius: 16px;
+}
+
+.zgloszenia th:last-child {
+  border-top-right-radius: 16px;
+}
+
+.zgloszenia tr:last-of-type td:first-child {
+  border-bottom-left-radius: 16px;
+}
+
+.zgloszenia tr:last-of-type td:last-child {
+  border-bottom-right-radius: 16px;
+}
+
+.table-border {
+  border-collapse: collapse;
+  border: 5px solid #ddd;
+  border-radius: 16px; /* Zaokrąglone rogi panelu */
 }
 
 #rejestracja{
@@ -284,6 +311,17 @@ input {
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
 }
 
+.panel-table {
+  padding: 40px;
+  background-color: #304ebb8e !important;
+  border-radius: 16px; /* Zaokrąglone rogi panelu */
+  margin-top: 15px;
+  color: #ffffff;
+  display: block;
+  margin-bottom: 20%;
+  box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
+}
+
 
 .full-input, #data, #godzina, #liczba, #opis, .sprawca {
   margin-bottom: 15px; /* Odstęp poniżej każdego pola */
@@ -338,8 +376,20 @@ tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 tr:hover {
-  background-color: #e9e9e9;
+  background-color: #142252;
+  color: #e9e9e9;
 }
+
+tr {
+  background-color: #e9e9e9;
+  color: #142252;
+}
+
+#column-title{
+  background-color: #378e25;
+  color: #ffffff;
+}
+
 .formularz{
   display: flex;
   flex-wrap: wrap;
@@ -348,7 +398,7 @@ tr:hover {
   margin-bottom: 50px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 500px) {
   .formularz {
       flex-direction: column; /* Zmieniamy układ na kolumnowy */
   }
@@ -400,6 +450,11 @@ tr:hover {
   }
 }
 
+
+#text-table {
+  width: 100%;
+  text-align: center;
+}
 
 .button-container1{
   display: flex;
@@ -547,7 +602,7 @@ width: 100px;
   width: 300px;
 }
 
-@media all and (max-width: 900px) {
+@media all and (max-width: 1100px) {
 main {
   flex-wrap: wrap;
   padding-left: 10px;
@@ -562,7 +617,18 @@ nav, h5, #header, .title { display: none; }
   align-items: center;
   gap: 20px 10px;
 }
-.sidebar {padding-top: 15px;}
+.sidebar {
+  padding-top: 15px;
+}
+
+@media all and (min-width: 1100px) {
+  .sidebar{
+    display: none;
+    width: 0;
+  }
+}
+
+
 .sidebar a {font-size: 18px;}
 }
 
