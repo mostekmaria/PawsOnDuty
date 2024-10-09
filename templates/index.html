@@ -13,7 +13,7 @@
     <!-- OBSŁUGA MAP -->
     <script src="{{ url_for('static', filename='js/mapscript.js') }}" alt=""></script>
 </head>
-<body onload="areas()">
+<body>
     <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
         <br><br>
@@ -89,31 +89,14 @@
                 <input type="text" class="half-input" placeholder="Kod pocztowy" id="postal_code-input" name = "postal_code-input" pattern="[0-9]{2}-[0-9]{3}"/>
               </div>
             </div>
-            <gmp-map id="myMap" center="40.731,-73.997" zoom="8" map-id="DEMO_MAP_ID">
+
                 <div id="map" style="height: 500px; width: 100%;"></div> <!-- Kontener dla mapy -->
                 <div id="floating-panel" slot="control-block-start-inline-center">
                   <input id="latlng" type="text" value="40.714224,-73.961452"/>
                   <input id="submit" type="button" value="Reverse Geocode"/>
                 </div>
-                <gmp-advanced-marker></gmp-advanced-marker>
-            </gmp-map>            
+         
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDn6z08ngV98L8UZD2jsUPd2PX-YGBblrc&callback=initMap" async defer></script>
-            <script>
-                function initMap() {
-                    const initialLocation = { lat: 40.714224, lng: -73.961452 }; // Ustawienie lokalizacji startowej
-                    const map = new google.maps.Map(document.getElementById("map"), {
-                        zoom: 12,
-                        center: initialLocation,
-                    });
-        
-                    const marker = new google.maps.Marker({
-                        position: initialLocation,
-                        map: map,
-                        title: "Wybierz miejsce!",
-                        draggable: true, // Marker jest przeciągalny
-                    });
-                }
-            </script>
             
         <div class="panel-time fade-in">
                 <div class="titleicon">
@@ -175,8 +158,6 @@
 <!-- OBSŁUGA TOOLTIPÓW -->
 <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
   
-  </body>
-  </html>
 <div id="div"></div>
 <footer>
     <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
