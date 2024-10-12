@@ -5,19 +5,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chatbot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="static/logo.png"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+    <!-- OBSŁUGA MAP -->
+    <script src="{{ url_for('static', filename='js/mapscript.js') }}" alt=""></script>
 </head>
+
 <body>
-    <h1>Chatbot</h1>
-<!-- chatbot.html -->
-<form id="chatForm" action="{{ url_for('chatbot') }}" method="post">
-    <input type="text" name="user_input" placeholder="Type your message here">
-    <button type="submit">Send</button>
-</form>
-
-{% if response %}
-    <p>Chatbot: {{ response }}</p>
-{% endif %}
-
+    <div id="mySidebar" class="sidebar">
+        <br><br>
+        <br><br>
+        <a href="#"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="80"></a>
+        <br><br>
+        
+        {% if not session.get('zalogowany') %}
+        <a id="baroption" href="{{ url_for('register') }}">Zarejestruj się</a>
+        <a id="baroption" href="{{ url_for('logowanie') }}">Zaloguj się</a>
+        <a id="baroption" href="{{ url_for('chatbot') }}">Chatbot</a>
+        {% else %}
+        <a class="bar" id="barname">{{ session.get('name') }}</a>
+        <br><br>
+        <a id="baroption" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>
+        <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+        <a id="baroption" href="{{ url_for('chatbot') }}">Chatbot</a>
+        {% endif %}
     </div>
+    <header>
+        <div id="logo">
+            <a href = ><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="90" height="90"></a><br>
+        </div>
+        <img id="menu" src="static/menu.png" onclick="openCloseNav()">
+            <!-- OBSŁUGA SIDEBAR MENU -->
+            <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
+        <div id="header">
+            <a href = ><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="65"></a><br>
+        </div>
+        <nav class="navbar navbar-dark bg-primary">
+            {% if not zalogowany %}
+            <a id="link1" class="has-tooltip" data-tooltip="Zarejestruj się" href=rejestracja.html>Zarejestruj się</a>
+            <a id="link2" class="has-tooltip" data-tooltip="Zaloguj się" href=logowanie.html>Zaloguj się</a>
+            {% else %}
+            <span id="name">{{ imie }}</span>
+            <a id="link2" class="has-tooltip" data-tooltip="Moje zgłoszenia" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>   
+            <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+            {% endif %}
+            <!-- Nowy przycisk do chatbota -->
+            <a id="link3" class="has-tooltip" data-tooltip="Chatbot" href="{{ url_for('chatbot') }}">Chatbot</a>
+        </nav>  
+    </header>  
+    <main>
+        <div class="chatbot">
+            <div class="chatbot-title">
+            <h1>Chatbot</h1>
+            <p style="width:100%">Opowiedz swojemu ososbistemu asystentowi co się wydarzyło.</p>
+            </div>
+            {% if response %}
+                <p>Chatbot: {{ response }}</p>
+            {% endif %}  
+            <!-- chatbot.html -->
+            <div class="message-field">
+                <form id="chatForm" action="{{ url_for('chatbot') }}" method="post">
+                    <input id="message-user" type="text" name="user_input" placeholder="Wpisz wiadomość">
+                    <button class="send-sign" id="send" type="submit"></button>
+                </form>
+            </div>
+        </div>       
+    <main/>
+
 </body>
 </html>
+<footer>
+    <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
+    <p id="footer">© Maria Mostek, Patrycja Ruda. Kraków 2024.</p>
+</footer>

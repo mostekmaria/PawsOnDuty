@@ -235,6 +235,103 @@ input {
   border-bottom-right-radius: 16px;
 }
 
+.chatbot{
+  display: flex;
+  flex-direction:column;
+  justify-content:space-between;
+  margin-top: 8%;
+  width: 100%;
+  height: 75vh;
+  align-items: center; /* Ustawienie w poziomie */
+}
+
+.chatbot-title {
+  display: flex;               /* Użycie flexboxa */
+  float:inline-start;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;      /* Ustawienie kierunku na kolumnę */
+}
+
+#message-user {
+  flex: 1; /* Element zajmuje dostępne miejsce */
+  position: absolute;
+  left: 0;
+  top: -12px;
+  align-items: center;
+  text-align: left;
+  margin-bottom: 15px; /* Odstęp poniżej każdego pola */
+  border-radius: 20px; /* Zaokrąglone rogi pola */
+  font-size: 20px; /* Rozmiar czcionki pola */
+  border-color: #ffffff;
+  color: #768cd194;
+  box-sizing: border-box;
+  z-index: 2;
+  outline: none; /* Usunięcie domyślnego podświetlenia przeglądarki */
+  box-shadow: 0 0 7px #378e25; /* Delikatny cień wokół pola */
+  width: 86%;
+}
+
+.send-sign {
+  border-right: transparent;
+  border-top: 30px solid transparent;
+  border-bottom: 30px solid transparent;
+  border-left: 60px solid #378e25; /* Trójkąt */
+  background-color: transparent;
+  cursor: pointer;
+  position: relative;
+  outline: none;
+  transition: transform 0.5s ease;
+  margin-top: -2vh;
+  height: 100%;
+  z-index: 2;
+}
+
+.send-sign::before {
+  content: '';
+  position: absolute;
+  top: -22px;
+  left: -52px; /* Dopasowanie do pozycji trójkąta */
+  width: 0;
+  height: 0;
+  border-top: 30px solid transparent;
+  border-bottom: 30px solid transparent;
+  border-left: 60px solid #378e2555; /* Cień */
+  filter: blur(6px); /* Rozmycie cienia */
+  z-index: 0;
+  filter: blur(5px); /* Dodanie rozmycia do cienia */
+  transition: transform 2s ease;
+  transition: opacity 0.3s ease; /* Płynna zmiana przezroczystości */
+}
+
+.send-sign:hover {
+  transform: scale(0.85);
+}
+
+.send-sign:hover::before {
+  opacity: 0; /* Cień powoli zanika */
+}
+
+.message-field {
+  background-color: #ffffff;
+  border: 60px solid #ffffff; /* Cień */
+  border-radius: 60px;
+  height: 10vh;
+  z-index: -1;
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 1;
+  box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
+  width: 80%;
+}
+
+#chatForm {
+  height: 10px;
+}
+
 .table-border {
   border-collapse: collapse;
   border: 5px solid #ddd;
