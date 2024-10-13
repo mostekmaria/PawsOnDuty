@@ -52,6 +52,7 @@
       <table class="zgloszenia">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Tytuł</th>
                 <th>Opis zdarzenia</th>
                 <th>Adres</th>
@@ -88,20 +89,21 @@ function showFields(zgloszenieId) {
     submitButton.style.display = "block";
 }
                 </script>
-    <td class="status" data-zgloszenie-id="{{ zgloszenie[3] }}" data-aktualny-status="{{ zgloszenie[11] }}">
-      <div class="button-container">
-        <div>
-          <button class="edit-button" onclick="showFields('{{ zgloszenie[3] }}')">Edytuj</button>
-          <select class="status-select" name="status" data-zgloszenie-id="{{ zgloszenie[3] }}" style="display: none">
-              <option value="przyjęto">przyjęto</option>
-              <option value="zindentyfikowano">zindentyfikowano</option>
-              <option value="zakończono">zakończono</option>
-              <option value="porzucono">porzucono</option>
-          </select>
-        </div>
-        <button class="submit-button" onclick="submitChanges('{{ zgloszenie[3] }}')" style="display: none">Zatwierdź</button>
+<td class="status" data-zgloszenie-id="{{ zgloszenie[0] }}" data-aktualny-status="{{ zgloszenie[11] }}">
+    <div class="button-container">
+      <div>
+        <button class="edit-button" onclick="showFields('{{ zgloszenie[0] }}')">Edytuj</button> <!-- Zmienione z [3] na [0] -->
+        <select class="status-select" name="status" data-zgloszenie-id="{{ zgloszenie[0] }}" style="display: none"> <!-- Zmienione z [3] na [0] -->
+            <option value="przyjęto">przyjęto</option>
+            <option value="zindentyfikowano">zindentyfikowano</option>
+            <option value="zakończono">zakończono</option>
+            <option value="porzucono">porzucono</option>
+        </select>
       </div>
-    </td>
+      <button class="submit-button" onclick="submitChanges('{{ zgloszenie[0] }}')" style="display: none">Zatwierdź</button> <!-- Zmienione z [3] na [0] -->
+    </div>
+  </td>
+  
     
 </tr>
 {% endfor %}
@@ -117,41 +119,41 @@ function showFields(zgloszenieId) {
     <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
 		<div id="div"></div>
     <script>
-      function submitChanges(zgloszenieId, nazwaTabeli) {
-          const statusElement = document.querySelector(`.status[data-zgloszenie-id="${zgloszenieId}"]`);
-          const editButton = statusElement.querySelector('.edit-button');
-          const selectElement = statusElement.querySelector('.status-select');
-          const submitButton = statusElement.querySelector('.submit-button');
-      
-          const newStatus = selectElement.value;
-      
-          fetch('/update_status', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                  zgloszenieId: zgloszenieId,
-                  nazwaTabeli: nazwaTabeli,
-                  newStatus: newStatus,
-              }),
-          })
-              .then(response => {
-                  if (response.ok) {
-                      // Aktualizacja statusu na stronie bez ponownego ładowania
-                      statusElement.setAttribute('data-aktualny-status', newStatus);
-                      // Zmiana widoczności elementów
-                      editButton.style.display = "block";
-                      selectElement.style.display = "none";
-                      submitButton.style.display = "none";
-                  } else {
-                      console.error('Wystąpił błąd podczas aktualizacji statusu');
-                  }
-              })
-              .catch(error => {
-                  console.error('Wystąpił błąd podczas aktualizacji statusu', error);
-              });
-      }
+function submitChanges(zgloszenieId) {
+    const statusElement = document.querySelector(`.status[data-zgloszenie-id="${zgloszenieId}"]`);
+    const editButton = statusElement.querySelector('.edit-button');
+    const selectElement = statusElement.querySelector('.status-select');
+    const submitButton = statusElement.querySelector('.submit-button');
+
+    const newStatus = selectElement.value;
+
+    fetch('/update_status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            zgloszenieId: zgloszenieId,
+            newStatus: newStatus,
+        }),
+    })
+    .then(response => {
+        if (response.ok) {
+            // Aktualizacja statusu na stronie bez ponownego ładowania
+            statusElement.setAttribute('data-aktualny-status', newStatus);
+            // Zmiana widoczności elementów
+            editButton.style.display = "block";
+            selectElement.style.display = "none";
+            submitButton.style.display = "none";
+        } else {
+            console.error('Wystąpił błąd podczas aktualizacji statusu');
+        }
+    })
+    .catch(error => {
+        console.error('Wystąpił błąd podczas aktualizacji statusu', error);
+    });
+}
+
       </script>
       
 		<footer>

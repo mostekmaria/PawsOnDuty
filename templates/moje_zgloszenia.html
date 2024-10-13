@@ -2,126 +2,122 @@
 <html lang="pl">
     <head>
         <meta charset="UTF-8">
-        <title>PawsOnDuty - moje zgloszenia</title>
+        <title>PawsOnDuty - moje zgłoszenia</title>
         <link rel="shortcut icon" href="static/logo.png"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
     </head>
     <body>
-      <body>
         <div id="mySidebar" class="sidebar">
-          <br><br>
-          <br><br>
-          <a href="#"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="80"></a>
-          <br><br>
-          {% if zalogowany %}
-          <a class ="bar" id="barname">{{ imie }}</span>
+            <br><br><br><br>
+            <a href="index.html"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="80"></a>
             <br><br>
-          <a id="baroption" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>
-          <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
-          {% else %}
-          <a id="baroption" href=rejestracja.html>Zarejestruj się</a>
-          <a id="baroption" href=logowanie.html>Zaloguj się</a>
-          {% endif %}
+            {% if zalogowany %}
+                <a class="bar" id="barname">{{ imie }}</a>
+                <br><br>
+                <a id="baroption" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>
+                <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+            {% else %}
+                <a id="baroption" href="rejestracja.html">Zarejestruj się</a>
+                <a id="baroption" href="logowanie.html">Zaloguj się</a>
+            {% endif %}
         </div>
 
-
-
-
-      {% if komunikat %}
-      <div class="komunikat">{{ komunikat }}</div>
-  {% endif %}
-<header>
-    <div id="logo">
-        <a href = ><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="90" height="90"></a><br>
-    </div>
-    <img id="menu" src="static/menu.png" onclick="openCloseNav()">
-        <!-- OBSŁUGA SIDEBAR MENU -->
-        <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
-    <div id="header">
-        <a href = ><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="65"></a><br>
-    </div>
-    <nav class="navbar navbar-dark bg-primary">
-        {% if not zalogowany %}
-        <a id="link1" class="has-tooltip" data-tooltip="Zarejestruj się" href=rejestracja.html>Zarejestruj się</a>
-        <a id="link2" class="has-tooltip" data-tooltip="Zaloguj się" href=logowanie.html>Zaloguj się</a>
-        {% else %}
-        <span id="name">{{ imie }}</span>
-        <a id="link2" class="has-tooltip" data-tooltip="Moje zgłoszenia" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>   
-        <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+        {% if komunikat %}
+            <div class="komunikat">{{ komunikat }}</div>
         {% endif %}
-        <!-- Nowy przycisk do chatbota -->
-        <a id="link3" class="has-tooltip" data-tooltip="Chatbot" href="{{ url_for('chatbot') }}">Chatbot</a>
-    </nav>  
-</header>  
-  <nav>
-    {% if zalogowany %}
-    <span id="name">{{ imie }}</span>
-    <a id="link1" href="{{ url_for('moje_zgloszenia') }}" class="has-tooltip" data-tooltip="Moje zgłoszenia">Moje zgłoszenia</a> 
-    <a id="link2" href="{{ url_for('wyloguj') }}" class="has-tooltip" data-tooltip="Wyloguj się">Wyloguj się</a>  
-    {% else %}
-    <a id="link1" href=rejestracja.html class="has-tooltip" data-tooltip="Zarejestruj się">Zarejestruj się</a>
-    <a id="link2" href=logowanie.html class="has-tooltip" data-tooltip="Zaloguj się">Zaloguj się</a>
-    {% endif %}
-  </nav>
-  <main id="mainlog">
-    {% if zgloszenia %}
-    <h1 id="log">MOJE ZGŁOSZENIA</h1>
-    <p id="text-table">Przeglądaj swoje zgłoszenia i śledź ich status<p/>
-      <br>
-      {% if komunikat %}
-      <p style="color: red;">{{ komunikat }}</p>
-      {% endif %}  
-      <div class="panel-table">          
-        <table class="zgloszenia">
-          <thead>
-            <tr id="column-title">
-              <th>Tytuł</th>
-              <th>Opis zdarzenia</th>
-              <th>Adres</th>
-              <th>Data</th>
-              <th>Sprawcy</th>
-              <th>Świadkowie</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-              {% for zgloszenie in zgloszenia %}
-              <tr id="record">
-                <td>{{ zgloszenie[0] }}</td>
-                <td>{{ zgloszenie[1] }}</td>
-                <td>{{ zgloszenie[2] }}</td>
-                <td>{{ zgloszenie[3] }}</td>
-                <td>{{ zgloszenie[4] }}</td>
-                <td>{{ zgloszenie[5] }}</td>
-                <td>{{ zgloszenie[6] }}</td>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-            
-        </table>
-        
-      <div/>
-        {% else %}
-        <p class="naglowek">Brak zgłoszeń dla wybranej daty.</p>
-        {% endif %}
-        <br><br>
-        <div class = "link">
-          <a id="link4" href=index.html class="has-tooltip" data-tooltip="Wróć do strony głównej">Wróć do strony głównej</a> 
-        </div> 
-		</main> <div class="tooltip"></div>
-    <!-- OBSŁUGA TOOLTIPÓW --> 
-  <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
 
-		<div id="div"></div>
-    <footer>
-      <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
-      <p id="footer">© Maria Mostek, Patrycja Ruda. Kraków 2024.</p>
-    </footer>
+        <header>
+          <div id="logo">
+            <a href = "index.html"><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="90" height="90"></a><br>
+        </div>
+        <img id="menu" src="static/menu.png" onclick="openCloseNav()">
+            <!-- OBSŁUGA SIDEBAR MENU -->
+            <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
+        <div id="header">
+            <a href = "index.html"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="65"></a><br>
+        </div>
+            <nav class="navbar navbar-dark bg-primary">
+                {% if not zalogowany %}
+                    <a id="link1" class="has-tooltip" data-tooltip="Zarejestruj się" href="rejestracja.html">Zarejestruj się</a>
+                    <a id="link2" class="has-tooltip" data-tooltip="Zaloguj się" href="logowanie.html">Zaloguj się</a>
+                {% else %}
+                    <span id="name">{{ imie }}</span>
+                    <a id="link2" class="has-tooltip" data-tooltip="Moje zgłoszenia" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>   
+                    <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+                {% endif %}
+                <!-- Nowy przycisk do chatbota -->
+                <a id="link3" class="has-tooltip" data-tooltip="Chatbot" href="{{ url_for('chatbot') }}">Chatbot</a>
+            </nav>  
+        </header>  
+
+        <nav>
+            {% if zalogowany %}
+                <span id="name">{{ imie }}</span>
+                <a id="link1" href="{{ url_for('moje_zgloszenia') }}" class="has-tooltip" data-tooltip="Moje zgłoszenia">Moje zgłoszenia</a> 
+                <a id="link2" href="{{ url_for('wyloguj') }}" class="has-tooltip" data-tooltip="Wyloguj się">Wyloguj się</a>  
+            {% else %}
+                <a id="link1" href="rejestracja.html" class="has-tooltip" data-tooltip="Zarejestruj się">Zarejestruj się</a>
+                <a id="link2" href="logowanie.html" class="has-tooltip" data-tooltip="Zaloguj się">Zaloguj się</a>
+            {% endif %}
+        </nav>
+
+        <main id="mainlog">
+            {% if zgloszenia %}
+                <h1 id="log">MOJE ZGŁOSZENIA</h1>
+                <p id="text-table">Przeglądaj swoje zgłoszenia i śledź ich status</p>
+                <br>
+                {% if komunikat %}
+                    <p style="color: red;">{{ komunikat }}</p>
+                {% endif %}  
+                <div class="panel-table">          
+                    <table class="zgloszenia">
+                        <thead>
+                            <tr id="column-title">
+                                <th>Tytuł</th>
+                                <th>Opis zdarzenia</th>
+                                <th>Adres</th>
+                                <th>Data</th>
+                                <th>Sprawcy</th>
+                                <th>Świadkowie</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for zgloszenie in zgloszenia %}
+                                <tr id="record">
+                                    <td>{{ zgloszenie[0] }}</td>
+                                    <td>{{ zgloszenie[1] }}</td>
+                                    <td>{{ zgloszenie[2] }}</td>
+                                    <td>{{ zgloszenie[3] }}</td>
+                                    <td>{{ zgloszenie[4] }}</td>
+                                    <td>{{ zgloszenie[5] }}</td>
+                                    <td>{{ zgloszenie[6] }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="naglowek">Brak zgłoszeń dla wybranej daty.</p>
+            {% endif %}
+            <br><br>
+            <div class="link">
+                <a id="link4" href="index.html" class="has-tooltip" data-tooltip="Wróć do strony głównej">Wróć do strony głównej</a> 
+            </div> 
+        </main>
+        <div class="tooltip"></div>
+        <!-- OBSŁUGA TOOLTIPÓW --> 
+        <script src="{{ url_for('static', filename='js/tooltip.js') }}"></script> 
+
+        <div id="div"></div>
+        <footer>
+            <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
+            <p id="footer">© Maria Mostek, Patrycja Ruda. Kraków 2024.</p>
+        </footer>
     </body>
 </html>
