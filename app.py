@@ -10,7 +10,7 @@ db_config = {
     'user': 'administrator',
     'password': 'haslo',
     'host': '127.0.0.1',
-    'database': 'crimedb',
+    'database': 'crimedb2',
     'raise_on_warnings': True
 }
 
