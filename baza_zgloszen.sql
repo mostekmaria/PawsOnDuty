@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Paź 14, 2024 at 10:57 AM
+-- Generation Time: Paź 14, 2024 at 08:21 PM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.0.30
 
@@ -80,7 +80,7 @@ CREATE TABLE `reports` (
 --
 
 INSERT INTO `reports` (`report_id`, `title`, `user_id`, `report_time`, `status`) VALUES
-(1, 'Załoga G baluje na naszym osie...', 2, '2024-10-14 10:55:44', 'przyjęto');
+(1, 'Załoga G baluje na naszym osie...', 2, '2024-10-14 10:55:44', 'zindentyfikowano');
 
 -- --------------------------------------------------------
 
@@ -90,12 +90,15 @@ INSERT INTO `reports` (`report_id`, `title`, `user_id`, `report_time`, `status`)
 
 CREATE TABLE `suspects` (
   `suspect_id` smallint(6) NOT NULL,
-  `event_feature_id` smallint(6) NOT NULL,
+  `report_id` smallint(6) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   `surname` varchar(50) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `birthdate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+
 
 -- --------------------------------------------------------
 
@@ -170,7 +173,7 @@ ALTER TABLE `reports`
 --
 ALTER TABLE `suspects`
   ADD PRIMARY KEY (`suspect_id`),
-  ADD KEY `event_feature_id` (`event_feature_id`);
+  ADD KEY `event_feature_id` (`report_id`);
 
 --
 -- Indeksy dla tabeli `users`
@@ -211,7 +214,7 @@ ALTER TABLE `reports`
 -- AUTO_INCREMENT for table `suspects`
 --
 ALTER TABLE `suspects`
-  MODIFY `suspect_id` smallint(6) NOT NULL AUTO_INCREMENT;
+  MODIFY `suspect_id` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -251,7 +254,7 @@ ALTER TABLE `reports`
 -- Constraints for table `suspects`
 --
 ALTER TABLE `suspects`
-  ADD CONSTRAINT `suspects_ibfk_1` FOREIGN KEY (`event_feature_id`) REFERENCES `event_features` (`event_feature_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `suspects_ibfk_1` FOREIGN KEY (`report_id`) REFERENCES `event_features` (`event_feature_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `witnesses`

@@ -101,9 +101,8 @@ function showFields(zgloszenieId) {
       </div>
       <button class="submit-button" onclick="submitChanges('{{ zgloszenie[0] }}')" style="display: none">Zatwierdź</button> <!-- Zmienione z [3] na [0] -->
     </div>
+    <button class="suspect-button" onclick="addSuspect('{{ zgloszenie[0] }}')">Dodaj podejrzanego</button>
   </td>
-  
-    
  </tr>
                     {% endfor %}
                 </tbody>
@@ -119,6 +118,12 @@ function showFields(zgloszenieId) {
     <!-- OBSŁUGA TOOLTIPÓW -->
     <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
 		<div id="div"></div>
+        <script>
+            function addSuspect(reportId) {
+                // Przekierowanie na stronę suspects.html z ID zgłoszenia w URL
+                window.location.href = `/suspects.html?report_id=${reportId}`;
+            }
+            </script>          
     <script>
 function submitChanges(zgloszenieId) {
     const statusElement = document.querySelector(`.status[data-zgloszenie-id="${zgloszenieId}"]`);
