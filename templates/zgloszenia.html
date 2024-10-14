@@ -6,17 +6,20 @@
         <link rel="shortcut icon" href="static/logo.png"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
     </head>
     <body>
         <div id="mySidebar" class="sidebar">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
             <br><br>
             <br><br>
-            <a class="bar" id="bar" href="index.html">PawsOnDuty</a>
+            <a href="#"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="80"></a>
             <br><br>
-            <a class="bar" id="barname">{{ name }}</a>  <!-- Używamy 'name' zamiast 'imie' -->
-            <br><br>
-            <a id="baroption" href="index.html">Wyszukiwanie zgłoszenia</a>
+            
+            <a class="bar" id="barname">{{ session.get('name') }}</a>
+            <br>
             <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
         </div>
         
@@ -25,93 +28,87 @@
         {% endif %}
         
         <header>
-            <a href="#"><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="150" height="150"></a><br>
-            <img id="menu" src="static/menu.png" onclick="openNav()">
-            <!-- OBSŁUGA SIDEBAR MENU -->
-            <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
-            
-            <div id="header">
-                <a href="index.html"><h1 class="title has-tooltip" data-tooltip="Przejdź do strony głównej">PawsOnDuty</h1></a>
-                <h5>Powered by Core-Oho-Duh</h5>
+            <div id="logo">
+                <a href = ><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="90" height="90"></a><br>
             </div>
-
-            <nav>
-                <span id="name">{{ name }}</span>  <!-- Używamy 'name' zamiast 'imie' -->
-                <a id="link2" class="has-tooltip" data-tooltip="Wyszukiwanie zgłoszenia" href="index.html">Wyszukiwanie zgłoszenia</a>   
+            <img id="menu" src="static/menu.png" onclick="openCloseNav()">
+                <!-- OBSŁUGA SIDEBAR MENU -->
+                <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
+            <div id="header">
+                <a href = ><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="65"></a><br>
+            </div> 
+            <nav class="navbar navbar-dark bg-primary">
+                <span id="name">{{ imie }}</span>  
                 <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
-            </nav>
-            
-        </header>
+            </nav> 
+        </header> 
+
   <main id="mainlog">
     {% if zgloszenia %}
     <h1 id="log">Zgłoszenia dla wybranej daty: {{ zgloszenia[0][6] }}</h1>
       <br>
       {% if komunikat %}
       <p style="color: red;">{{ komunikat }}</p>
-      {% endif %}            
-      <table class="zgloszenia">
-        <thead>
-            <tr>
-                <th>Tytuł</th>
-                <th>Opis zdarzenia</th>
-                <th>Adres</th>
-                <th>Data</th>
-                <th>Sprawcy</th>
-                <th>Świadkowie</th>
-                <th>Status</th>
-              </tr>
-        </thead>
-        <tbody>
-            {% for zgloszenie in zgloszenia %}
-            <tr>
-              <td>{{ zgloszenie[0] }}</td>
-              <td>{{ zgloszenie[1] }}</td>
-              <td>{{ zgloszenie[2] }}</td>
-              <td>{{ zgloszenie[3] }}</td>
-              <td>{{ zgloszenie[4] }}</td>
-              <td>{{ zgloszenie[5] }}</td>
-              <td>{{ zgloszenie[6] }}</td>
-              <td>{{ zgloszenie[7] }}</td>
-              <td>{{ zgloszenie[8] }}</td>
-              <td>{{ zgloszenie[9] }}</td>
-              <td>{{ zgloszenie[10] }}</td>
-               <td>{{ zgloszenie[11] }}</td> <!-- Wyświetl status -->
-               <script>
-function showFields(zgloszenieId) {
-    const statusElement = document.querySelector(`.status[data-zgloszenie-id="${zgloszenieId}"]`);
-    const editButton = statusElement.querySelector('.edit-button');
-    const selectElement = statusElement.querySelector('.status-select');
-    const submitButton = statusElement.querySelector('.submit-button');
+      {% endif %}
+      <div class="panel-table">            
+        <table class="zgloszenia">
+            <thead>
+                <tr id="column-title">
+                    <th>Tytuł</th>
+                    <th>Opis zdarzenia</th>
+                    <th>Adres</th>
+                    <th>Data</th>
+                    <th>Sprawcy</th>
+                    <th>Świadkowie</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for zgloszenie in zgloszenia %}
+                <tr>
+                <td>{{ zgloszenie[0] }}</td>
+                <td>{{ zgloszenie[1] }}</td>
+                <td>{{ zgloszenie[2] }}</td>
+                <td>{{ zgloszenie[3] }}</td>
+                <td>{{ zgloszenie[4] }}</td>
+                <td>{{ zgloszenie[5] }}</td>
+                <script>
+    function showFields(zgloszenieId) {
+        const statusElement = document.querySelector(`.status[data-zgloszenie-id="${zgloszenieId}"]`);
+        const editButton = statusElement.querySelector('.edit-button');
+        const selectElement = statusElement.querySelector('.status-select');
+        const submitButton = statusElement.querySelector('.submit-button');
 
-    editButton.style.display = "none";
-    selectElement.style.display = "block";
-    submitButton.style.display = "block";
-}
-                </script>
-    <td class="status" data-zgloszenie-id="{{ zgloszenie[3] }}" data-aktualny-status="{{ zgloszenie[11] }}">
-      <div class="button-container">
-        <div>
-          <button class="edit-button" onclick="showFields('{{ zgloszenie[3] }}')">Edytuj</button>
-          <select class="status-select" name="status" data-zgloszenie-id="{{ zgloszenie[3] }}" style="display: none">
-              <option value="przyjęto">przyjęto</option>
-              <option value="zindentyfikowano">zindentyfikowano</option>
-              <option value="zakończono">zakończono</option>
-              <option value="porzucono">porzucono</option>
-          </select>
+        editButton.style.display = "none";
+        selectElement.style.display = "block";
+        submitButton.style.display = "block";
+    }
+                    </script>
+        <td class="status" data-zgloszenie-id="{{ zgloszenie[3] }}" data-aktualny-status="{{ zgloszenie[11] }}">
+        <div class="button-container">
+            <div>
+            <button class="edit-button" onclick="showFields('{{ zgloszenie[3] }}')">Edytuj</button>
+            <select class="status-select" name="status" data-zgloszenie-id="{{ zgloszenie[3] }}" style="display: none">
+                <option value="przyjęto">przyjęto</option>
+                <option value="zindentyfikowano">zindentyfikowano</option>
+                <option value="zakończono">zakończono</option>
+                <option value="porzucono">porzucono</option>
+            </select>
+            </div>
+            <button class="submit-button" onclick="submitChanges('{{ zgloszenie[3] }}')" style="display: none">Zatwierdź</button>
         </div>
-        <button class="submit-button" onclick="submitChanges('{{ zgloszenie[3] }}')" style="display: none">Zatwierdź</button>
-      </div>
-    </td>
-    
-</tr>
-{% endfor %}
-          </tbody>
-      </table>
+        </td>
+        
+    </tr>
+    {% endfor %}
+            </tbody>
+        </table>
+    <div/>
         {% else %}
         <p>Brak zgłoszeń dla wybranej daty.</p>
         {% endif %}
         <br><br>
-        <div><a id="link3" href=index.html class="has-tooltip" data-tooltip="Wróć do strony głównej">Wróć do strony głównej</a> </div> <br>
+        <div class="link"><a id="link4" href=index.html class="has-tooltip" data-tooltip="Wróć do strony głównej">Wróć do strony głównej</a> </div> <br>
 		</main><div class="tooltip"></div>
     <!-- OBSŁUGA TOOLTIPÓW -->
     <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
@@ -154,9 +151,9 @@ function showFields(zgloszenieId) {
       }
       </script>
       
-		<footer>
-			<p id="footer">Aplikacja webowa stworzona jako projekt z kursu Języki Programowania Aplikacji Internetowych AGH.</p>
-			<p id="footer">© Maria Mostek, Patrycja Ruda, Filip Kuś. Kraków 2023.</p>
-		</footer>
+      <footer>
+        <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
+        <p id="footer">© Maria Mostek, Patrycja Ruda. Kraków 2024.</p>
+      </footer>
     </body>
 </html>
