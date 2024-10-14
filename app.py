@@ -10,7 +10,7 @@ db_config = {
     'user': 'administrator',
     'password': 'haslo',
     'host': '127.0.0.1',
-    'database': 'crimedb',
+    'database': 'crimedb', #tu sobie ja musze zmieniać na 2
     'raise_on_warnings': True
 }
 
@@ -85,21 +85,30 @@ def insert_report_into_db():
         # Pobranie aktualnej daty i czasu z systemu
         report_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        # Wstawienie danych do tabeli reports (dodanie kolumny report_time)
-        report_insert = "INSERT INTO reports (title, report_time, user_id) VALUES (%s, %s, %s)"
+        # Wstawienie danych do tabeli reports (dodanie kolumny status)
+        report_insert = """
+            INSERT INTO reports (title, report_time, user_id, status) 
+            VALUES (%s, %s, %s, %s)
+        """
         
         # Pobieramy user_id z sesji; jeśli użytkownik nie jest zalogowany, ustawiamy None
         user_id = session.get('user_id', None)
+        status = report_data.get('status', 'Zgłoszono')  # Domyślnie "Zgłoszono"
         
-        cursor.execute(report_insert, (report_data['title'], report_time, user_id))
+        cursor.execute(report_insert, (
+            report_data['title'], 
+            report_time, 
+            user_id, 
+            status
+        ))
 
         report_id = cursor.lastrowid
 
         # Wstawienie danych do tabeli event_features
-        event_features_insert = (
-            "INSERT INTO event_features (report_id, event_description, address, event_time) "
-            "VALUES (%s, %s, %s, %s)"
-        )
+        event_features_insert = """
+            INSERT INTO event_features (report_id, event_description, address, event_time) 
+            VALUES (%s, %s, %s, %s)
+        """
         cursor.execute(event_features_insert, (
             report_id,
             report_data['event_desc'],
@@ -126,6 +135,7 @@ def insert_report_into_db():
         cursor.close()
         cnx.close()
 
+
 @app.route('/')
 def main():
     return redirect(url_for('przekierowanieZgloszenie'))
@@ -141,9 +151,7 @@ def przekierowanieZgloszenie():
     except:
         return render_template('index.html', komunikat=komunikat)
     
-@app.route('/przegladanie.html')
-def przegladanie():
-    return render_template('przegladanie.html', zalogowany=session.get('zalogowany'), imie=session.get('name'))
+
     
 # Endpoint to handle form submission and save data to report.json
 @app.route('/submit', methods=['POST'])
@@ -177,7 +185,8 @@ def submit_form():
         "address": address.strip(),
         "event_time": event_time.strip(),
         "appearance": appearance,
-        "info_contact": "anonimowy"
+        "info_contact": "anonimowy",
+        "status": "Zgłoszono"
     }
 
     # Zapis do pliku report.json
@@ -191,6 +200,12 @@ def submit_form():
 
     # Przekierowanie na stronę główną po zapisaniu danych
     return redirect(url_for('main'))
+
+@app.route('/przegladanie.html')
+def przegladanie():
+    return render_template('przegladanie.html', zalogowany=session.get('zalogowany'), imie=session.get('name'))
+
+
 
     
 @app.route('/rejestracja.html', methods=['GET', 'POST'])
@@ -333,21 +348,108 @@ def moje_zgloszenia():
 
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
-    query = "SELECT r.title, ef.event_description, ef.address, ef.event_time, p.appearance, w.info_contact FROM reports r JOIN event_features ef ON r.report_id = ef.report_id JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id JOIN witnesses w ON ef.event_feature_id = w.event_feature_id " \
+    query = "SELECT r.title, ef.event_description, ef.address, ef.event_time, p.appearance, w.info_contact, r.status FROM reports r JOIN event_features ef ON r.report_id = ef.report_id JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id JOIN witnesses w ON ef.event_feature_id = w.event_feature_id " \
         "WHERE r.user_id = %s " \
         "ORDER BY ef.event_time DESC"
     cursor.execute(query, (user_id,))
     zgloszenia = cursor.fetchall()
 
-    return render_template('moje_zgloszenia.html', zgloszenia=zgloszenia, zalogowany=session.get('zalogowany'), imie=session.get('imie'))
+    return render_template('moje_zgloszenia.html', zgloszenia=zgloszenia, zalogowany=session.get('zalogowany'), imie=session.get('name'))
 
 @app.route('/zgloszenia.html', methods=['GET'])
 def zgloszenia():
+    selected_date = request.args.get('data')  # Pobranie parametru 'data' z zapytania GET
+    try:
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor()
+        
+        if selected_date:
+            # Zakładam, że format daty w report_time to 'YYYY-MM-DD HH:MM:SS'
+            # Używamy funkcji DATE() aby wyekstrahować część daty
+            query = """
+                SELECT 
+                    r.report_id, 
+                    r.title, 
+                    ef.event_description, 
+                    ef.address, 
+                    ef.event_time, 
+                    p.appearance, 
+                    w.info_contact, 
+                    r.status 
+                FROM reports r 
+                JOIN event_features ef ON r.report_id = ef.report_id 
+                JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id 
+                JOIN witnesses w ON ef.event_feature_id = w.event_feature_id
+                WHERE DATE(r.report_time) = %s
+            """
+            cursor.execute(query, (selected_date,))
+        else:
+            # Jeśli nie podano daty, pobieramy wszystkie zgłoszenia
+            query = """
+                SELECT 
+                    r.report_id, 
+                    r.title, 
+                    ef.event_description, 
+                    ef.address, 
+                    ef.event_time, 
+                    p.appearance, 
+                    w.info_contact, 
+                    r.status 
+                FROM reports r 
+                JOIN event_features ef ON r.report_id = ef.report_id 
+                JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id 
+                JOIN witnesses w ON ef.event_feature_id = w.event_feature_id
+            """
+            cursor.execute(query)
+        
+        zgloszenia = cursor.fetchall()
+        
+        # Opcjonalnie: Przekazanie wybranej daty do szablonu, aby ją wyświetlić
+        return render_template(
+            'zgloszenia.html', 
+            zgloszenia=zgloszenia, 
+            komunikat=None, 
+            zalogowany=session.get('zalogowany'), 
+            name=session.get('name'),
+            selected_date=selected_date
+        )
+        
+    except mysql.connector.Error as err:
+        print(f"Błąd podczas pobierania zgłoszeń: {err}")
+        zgloszenia = []
+        return render_template(
+            'zgloszenia.html', 
+            zgloszenia=zgloszenia, 
+            komunikat="Wystąpił błąd podczas pobierania zgłoszeń.", 
+            zalogowany=session.get('zalogowany'), 
+            name=session.get('name')
+        )
+    finally:
+        cursor.close()
+        cnx.close()
+
+@app.route('/update_status', methods=['POST'])
+def update_status():
+    zgloszenie_id = request.json['zgloszenieId']
+    new_status = request.json['newStatus']
+    
+    print(f"Zgłoszenie ID: {zgloszenie_id}, Nowy status: {new_status}")  # Debugowanie
+    
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
-    cursor.execute("SELECT r.title, ef.event_description, ef.address, ef.event_time, p.appearance, w.info_contact FROM reports r JOIN event_features ef ON r.report_id = ef.report_id JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id JOIN witnesses w ON ef.event_feature_id = w.event_feature_id")
-    zgloszenia = cursor.fetchall()
-    return render_template('zgloszenia.html', zgloszenia=zgloszenia, komunikat=None, zalogowany=session.get('zalogowany'), imie=session.get('name'))
+    
+    try:
+        update_query = f"UPDATE reports SET status = %s WHERE report_id = %s"
+        cursor.execute(update_query, (new_status, zgloszenie_id))
+        cnx.commit()
+        return 'OK', 200
+    except Exception as e:
+        print('Błąd podczas aktualizacji statusu:', e)
+        cnx.rollback()
+        return 'Błąd podczas aktualizacji statusu', 500
+    finally:
+        cursor.close()
+        cnx.close()
 
 
 @app.route('/chatbot', methods=['GET', 'POST'])

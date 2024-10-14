@@ -13,7 +13,7 @@
     <!-- OBSŁUGA MAP -->
     <script src="{{ url_for('static', filename='js/mapscript.js') }}" alt=""></script>
 </head>
-<body onload="areas()">
+<body>
     <div id="mySidebar" class="sidebar">
         <br><br>
         <br><br>
@@ -88,10 +88,14 @@
                 <input type="text" class="half-input" placeholder="Kod pocztowy" id="postal_code-input" name = "postal_code-input" pattern="[0-9]{2}-[0-9]{3}"/>
               </div>
             </div>
-            <div class="map fade-in" id="gmp-map"></div>
-            <div id="kontrola"></div>
-        <!-- OBSŁUGA MAPY -->
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDn6z08ngV98L8UZD2jsUPd2PX-YGBblrc&libraries=places&callback=initMap&solution_channel=GMP_QB_addressselection_v1_cABC" async defer></script>
+
+                <div id="map" style="height: 500px; width: 100%;"></div> <!-- Kontener dla mapy -->
+                <div id="floating-panel" slot="control-block-start-inline-center">
+                  <input id="latlng" type="text" value="40.714224,-73.961452"/>
+                  <input id="submit" type="button" value="Reverse Geocode"/>
+                </div>
+         
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDn6z08ngV98L8UZD2jsUPd2PX-YGBblrc&callback=initMap" async defer></script>
             
         <div class="panel-time fade-in">
                 <div class="titleicon">
@@ -153,8 +157,6 @@
 <!-- OBSŁUGA TOOLTIPÓW -->
 <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
   
-  </body>
-  </html>
 <div id="div"></div>
 <footer>
     <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>

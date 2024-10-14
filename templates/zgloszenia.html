@@ -44,7 +44,16 @@
         </header> 
 
   <main id="mainlog">
+    {% if selected_date %}
+    <h1 id="log">Zgłoszenia dla wybranej daty: {{ selected_date }}</h1>
+    {% endif %}
+    <br>
+    {% if komunikat %}
+        <p style="color: red;">{{ komunikat }}</p>
+    {% endif %}
+
     {% if zgloszenia %}
+    
     <h1 id="log">Zgłoszenia dla wybranej daty: {{ zgloszenia[0][6] }}</h1>
       <br>
       {% if komunikat %}
@@ -105,50 +114,51 @@
         </table>
     <div/>
         {% else %}
-        <p>Brak zgłoszeń dla wybranej daty.</p>
+            <p>Brak zgłoszeń dla wybranej daty.</p>
         {% endif %}
         <br><br>
+
         <div class="link"><a id="link4" href=index.html class="has-tooltip" data-tooltip="Wróć do strony głównej">Wróć do strony głównej</a> </div> <br>
 		</main><div class="tooltip"></div>
     <!-- OBSŁUGA TOOLTIPÓW -->
     <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
 		<div id="div"></div>
     <script>
-      function submitChanges(zgloszenieId, nazwaTabeli) {
-          const statusElement = document.querySelector(`.status[data-zgloszenie-id="${zgloszenieId}"]`);
-          const editButton = statusElement.querySelector('.edit-button');
-          const selectElement = statusElement.querySelector('.status-select');
-          const submitButton = statusElement.querySelector('.submit-button');
-      
-          const newStatus = selectElement.value;
-      
-          fetch('/update_status', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                  zgloszenieId: zgloszenieId,
-                  nazwaTabeli: nazwaTabeli,
-                  newStatus: newStatus,
-              }),
-          })
-              .then(response => {
-                  if (response.ok) {
-                      // Aktualizacja statusu na stronie bez ponownego ładowania
-                      statusElement.setAttribute('data-aktualny-status', newStatus);
-                      // Zmiana widoczności elementów
-                      editButton.style.display = "block";
-                      selectElement.style.display = "none";
-                      submitButton.style.display = "none";
-                  } else {
-                      console.error('Wystąpił błąd podczas aktualizacji statusu');
-                  }
-              })
-              .catch(error => {
-                  console.error('Wystąpił błąd podczas aktualizacji statusu', error);
-              });
-      }
+function submitChanges(zgloszenieId) {
+    const statusElement = document.querySelector(`.status[data-zgloszenie-id="${zgloszenieId}"]`);
+    const editButton = statusElement.querySelector('.edit-button');
+    const selectElement = statusElement.querySelector('.status-select');
+    const submitButton = statusElement.querySelector('.submit-button');
+
+    const newStatus = selectElement.value;
+
+    fetch('/update_status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            zgloszenieId: zgloszenieId,
+            newStatus: newStatus,
+        }),
+    })
+    .then(response => {
+        if (response.ok) {
+            // Aktualizacja statusu na stronie bez ponownego ładowania
+            statusElement.setAttribute('data-aktualny-status', newStatus);
+            // Zmiana widoczności elementów
+            editButton.style.display = "block";
+            selectElement.style.display = "none";
+            submitButton.style.display = "none";
+        } else {
+            console.error('Wystąpił błąd podczas aktualizacji statusu');
+        }
+    })
+    .catch(error => {
+        console.error('Wystąpił błąd podczas aktualizacji statusu', error);
+    });
+}
+
       </script>
       
       <footer>
