@@ -50,12 +50,12 @@
                 <p style="color: red;">{{ komunikat }}</p>
             {% endif %}         
             
-            <form action="/zgloszenia.html" method="GET" id="formsearch">
+            <form action="{{ url_for('zgloszenia') }}" method="GET" id="formsearch">
                 <div class="sign" id="search">
                     <label for="data">Data:</label>
                     <input type="date" id="data" name="data" required><br><br>
-                </div> <br><br>
-
+                </div>
+                <br><br>
                 <input class="button" type="submit" value="Wyszukaj">
             </form>
         </main>

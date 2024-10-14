@@ -10,7 +10,7 @@ db_config = {
     'user': 'administrator',
     'password': 'haslo',
     'host': '127.0.0.1',
-    'database': 'crimedb2',
+    'database': 'crimedb', #tu sobie ja musze zmieniać na 2
     'raise_on_warnings': True
 }
 
@@ -358,34 +358,75 @@ def moje_zgloszenia():
 
 @app.route('/zgloszenia.html', methods=['GET'])
 def zgloszenia():
+    selected_date = request.args.get('data')  # Pobranie parametru 'data' z zapytania GET
     try:
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
-        query = """
-            SELECT 
-                r.report_id, 
-                r.title, 
-                ef.event_description, 
-                ef.address, 
-                ef.event_time, 
-                p.appearance, 
-                w.info_contact, 
-                r.status 
-            FROM reports r 
-            JOIN event_features ef ON r.report_id = ef.report_id 
-            JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id 
-            JOIN witnesses w ON ef.event_feature_id = w.event_feature_id
-        """
-        cursor.execute(query)
+        
+        if selected_date:
+            # Zakładam, że format daty w report_time to 'YYYY-MM-DD HH:MM:SS'
+            # Używamy funkcji DATE() aby wyekstrahować część daty
+            query = """
+                SELECT 
+                    r.report_id, 
+                    r.title, 
+                    ef.event_description, 
+                    ef.address, 
+                    ef.event_time, 
+                    p.appearance, 
+                    w.info_contact, 
+                    r.status 
+                FROM reports r 
+                JOIN event_features ef ON r.report_id = ef.report_id 
+                JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id 
+                JOIN witnesses w ON ef.event_feature_id = w.event_feature_id
+                WHERE DATE(r.report_time) = %s
+            """
+            cursor.execute(query, (selected_date,))
+        else:
+            # Jeśli nie podano daty, pobieramy wszystkie zgłoszenia
+            query = """
+                SELECT 
+                    r.report_id, 
+                    r.title, 
+                    ef.event_description, 
+                    ef.address, 
+                    ef.event_time, 
+                    p.appearance, 
+                    w.info_contact, 
+                    r.status 
+                FROM reports r 
+                JOIN event_features ef ON r.report_id = ef.report_id 
+                JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id 
+                JOIN witnesses w ON ef.event_feature_id = w.event_feature_id
+            """
+            cursor.execute(query)
+        
         zgloszenia = cursor.fetchall()
+        
+        # Opcjonalnie: Przekazanie wybranej daty do szablonu, aby ją wyświetlić
+        return render_template(
+            'zgloszenia.html', 
+            zgloszenia=zgloszenia, 
+            komunikat=None, 
+            zalogowany=session.get('zalogowany'), 
+            name=session.get('name'),
+            selected_date=selected_date
+        )
+        
     except mysql.connector.Error as err:
         print(f"Błąd podczas pobierania zgłoszeń: {err}")
         zgloszenia = []
+        return render_template(
+            'zgloszenia.html', 
+            zgloszenia=zgloszenia, 
+            komunikat="Wystąpił błąd podczas pobierania zgłoszeń.", 
+            zalogowany=session.get('zalogowany'), 
+            name=session.get('name')
+        )
     finally:
         cursor.close()
         cnx.close()
-    
-    return render_template('zgloszenia.html', zgloszenia=zgloszenia, komunikat=None, zalogowany=session.get('zalogowany'), name=session.get('name'))
 
 @app.route('/update_status', methods=['POST'])
 def update_status():
