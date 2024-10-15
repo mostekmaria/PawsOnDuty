@@ -47,37 +47,31 @@
     {% if selected_date %}
     <h1 id="log">Zgłoszenia dla wybranej daty: {{ selected_date }}</h1>
     {% endif %}
-    <br>
-    {% if komunikat %}
-        <p style="color: red;">{{ komunikat }}</p>
-    {% endif %}
 
     {% if zgloszenia %}
-      <table class="zgloszenia">
-          <thead>
-              <tr>
-                  <th>ID</th>
-                  <th>Tytuł</th>
-                  <th>Opis zdarzenia</th>
-                  <th>Adres</th>
-                  <th>Data</th>
-                  <th>Sprawcy</th>
-                  <th>Świadkowie</th>
-                  <th>Status</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for zgloszenie in zgloszenia %}
-              <tr>
-                  <td>{{ zgloszenie[0] }}</td>
-                  <td>{{ zgloszenie[1] }}</td>
-                  <td>{{ zgloszenie[2] }}</td>
-                  <td>{{ zgloszenie[3] }}</td>
-                  <td>{{ zgloszenie[4].split(' ')[0] }}</td> <!-- Wyświetlanie tylko daty -->
-                  <td>{{ zgloszenie[5] }}</td>
-                  <td>{{ zgloszenie[6] }}</td>
-                  <td>{{ zgloszenie[7] }}</td> <!-- Wyświetl status -->
-               <script>
+    <div class="panel-table">            
+        <table class="zgloszenia">
+            <thead>
+                <tr id="column-title">
+                    <th>Tytuł</th>
+                    <th>Opis zdarzenia</th>
+                    <th>Adres</th>
+                    <th>Data</th>
+                    <th>Sprawcy</th>
+                    <th>Świadkowie</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for zgloszenie in zgloszenia %}
+                <tr>
+                <td>{{ zgloszenie[0] }}</td>
+                <td>{{ zgloszenie[1] }}</td>
+                <td>{{ zgloszenie[2] }}</td>
+                <td>{{ zgloszenie[3] }}</td>
+                <td>{{ zgloszenie[4] }}</td>
+                <td>{{ zgloszenie[5] }}</td>
+                <script>
 function showFields(zgloszenieId) {
     const statusElement = document.querySelector(`.status[data-zgloszenie-id="${zgloszenieId}"]`);
     const editButton = statusElement.querySelector('.edit-button');
@@ -108,13 +102,14 @@ function showFields(zgloszenieId) {
                     {% endfor %}
                 </tbody>
             </table>
+    </div>
         {% else %}
             <p>Brak zgłoszeń dla wybranej daty.</p>
         {% endif %}
         <br><br>
         <div><a id="link3" href="{{ url_for('przegladanie') }}" class="has-tooltip" data-tooltip="Wróć do strony głównej">Wróć do strony głównej</a></div>
         <br>
-    </main><div
+    </main><div>
      class="tooltip"></div>
     <!-- OBSŁUGA TOOLTIPÓW -->
     <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 

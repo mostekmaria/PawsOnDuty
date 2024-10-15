@@ -15,14 +15,12 @@
         <div id="mySidebar" class="sidebar">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
             <br><br>
-            <a id="baroption" href="index.html">Wyszukiwanie zgłoszenia</a>
-            <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
             <br><br>
             <a href="index.html"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="80"></a>
             <br><br>
             <a class="bar" id="barname">{{ session.get('name') }}</a>
             <br>  <!-- Używamy 'name' zamiast 'imie' -->
-            <br>
+            <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
         </div>
         
         {% if komunikat %}
@@ -32,6 +30,7 @@
         <header>
             <div id="logo">
             <a href = "index.html"><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="90" height="90"></a><br>
+            </div>
             <img id="menu" src="static/menu.png" onclick="openCloseNav()">
             <!-- OBSŁUGA SIDEBAR MENU -->
             <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
