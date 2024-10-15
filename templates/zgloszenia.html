@@ -107,9 +107,8 @@ function showFields(zgloszenieId) {
             <p>Brak zgłoszeń dla wybranej daty.</p>
         {% endif %}
         <br><br>
-        <div><a id="link3" href="{{ url_for('przegladanie') }}" class="has-tooltip" data-tooltip="Wróć do strony głównej">Wróć do strony głównej</a></div>
-        <br>
-    </main><div>
+        <div class="link"><a id="link4" href=index.html class="has-tooltip" data-tooltip="Wróć do strony głównej">Wróć do strony głównej</a> </div> <br>
+    </main><div class="tooltip"></div>
      class="tooltip"></div>
     <!-- OBSŁUGA TOOLTIPÓW -->
     <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
