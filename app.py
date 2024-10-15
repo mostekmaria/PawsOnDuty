@@ -166,6 +166,8 @@ def insert_suspect_into_db(report_id, name, surname, address, birthdate, photo_b
     finally:
         cursor.close()
         cnx.close()
+        with open('report.json', 'w', encoding='utf-8') as f:
+            f.write('')  # Zapisywanie pustego pliku
 
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -231,6 +233,8 @@ def submit_form():
         json.dump(report_data, f, ensure_ascii=False, indent=4)
 
     insert_report_into_db()
+
+    report_data=None
 
     # Ustawienie komunikatu
     session['komunikat'] = "Zgłoszenie zostało zapisane pomyślnie!"
@@ -562,10 +566,11 @@ def chatbot():
         if intent_tag == "witnesses":
             insert_report_into_db()
             session.pop('first_message', None)
-            return "Dziękujemy za zgłoszenie. Dane zostały zapisane w bazie."
+            return redirect(url_for('main'))
 
     print(f"Session data (after request): {session}")
-    return render_template('chatbot.html', response=response)
+    return render_template('chatbot.html', response=response, zalogowany=session.get('zalogowany'), 
+            name=session.get('name'),)
 
 
 if __name__ == '__main__':
