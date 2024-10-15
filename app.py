@@ -136,22 +136,25 @@ def insert_report_into_db():
         cnx.close()
 
 # Funkcja do wstawiania podejrzanych do tabeli suspects w bazie danych
-def insert_suspect_into_db(event_feature_id, name, surname, address, birthdate):
+def insert_suspect_into_db(report_id, name, surname, address, birthdate, photo_blob):
     try:
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
 
-        # Wstawienie danych do tabeli suspects
+        # Zapytanie SQL
         suspect_insert = """
-            INSERT INTO suspects (report_id, name, surname, address, birthdate) 
-            VALUES (%s, %s, %s, %s, %s)
+            INSERT INTO suspects (report_id, name, surname, address, birthdate, photo) 
+            VALUES (%s, %s, %s, %s, %s, %s)
         """
+        
+        # Wstawienie danych do tabeli suspects
         cursor.execute(suspect_insert, (
-            event_feature_id, 
-            name, 
-            surname, 
-            address, 
-            birthdate
+            report_id,  # Upewnij się, że to jest report_id
+            name,
+            surname,
+            address,
+            birthdate,
+            photo_blob  # Upewnij się, że photo_blob jest przekazywane
         ))
 
         # Zatwierdzenie transakcji
@@ -163,6 +166,12 @@ def insert_suspect_into_db(event_feature_id, name, surname, address, birthdate):
     finally:
         cursor.close()
         cnx.close()
+
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+def allowed_file(filename):
+    """Sprawdzenie, czy plik ma dozwolone rozszerzenie."""
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
 def main():
@@ -456,6 +465,7 @@ def zgloszenia():
         cursor.close()
         cnx.close()
 
+
 @app.route('/suspects.html', methods=['GET', 'POST'])
 def handle_suspects():
     if request.method == 'POST':
@@ -464,16 +474,26 @@ def handle_suspects():
         surname = request.form.get('surname') or None
         address = request.form.get('address') or None
         birthdate = request.form.get('birthdate') or None
-
-        # Pobieranie report_id z formularza
         report_id = request.form.get('report_id') or None
+
+        # Pobieranie pliku zdjęcia
+        if 'photo' not in request.files:
+            return "Brak pliku zdjęcia", 400
+        photo = request.files['photo']
+
+        # Sprawdzanie, czy plik jest poprawny
+        if photo and allowed_file(photo.filename):
+            # Odczyt pliku jako danych binarnych (BLOB)
+            photo_blob = photo.read()
+        else:
+            return "Nieprawidłowy plik. Dozwolone formaty to JPG i PNG", 400
 
         # Walidacja danych
         if not name or not surname or not report_id:
             return "Brak wymaganych danych", 400
 
-        # Wstawienie podejrzanego do bazy danych
-        insert_suspect_into_db(report_id, name, surname, address, birthdate)
+        # Wstawienie podejrzanego do bazy danych, razem z plikiem BLOB
+        insert_suspect_into_db(report_id, name, surname, address, birthdate, photo_blob)
 
         # Przekierowanie lub renderowanie odpowiedzi
         return redirect(url_for('przekierowanieZgloszenie'))

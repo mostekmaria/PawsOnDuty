@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Dodaj podejrzanego</h1>
-    <form action="{{ url_for('handle_suspects') }}" method="POST">
+    <form action="{{ url_for('handle_suspects') }}" method="POST" enctype="multipart/form-data">
         <label for="name">Imię:</label>
         <input type="text" id="name" name="name" required><br>
 
@@ -19,6 +19,9 @@
 
         <label for="birthdate">Data urodzenia:</label>
         <input type="date" id="birthdate" name="birthdate"><br>
+
+        <label for="photo">Zdjęcie podejrzanego (jpg, png):</label>
+        <input type="file" id="photo" name="photo" accept=".jpg, .jpeg, .png"><br>
 
         <!-- Ukryte pole na report_id -->
         <input type="hidden" id="report_id" name="report_id" value="{{ report_id }}"><br>

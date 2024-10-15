@@ -94,7 +94,8 @@ CREATE TABLE `suspects` (
   `name` varchar(50) DEFAULT NULL,
   `surname` varchar(50) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
-  `birthdate` date DEFAULT NULL
+  `birthdate` date DEFAULT NULL,
+  `photo` mediumblob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
