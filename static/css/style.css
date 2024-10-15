@@ -419,20 +419,8 @@ input {
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
 }
 
-.panel-search {
-  padding: 40px;
-  background-color: #304ebb8e !important;
-  border-radius: 16px; /* Zaokrąglone rogi panelu */
-  width: 300px !important; /* Maksymalna szerokość panelu */
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
-}
 
-
-.full-input, #data, #godzina, #liczba, #opis, .sprawca, #date-search {
+.full-input, #data, #godzina, #liczba, #opis, .sprawca {
   margin-bottom: 15px; /* Odstęp poniżej każdego pola */
   border-radius: 4px; /* Zaokrąglone rogi pola */
   font-size: 20px; /* Rozmiar czcionki pola */
@@ -707,7 +695,9 @@ width: 100px;
   transition: margin-left .5s;
   padding: 16px;
 }
-
+#search{
+  width: 300px;
+}
 
 @media all and (max-width: 1100px) {
 main {

@@ -135,6 +135,34 @@ def insert_report_into_db():
         cursor.close()
         cnx.close()
 
+# Funkcja do wstawiania podejrzanych do tabeli suspects w bazie danych
+def insert_suspect_into_db(event_feature_id, name, surname, address, birthdate):
+    try:
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor()
+
+        # Wstawienie danych do tabeli suspects
+        suspect_insert = """
+            INSERT INTO suspects (report_id, name, surname, address, birthdate) 
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        cursor.execute(suspect_insert, (
+            event_feature_id, 
+            name, 
+            surname, 
+            address, 
+            birthdate
+        ))
+
+        # Zatwierdzenie transakcji
+        cnx.commit()
+        print("Dane podejrzanego zostały pomyślnie wstawione do bazy danych.")
+    except mysql.connector.Error as err:
+        print(f"Błąd podczas wstawiania danych podejrzanego: {err}")
+        cnx.rollback()
+    finally:
+        cursor.close()
+        cnx.close()
 
 @app.route('/')
 def main():
@@ -427,6 +455,34 @@ def zgloszenia():
     finally:
         cursor.close()
         cnx.close()
+
+@app.route('/suspects.html', methods=['GET', 'POST'])
+def handle_suspects():
+    if request.method == 'POST':
+        # Pobieranie danych z formularza
+        name = request.form.get('name') or None
+        surname = request.form.get('surname') or None
+        address = request.form.get('address') or None
+        birthdate = request.form.get('birthdate') or None
+
+        # Pobieranie report_id z formularza
+        report_id = request.form.get('report_id') or None
+
+        # Walidacja danych
+        if not name or not surname or not report_id:
+            return "Brak wymaganych danych", 400
+
+        # Wstawienie podejrzanego do bazy danych
+        insert_suspect_into_db(report_id, name, surname, address, birthdate)
+
+        # Przekierowanie lub renderowanie odpowiedzi
+        return redirect(url_for('przekierowanieZgloszenie'))
+
+    # Jeśli metoda GET, wyświetlamy formularz suspects.html
+    report_id = request.args.get('report_id')  # Pobieramy report_id z URL
+
+    return render_template('suspects.html', report_id=report_id)
+
 
 @app.route('/update_status', methods=['POST'])
 def update_status():
