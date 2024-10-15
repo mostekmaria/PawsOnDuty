@@ -6,16 +6,20 @@
         <link rel="shortcut icon" href="static/logo.png"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
     </head>
     <body>
         <div id="mySidebar" class="sidebar">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
             <br><br>
             <br><br>
-            <a class="bar" id="bar" href="index.html">PawsOnDuty</a>
+            <a href="index.html"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="80"></a>
             <br><br>
-            <a class="bar" id="barname">{{ name }}</a>  <!-- Używamy 'name' zamiast 'imie' -->
-            <br><br>
+            <a class="bar" id="barname">{{ session.get('name') }}</a>
+            <br>
             <a id="baroption" href="index.html">Wyszukiwanie zgłoszenia</a>
             <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
         </div>
@@ -25,23 +29,20 @@
         {% endif %}
         
         <header>
-            <a href="#"><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="150" height="150"></a><br>
-            <img id="menu" src="static/menu.png" onclick="openNav()">
-            <!-- OBSŁUGA SIDEBAR MENU -->
-            <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
-            
-            <div id="header">
-                <a href="index.html"><h1 class="title has-tooltip" data-tooltip="Przejdź do strony głównej">PawsOnDuty</h1></a>
-                <h5>Powered by Core-Oho-Duh</h5>
+            <div id="logo">
+            <a href = ><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="90" height="90"></a><br>
             </div>
-
-            <nav>
-                <span id="name">{{ name }}</span>  <!-- Używamy 'name' zamiast 'imie' -->
-                <a id="link2" class="has-tooltip" data-tooltip="Wyszukiwanie zgłoszenia" href="index.html">Wyszukiwanie zgłoszenia</a>   
+            <img id="menu" src="static/menu.png" onclick="openCloseNav()">
+                <!-- OBSŁUGA SIDEBAR MENU -->
+                <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
+            <div id="header">
+                <a href = ><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="65"></a><br>
+            </div> 
+            <nav class="navbar navbar-dark bg-primary">
+                <span id="name">{{ imie }}</span>    
                 <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
-            </nav>
-            
-        </header>
+            </nav> 
+        </header> 
   <main id="mainlog">
     {% if selected_date %}
     <h1 id="log">Zgłoszenia dla wybranej daty: {{ selected_date }}</h1>
@@ -162,9 +163,9 @@ function submitChanges(zgloszenieId) {
 
       </script>
       
-		<footer>
-			<p id="footer">Aplikacja webowa stworzona jako projekt z kursu Języki Programowania Aplikacji Internetowych AGH.</p>
-			<p id="footer">© Maria Mostek, Patrycja Ruda, Filip Kuś. Kraków 2023.</p>
-		</footer>
+      <footer>
+        <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
+        <p id="footer">© Maria Mostek, Patrycja Ruda. Kraków 2024.</p>
+      </footer>
     </body>
 </html>
