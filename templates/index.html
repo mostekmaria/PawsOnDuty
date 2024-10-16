@@ -89,57 +89,62 @@
               </div>
             </div>
 
-                <div id="map" style="height: 500px; width: 100%;"></div> <!-- Kontener dla mapy -->
+            <div class="map fade-in" id="map"></div> <!-- Kontener dla mapy --></div>
                 <div id="floating-panel" slot="control-block-start-inline-center">
                   <input id="latlng" type="text" value="40.714224,-73.961452"/>
-                  <input id="submit" type="button" value="Reverse Geocode"/>
+                  <input id="submit-map" type="button" value="Reverse Geocode"/>
                 </div>
-         
+
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDn6z08ngV98L8UZD2jsUPd2PX-YGBblrc&callback=initMap" async defer></script>
             
-        <div class="panel-time fade-in">
-                <div class="titleicon">
-                    <img class="sb-title-icon" src="{{ url_for('static', filename='date.png') }}" alt="">
-                    <span class="sb-title">Data i godzina</span>
+            <div class="time-container">
+                <div class="panel-time fade-in">
+                    <div class="titleicon">
+                        <img class="sb-title-icon" src="{{ url_for('static', filename='date.png') }}" alt="">
+                        <span class="sb-title">Data i godzina</span>
+                    </div>
+                    <input type="date" placeholder="DD/MM/YYYY" onfocus="this.type='date'" onblur="this.type='text'" id="data" name="data" required>
+                    <input type="time" id="godzina" name="godzina" required>
                 </div>
-                <input type="date" placeholder="DD/MM/YYYY" onfocus="this.type='date'" onblur="this.type='text'" id="data" name="data" required>
-                <input type="time" id="godzina" name="godzina" required>
-            </div>
-            <div class="text-time fade-in">
-                <h1>CZAS</h1>
-                <p>Wpisz datę i godzinę zdarzenia lub użyj ikon, aby zaznaczyć je.<p/>
-            </div>
-
-            <div class="text-description fade-in">
-                <h1>ZDARZENIE</h1>
-                <p>Wpisz w polu obok szczegóły zdarzenia. Opisz po kolei co się wydarzyło. Zrób to jak najdokładniej tak, żeby funkcjonariusze Policji mogli podjąć odpowiednie kroki.<p/>
+                <div class="text-time fade-in">
+                    <h1>CZAS</h1>
+                    <p>Wpisz datę i godzinę zdarzenia lub użyj ikon, aby zaznaczyć je.<p/>
+                </div>
             </div>
 
-
-            <div class="panel-description fade-in">
-                <div class="titleicon">
-                    <img class="sb-title-icon" src="{{ url_for('static', filename='info.png') }}" alt="">
-                    <span class="sb-title">Opis zdarzenia</span>
+            <div class="description-container">
+                <!-- Sekcja z tekstem -->
+                <div class="text-description fade-in">
+                    <h1>ZDARZENIE</h1>
+                    <p>Wpisz w polu obok szczegóły zdarzenia. Opisz po kolei co się wydarzyło. Zrób to jak najdokładniej tak, żeby funkcjonariusze Policji mogli podjąć odpowiednie kroki.</p>
                 </div>
-                <textarea placeholder="W tym miejscu opisz, co się stało..." id="opis" name="opis" rows="10" cols="70" required></textarea>
-            </div> <br>
-
-
-            <div class="panel-perpetrators fade-in">
-                <div class="titleicon">
-                    <img class="sb-title-icon" src="{{ url_for('static', filename='user.png') }}" alt="">
-                    <span class="sb-title">Sprawcy</span>
+            
+                <!-- Sekcja z panelem i tekstarea -->
+                <div class="panel-description fade-in">
+                    <div class="titleicon">
+                        <img class="sb-title-icon" src="{{ url_for('static', filename='info.png') }}" alt="">
+                        <span class="sb-title">Opis zdarzenia</span>
+                    </div>
+                    <textarea placeholder="W tym miejscu opisz, co się stało..." id="opis" name="opis" rows="10" cols="70" required></textarea>
                 </div>
-                    <input placeholder="Liczba sprawców" type="number" id="liczba" name="liczba" min="0" max="10" oninput="this.value = Math.round(this.value);" required>
-                <div id="divek"></div>
-          <!-- OBSŁUGA DODAWANIA SPRAWCÓW -->
-          <script src="{{ url_for('static', filename='js/sprawcy.js') }}"></script>
-    </div>
+            </div>
 
-        <div class="text-perpetrators fade-in">
-            <h1>SPRAWCY</h1>
-            <p>Zaznacz ilość sprawców zdarzenia, które chcesz zgłosić. Następnie dokładnie ich opisz, każdego w osobnym polu.<p/>
-        </div>
+            <div class="perpetrators-container">
+                <div class="panel-perpetrators fade-in">
+                    <div class="titleicon">
+                        <img class="sb-title-icon" src="{{ url_for('static', filename='user.png') }}" alt="">
+                        <span class="sb-title">Sprawcy</span>
+                    </div>
+                        <input placeholder="Liczba sprawców" type="number" id="liczba" name="liczba" min="0" max="10" oninput="this.value = Math.round(this.value);" required>
+                    <div id="divek"></div>
+            <!-- OBSŁUGA DODAWANIA SPRAWCÓW -->
+            <script src="{{ url_for('static', filename='js/sprawcy.js') }}"></script>
+                </div>
+                <div class="text-perpetrators fade-in">
+                    <h1>SPRAWCY</h1>
+                    <p>Zaznacz ilość sprawców zdarzenia, które chcesz zgłosić. Następnie dokładnie ich opisz, każdego w osobnym polu.<p/>
+                </div>
+            </div>
     <br>
         <div class="button-container1 fade-in">
             <input id="button1" class="button" type="submit" value="Wyślij zgłoszenie" ><div class="tooltip"></div>
