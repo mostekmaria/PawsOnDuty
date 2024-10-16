@@ -12,13 +12,19 @@
   border-color: white;
 }
 
-#gmp-map{
+#map{
   width: 100%;
   border: 20px solid #304ebb8e; /* Ramka o grubości 5px w kolorze czarnym */
   padding: 10px; /* Opcjonalne: odstęp między ramką a mapą */
   border-radius: 16px; /* Zaokrąglone rogi panelu */
-  margin-bottom: 150px;
+  margin-bottom: 50px;
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
+}
+
+#latlng, #submit-map {
+  height: 0;
+  width: 0;
+  opacity: 0;
 }
 
 #title-PawsOnDuty{
@@ -196,13 +202,15 @@ form{
   margin-bottom: 10px;
 }
 
-.text-place, .text-description{
+.text-place h1,.text-place p, .text-description h1, .text-description p{
   text-align: left;
-  padding-right: 100px;
+  margin-left: 50px;
 }
-.text-time, .text-perpetrators{
+
+.text-time h1, .text-time p, .text-perpetrators h1, .text-perpetrators p{
   text-align: right;
 }
+
 
 label {
   text-align: right;
@@ -352,6 +360,7 @@ input {
   display: block;
   margin-bottom: 15px;
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
+  margin-left: 50px;
 }
 
 .panel-time{
@@ -367,6 +376,12 @@ input {
   margin-left: 20px;
   margin-right: 110px;
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
+  left: 0;
+}
+
+.time-container {
+  display: flex;
+  flex-direction:row;
 }
 
 .panel-description {
@@ -379,9 +394,18 @@ input {
   height: 350px;
   display: block;
   margin-bottom: 80px;
-  margin-left: 20px;
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
+  margin-left: 50px;
 }
+
+.description-container {
+  display: flex; /* Ustawia elementy obok siebie */
+  flex-direction: row; /* Elementy będą ustawione w jednym wierszu */
+  gap: 45px; /* Dodaje odstęp między elementami */
+  align-items: flex-start; /* Wyrównuje elementy do góry */
+  width: 100%; /* Upewnia się, że kontener zajmuje całą szerokość */
+}
+
 
 .panel-perpetrators {
   padding: 20px;
@@ -393,8 +417,15 @@ input {
   height: auto;
   display: block;
   margin-bottom: 60px;
-  margin-left: 60px;
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
+  margin-left: 0;
+}
+
+.perpetrators-container {
+  display: flex;
+  flex-direction:row;
+  gap: 110px;
+  margin-bottom: 100px;
 }
 
 .panel-sign {
@@ -529,7 +560,7 @@ tr {
       order: 0; /* Element 1 teraz jest drugi */
   }
 
-  #gmp-map{
+  #map{
     margin: 0 auto;
     width: 98%;
     margin-bottom: -20px;
