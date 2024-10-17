@@ -166,6 +166,24 @@
                 </div>
             </div>
     <br>
+            {% if not zalogowany %}
+                <div class="civil-container">
+                    <div class="panel-civil fade-in">
+                        <div class="titleicon">
+                            <img class="sb-title-icon" src="{{ url_for('static', filename='user.png') }}" alt="">
+                            <span class="sb-title">Adres e-mail</span>
+                        </div>
+                        <input type="email" class="full-input" id="email" name="email" required>
+                    </div>
+                    <div class="text-civil fade-in">
+                        <h1>POTWIERDZENIE</h1>
+                        <p>Podaj swój adres e-mail, abyśmy mogli przesłać ci potwierdzenie przesłania zgłoszenia.<p/>
+                    </div>
+                </div>
+            {% else %}
+                <br><br>
+            {% endif %}
+
         <div class="button-container1 fade-in">
             <input id="button1" class="button" type="submit" value="Wyślij zgłoszenie" ><div class="tooltip"></div>
         </div>
