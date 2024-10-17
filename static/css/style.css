@@ -528,21 +528,19 @@ input {
 .half-input-container {
   display: flex; /* Wyświetla pola obok siebie */
   flex-direction: row; /* Zmieniamy układ na kolumnowy */
-  gap: 10px;
+  gap: 0px;
   padding: 5px;
   width: 100%;
 }
 
 .half-input {
-  flex: 1; /* Każde pole zajmuje równą część dostępnej przestrzeni */
+  flex: 2; /* Każde pole zajmuje równą część dostępnej przestrzeni */
   margin-bottom: 15px; /* Odstęp poniżej pół */
   border-radius: 4px; /* Zaokrąglone rogi pól */
   font-size: 20px; /* Rozmiar czcionki pół */
   border-color: #ffffff;
   color: #768cd194;
-  height: auto;
   box-sizing: border-box;
-  width: auto !important; /* Wyłącza inne wartości width */
 }
 
 .full-input:focus, .half-input:focus, #data:focus, #godzina:focus, #liczba:focus, #opis:focus, .sprawca:focus, .witness:focus, #liczba-swiadkow:focus {
@@ -894,4 +892,35 @@ nav, h5, #header, .title { display: none; }
 .fade-in.show {
   opacity: 1;
   transform: translateY(0);
+}
+
+
+
+
+.centered-container {
+  display: block;                /* Standardowy block layout */
+  text-align: center; 
+  margin-top: 100px;           /* Centrowanie tekstu */
+}
+
+.bootstrap-isolated .alert {
+  width: 50%;
+  margin: 20px auto;             /* Centrowanie tylko poziome */
+}
+
+.bootstrap-isolated .alert-success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.bootstrap-isolated .alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.bootstrap-isolated .alert-dismissible .btn-close {
+  padding: 0.75rem 1.25rem;
+  color: inherit;
 }

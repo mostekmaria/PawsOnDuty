@@ -1,9 +1,13 @@
 import mysql.connector
 import json
-from flask import Flask, render_template, request, session, redirect, url_for, jsonify
+import os
+from flask import Flask, render_template, request, session, redirect, url_for, jsonify, flash
 from datetime import datetime
 import hashlib
 from chatbot_rozmowa import predict_class, get_response, intents, append_to_report
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
 
 # Konfiguracja połączenia z bazą danych
 db_config = {
@@ -239,8 +243,34 @@ def submit_form():
     # Ustawienie komunikatu
     session['komunikat'] = "Zgłoszenie zostało zapisane pomyślnie!"
 
-    # Przekierowanie na stronę główną po zapisaniu danych
-    return redirect(url_for('main'))
+    # Pobieramy adres e-mail od użytkownika z formularza
+    email = request.form['email']
+    
+    # Tworzymy wiadomość e-mail
+    message = Mail(
+        from_email='pawsondutywebapp@gmail.com',  # Twój e-mail nadawcy
+        to_emails=email,  # Adres e-mail odbiorcy (użytkownika)
+        subject='Potwierdzenie zgłoszenia',  # Temat wiadomości
+        html_content='<p>Zgłoszenie zostało przesłane.</p><br><p>Dziękujemy za przesłanie zgłoszenia i dbanie o bezpieczeństwo naszego społeczeństwa! Zachęcamy do założenia konta w naszej aplikacji i śledzenia postępu w śledztwie!</p>'  # Treść wiadomości w HTML
+    )
+
+    try:
+        # Inicjalizacja klienta SendGrid za pomocą klucza API (używamy zmiennej środowiskowej)
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+
+        # Wysłanie wiadomości
+        response = sg.send(message)
+        flash('Twój e-mail został pomyślnie wysłany! Sprawdź swoją skrzynkę pocztową.', 'success')  # Sukces
+        return redirect(url_for('main'))  # Przekierowanie na stronę wynikową
+
+    except Exception as e:
+        print(e)
+        flash('Wystąpił błąd podczas wysyłania e-maila. Prosimy spróbować ponownie.', 'danger')  # Błąd
+        return redirect(url_for('main'))  # Przekierowanie na stronę wynikową
+
+
+
+
 
 @app.route('/przegladanie.html')
 def przegladanie():
@@ -571,6 +601,14 @@ def chatbot():
     print(f"Session data (after request): {session}")
     return render_template('chatbot.html', response=response, zalogowany=session.get('zalogowany'), 
             name=session.get('name'),)
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':

@@ -64,6 +64,19 @@
 </header>  
 
 <main>
+
+    <div class="bootstrap-isolated centered-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show mt-4" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
     <form method="POST", action="/submit">
     <div class="formularz">
         <!-- <div class="card-container"> -->
@@ -173,7 +186,7 @@
                             <img class="sb-title-icon" src="{{ url_for('static', filename='user.png') }}" alt="">
                             <span class="sb-title">Adres e-mail</span>
                         </div>
-                        <input type="email" class="full-input" id="email" name="email" required>
+                        <input type="email" class="full-input" id="email-confirmation" name="email" required>
                     </div>
                     <div class="text-civil fade-in">
                         <h1>POTWIERDZENIE</h1>
@@ -199,7 +212,7 @@
 </main>
 <!-- OBSŁUGA TOOLTIPÓW -->
 <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
-  
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <div id="div"></div>
 <footer>
     <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
