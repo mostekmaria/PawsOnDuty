@@ -202,7 +202,7 @@ form{
   margin-bottom: 10px;
 }
 
-.text-place h1,.text-place p, .text-description h1, .text-description p{
+.text-place h1,.text-place p, .text-description h1, .text-description p, .text-witnesses h1, .text-witnesses p{
   text-align: left;
   margin-left: 50px;
 }
@@ -462,8 +462,30 @@ input {
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
 }
 
+.panel-witnesses {
+  padding: 20px;
+  background-color: #304ebb8e !important;
+  border-radius: 16px; /* Zaokrąglone rogi panelu */
+  width: 550px !important; /* Maksymalna szerokość panelu */
+  margin-top: 75px;
+  color: #ffffff;
+  height: auto;
+  display: block;
+  margin-bottom: 60px;
+  box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
+}
 
-.full-input, #data, #godzina, #liczba, #opis, .sprawca, #date-search {
+.witnesses-container {
+  display: flex; /* Ustawia elementy obok siebie */
+  flex-direction: row; /* Elementy będą ustawione w jednym wierszu */
+  gap: 100px; /* Dodaje odstęp między elementami */
+  align-items: flex-start; /* Wyrównuje elementy do góry */
+  width: 100%; /* Upewnia się, że kontener zajmuje całą szerokość */
+  margin-bottom: 70px;
+}
+
+
+.full-input, #data, #godzina, #liczba, #opis, .sprawca, #date-search, #liczba-swiadkow, .witness {
   margin-bottom: 15px; /* Odstęp poniżej każdego pola */
   border-radius: 4px; /* Zaokrąglone rogi pola */
   font-size: 20px; /* Rozmiar czcionki pola */
@@ -482,12 +504,14 @@ input {
 
 .half-input-container {
   display: flex; /* Wyświetla pola obok siebie */
-  justify-content: space-between; /* Rozdzielenie pół na całej szerokości */
-  padding:5px;
+  flex-direction: row; /* Zmieniamy układ na kolumnowy */
+  gap: 10px;
+  padding: 5px;
+  width: 100%;
 }
 
 .half-input {
-  width: 48%;
+  flex: 1; /* Każde pole zajmuje równą część dostępnej przestrzeni */
   margin-bottom: 15px; /* Odstęp poniżej pół */
   border-radius: 4px; /* Zaokrąglone rogi pól */
   font-size: 20px; /* Rozmiar czcionki pół */
@@ -495,9 +519,10 @@ input {
   color: #768cd194;
   height: auto;
   box-sizing: border-box;
+  width: auto !important; /* Wyłącza inne wartości width */
 }
 
-.full-input:focus, .half-input:focus, #data:focus, #godzina:focus, #liczba:focus, #opis:focus, .sprawca:focus {
+.full-input:focus, .half-input:focus, #data:focus, #godzina:focus, #liczba:focus, #opis:focus, .sprawca:focus, .witness:focus, #liczba-swiadkow:focus {
   outline: none; /* Usunięcie domyślnego podświetlenia przeglądarki */
   box-shadow: 0 0 7px rgb(68, 255, 0); /* Delikatny cień wokół pola */
 }
@@ -543,12 +568,12 @@ tr {
       flex-direction: column; /* Zmieniamy układ na kolumnowy */
   }
 
-  .panel-place, .panel-time, .panel-description, .panel-perpetrators, .panel-sign{
+  .panel-place, .panel-time, .panel-description, .panel-perpetrators, .panel-sign, .panel-witnesses{
     margin-left: 0; /* Centrowanie w poziomie */
     margin-right: 6%; /* Centrowanie w poziomie */
   }
 
-  .text-place,  .text-description{
+  .text-place,  .text-description, .text-witnesses{
     margin-left: 4%; /* Centrowanie w poziomie */
   }
 
@@ -570,7 +595,7 @@ tr {
       order: 1;
   }
 
-  .panel-time, .text-description, .panel-description {
+  .panel-time, .text-description, .panel-description, .panel-witnesses{
     order: 2;
   }
   .text-perpetrators {
