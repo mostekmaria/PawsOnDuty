@@ -84,9 +84,9 @@
               <input type="text" class="full-input" placeholder="Numer lokalu (opcjonalnie)" id="numer_lokalu" name = "numer_lokalu"/>
               <input type="text" class="full-input" placeholder="Miasto" id="locality-input" name = "locality-input"/>
               <div class="half-input-container">
-                <input type="text" class="half-input" placeholder="Województwo" id="administrative_area_level_1-input" name = "administrative_area_level_1-input"/>
-                <input type="text" class="half-input" placeholder="Kod pocztowy" id="postal_code-input" name = "postal_code-input" pattern="[0-9]{2}-[0-9]{3}"/>
-              </div>
+                <input type="text" class="half-input" placeholder="Województwo" id="administrative_area_level_1-input" name="administrative_area_level_1-input"/>
+                <input type="text" class="half-input" placeholder="Kod pocztowy" id="postal_code-input" name="postal_code-input" pattern="[0-9]{2}-[0-9]{3}"/>
+            </div>
             </div>
 
             <div class="map fade-in" id="map"></div> <!-- Kontener dla mapy --></div>
@@ -143,6 +143,26 @@
                 <div class="text-perpetrators fade-in">
                     <h1>SPRAWCY</h1>
                     <p>Zaznacz ilość sprawców zdarzenia, które chcesz zgłosić. Następnie dokładnie ich opisz, każdego w osobnym polu.<p/>
+                </div>
+            </div>
+
+            <div class="witnesses-container">
+                <!-- Sekcja z tekstem -->
+                <div class="text-witnesses fade-in">
+                    <h1>ŚWIADKOWIE</h1>
+                    <p>Zaznacz w panelu obok czy na miejscu byli świadkowie i podaj ich dane kontaktowe jeśli takie posiadasz.</p>
+                </div>
+            
+                <!-- Sekcja z panelem i tekstarea -->
+                <div class="panel-witnesses fade-in">
+                    <div class="titleicon">
+                        <img class="sb-title-icon" src="{{ url_for('static', filename='user.png') }}" alt="">
+                        <span class="sb-title">Dane kontaktowe do świadka</span>
+                    </div>
+                    <input placeholder="Liczba świadków" type="number" id="liczba-swiadkow" name="liczba" min="0" max="10" oninput="this.value = Math.round(this.value);" required>
+                    <div id="divek-witnesses"></div>
+            <!-- OBSŁUGA DODAWANIA SPRAWCÓW -->
+            <script src="{{ url_for('static', filename='js/witnesses.js') }}"></script>
                 </div>
             </div>
     <br>
