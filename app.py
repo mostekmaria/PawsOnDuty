@@ -6,7 +6,9 @@ from datetime import datetime
 import hashlib
 from chatbot_rozmowa import predict_class, get_response, intents, append_to_report
 from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+from sendgrid.helpers.mail import Mail as SendGridMail
+import logging
+import socket
 
 
 # Konfiguracja połączenia z bazą danych
@@ -21,54 +23,15 @@ db_config = {
 app = Flask(__name__)
 app.secret_key = 'super_secret_key'
 
+# Konfiguracja loggera
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
 # Połączenie z bazą danych
 try:
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
     print("Połączono z bazą danych.")
-
-    # # Wczytanie pliku report.json
-    # with open('report.json', 'r', encoding='utf-8') as file:
-    #     report_data = json.load(file)
-
-    # # Wyświetlenie danych z pliku JSON
-    # print("Dane z pliku report.json:")
-    # print(json.dumps(report_data, indent=4, ensure_ascii=False))
-
-    # # Wstawienie danych do tabeli witnesses
-    # witness_insert = ("INSERT INTO witnesses (info_contact) VALUES (%s)")
-    # cursor.execute(witness_insert, (report_data['info_contact'],))
-    # witness_id = cursor.lastrowid
-
-    # # Wstawienie danych do tabeli perpetrators
-    # perpetrator_insert = ("INSERT INTO perpetrators (appearance) VALUES (%s)")
-    # cursor.execute(perpetrator_insert, (report_data['appearance'],))
-    # perp_id = cursor.lastrowid
-
-    # # Wstawienie danych do tabeli event_features
-    # event_features_insert = (
-    #     "INSERT INTO event_features (event_desc, address, event_time, witness_id, perp_id) "
-    #     "VALUES (%s, %s, %s, %s, %s)"
-    # )
-    # cursor.execute(event_features_insert, (
-    #     report_data['event_desc'],
-    #     report_data['address'],
-    #     report_data['event_time'],
-    #     witness_id,
-    #     perp_id
-    # ))
-    # event_feature_id = cursor.lastrowid
-
-    # # Wstawienie danych do tabeli reports
-    # report_insert = ("INSERT INTO reports (title, event_feature_id) VALUES (%s, %s)")
-    # cursor.execute(report_insert, (
-    #     report_data['title'],
-    #     event_feature_id
-    # ))
-
-    # # Zatwierdzenie transakcji
-    # cnx.commit()
-    # print("Dane zostały pomyślnie wstawione do bazy danych.")
 
 except mysql.connector.Error as err:
     print(f"Błąd: {err}")
@@ -76,26 +39,22 @@ except mysql.connector.Error as err:
 finally:
         print("Połączenie z bazą danych zostało zamknięte.")
 
-# Funkcja do wstawiania raportu do bazy danych
+
 def insert_report_into_db():
     try:
-        with open('report.json', 'r', encoding='utf-8') as file:
-            report_data = json.load(file)
-
         # Połączenie z bazą danych
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
 
-        # Pobranie aktualnej daty i czasu z systemu
+        # Pobranie danych z formularza JSON oraz daty i czasu
+        report_data = json.load(open('report.json', 'r', encoding='utf-8'))
         report_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-        # Wstawienie danych do tabeli reports (dodanie kolumny status)
+        # Wstawienie danych do tabeli reports
         report_insert = """
             INSERT INTO reports (title, report_time, user_id, status) 
             VALUES (%s, %s, %s, %s)
         """
-        
-        # Pobieramy user_id z sesji; jeśli użytkownik nie jest zalogowany, ustawiamy None
         user_id = session.get('user_id', None)
         status = report_data.get('status', 'Zgłoszono')  # Domyślnie "Zgłoszono"
         
@@ -105,27 +64,42 @@ def insert_report_into_db():
             user_id, 
             status
         ))
-
         report_id = cursor.lastrowid
 
-        # Wstawienie danych do tabeli event_features
+        # Wstawienie danych do tabeli event_features (bez zdjęć na razie)
         event_features_insert = """
-            INSERT INTO event_features (report_id, event_description, address, event_time) 
-            VALUES (%s, %s, %s, %s)
+            INSERT INTO event_features (report_id, event_description, address, event_time, photos) 
+            VALUES (%s, %s, %s, %s, %s)
         """
+
+        # Obsługa zdjęć (photos)
+        uploaded_files = request.files.getlist("photos")
+        photos_data = []
+
+        for file in uploaded_files:
+            if file and file.filename != '':
+                file_content = file.read()  # Odczytanie pliku jako binarny BLOB
+                photos_data.append(file_content)
+
+        # Konwertowanie listy binariów do jednego BLOB (opcjonalnie można zapisać każde zdjęcie osobno)
+        if photos_data:
+            photos_blob = b''.join(photos_data)  # Łączenie plików w jeden strumień binarny
+        else:
+            photos_blob = None
+
         cursor.execute(event_features_insert, (
             report_id,
             report_data['event_desc'],
             report_data['address'],
             report_data['event_time'],
+            photos_blob
         ))
         event_feature_id = cursor.lastrowid
 
-        # Wstawienie danych do tabeli witnesses
+        # Wstawienie danych do innych tabel (np. witnesses, perpetrators)
         witness_insert = "INSERT INTO witnesses (event_feature_id, info_contact) VALUES (%s, %s)"
         cursor.execute(witness_insert, (event_feature_id, report_data['info_contact'],))
 
-        # Wstawienie danych do tabeli perpetrators
         perpetrator_insert = "INSERT INTO perpetrators (event_feature_id, appearance) VALUES (%s, %s)"
         cursor.execute(perpetrator_insert, (event_feature_id, report_data['appearance'],))
 
@@ -199,27 +173,26 @@ def przekierowanieZgloszenie():
 # Endpoint to handle form submission and save data to report.json
 @app.route('/submit', methods=['POST'])
 def submit_form():
+    logger.debug("Rozpoczynam obsługę zgłoszenia formularza.")
+
     # Pobieranie danych z formularza
-    description = request.form.get('opis')
+    description = request.form.get('opis', '')
     title = description[:30] + '...' if description else ''
     event_desc = description
 
     address = f"{request.form.get('location-input', '')} {request.form.get('numer_lokalu', '')} {request.form.get('locality-input', '')} {request.form.get('administrative_area_level_1-input', '')} {request.form.get('postal_code-input', '')}"
-
     event_time = f"{request.form.get('data', '')} {request.form.get('godzina', '')}"
 
     # Pobranie liczby sprawców
     liczba_sprawcow = int(request.form.get('liczba', '0'))
+    logger.debug(f"Liczba sprawców: {liczba_sprawcow}")
 
     # Pobieranie opisu każdego sprawcy
-    sprawcy_opisy = []
-    for i in range(1, liczba_sprawcow + 1):
-        sprawca_opis = request.form.get(f'sprawca{i}', '')
-        if sprawca_opis:
-            sprawcy_opisy.append(sprawca_opis)
+    sprawcy_opisy = [request.form.get(f'sprawca{i}', '') for i in range(1, liczba_sprawcow + 1)]
+    sprawcy_opisy = [sprawca for sprawca in sprawcy_opisy if sprawca]
 
     # Tworzenie opisu sprawców
-    appearance = f"{liczba_sprawcow} - {', '.join(sprawcy_opisy)}"
+    appearance = f"{len(sprawcy_opisy)} - {', '.join(sprawcy_opisy)}"
 
     # Tworzenie obiektu JSON
     report_data = {
@@ -233,41 +206,55 @@ def submit_form():
     }
 
     # Zapis do pliku report.json
-    with open('report.json', 'w', encoding='utf-8') as f:
-        json.dump(report_data, f, ensure_ascii=False, indent=4)
+    try:
+        with open('report.json', 'w', encoding='utf-8') as f:
+            json.dump(report_data, f, ensure_ascii=False, indent=4)
+        logger.debug("Dane zgłoszenia zapisane do report.json.")
+    except Exception as e:
+        logger.error(f"Błąd podczas zapisywania do pliku report.json: {e}")
 
-    insert_report_into_db()
+    insert_report_into_db()  # Funkcja do wstawiania do bazy danych
 
-    report_data=None
-
-    # Ustawienie komunikatu
-    session['komunikat'] = "Zgłoszenie zostało zapisane pomyślnie!"
+    session['komunikat'] = "Zgłoszenie zostało zapisane pomyślnie!"  # Ustawienie komunikatu
 
     # Pobieramy adres e-mail od użytkownika z formularza
-    email = request.form['email']
+    email = request.form.get('email', '').strip()
     
     # Tworzymy wiadomość e-mail
-    message = Mail(
+    message = SendGridMail(
         from_email='pawsondutywebapp@gmail.com',  # Twój e-mail nadawcy
-        to_emails=email,  # Adres e-mail odbiorcy (użytkownika)
+        to_emails='paulina.krok@onet.pl',  # Adres e-mail odbiorcy (użytkownika)
         subject='Potwierdzenie zgłoszenia',  # Temat wiadomości
         html_content='<p>Zgłoszenie zostało przesłane.</p><br><p>Dziękujemy za przesłanie zgłoszenia i dbanie o bezpieczeństwo naszego społeczeństwa! Zachęcamy do założenia konta w naszej aplikacji i śledzenia postępu w śledztwie!</p>'  # Treść wiadomości w HTML
     )
 
+    # Sprawdzenie dostępności portów
     try:
-        # Inicjalizacja klienta SendGrid za pomocą klucza API (używamy zmiennej środowiskowej)
+        logger.debug("Sprawdzanie dostępności portu 587.")
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.settimeout(5)
+            sock.connect(("smtp.sendgrid.net", 587))
+            logger.debug("Port 587 jest dostępny.")
+    except socket.error as e:
+        logger.error(f"Błąd połączenia z portem 587: {e}")
+        flash('Port 587 nie jest dostępny. Proszę sprawdzić ustawienia sieciowe.', 'danger')
+        return redirect(url_for('main'))
+
+    try:
+        # Inicjalizacja klienta SendGrid za pomocą klucza API
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
 
         # Wysłanie wiadomości
         response = sg.send(message)
+        logger.info(f"Wysłano wiadomość e-mail: {response.status_code}")
+        
         flash('Twój e-mail został pomyślnie wysłany! Sprawdź swoją skrzynkę pocztową.', 'success')  # Sukces
         return redirect(url_for('main'))  # Przekierowanie na stronę wynikową
 
     except Exception as e:
-        print(e)
+        logger.error(f"Wystąpił błąd podczas wysyłania e-maila: {e}")
         flash('Wystąpił błąd podczas wysyłania e-maila. Prosimy spróbować ponownie.', 'danger')  # Błąd
         return redirect(url_for('main'))  # Przekierowanie na stronę wynikową
-
 
 
 
