@@ -548,12 +548,9 @@ def update_status():
         cursor.close()
         cnx.close()
 
-
 @app.route('/chatbot', methods=['GET', 'POST'])
 def chatbot():
     response = None
-
-    # Debugowanie sesji - w przypadku korzystania z sesji czasami pojawiają się błędy z ciasteczkami - wyczyszczenie ciasteczek pomaga
     print(f"Session data (before request): {session}")
 
     if 'first_message' not in session:
@@ -563,38 +560,43 @@ def chatbot():
     print(f"first_message (before request): {first_message}")
 
     if request.method == 'POST':
-        user_input = request.form['user_input']
+        print(f"Received form data: {request.form}")
+        print(f"Received files: {request.files}")
+
+        if 'photos' in request.files and request.files['photos']:
+            # Obsługa przesyłania zdjęć
+            uploaded_files = request.files.getlist("photos")
+            print(f"Uploaded files: {[file.filename for file in uploaded_files]}")
+
+            # Wstawiamy dane do bazy danych
+            insert_report_into_db()  # Wstawiamy dane do bazy danych
+
+            session.pop('first_message', None)
+            return redirect(url_for('main'))
+
+        user_input = request.form.get('user_input')
+        if not user_input:
+            print("User input is missing.")
+            return "User input is required.", 400  # Wczesne zakończenie z błędem
+
         intent_tag = predict_class(user_input)
         response = get_response(intents, intent_tag)
 
-        # Pobieramy poprzednią wiadomość, jeśli istnieje
         previous_message = session.get('previous_message', None)
 
-        # Dodajemy odpowiedź do raportu z użyciem previous_message jako response
         if session['first_message']:
             append_to_report("title", user_input, previous_message)
             session['first_message'] = False
         else:
             append_to_report(intent_tag, user_input, previous_message)
-        
-        # Nadpisujemy poprzednią wiadomość nową odpowiedzią
+
         session['previous_message'] = response
 
         if intent_tag == "witnesses":
-            insert_report_into_db()
-            session.pop('first_message', None)
-            return redirect(url_for('main'))
+            return render_template('chatbot.html', response=response, witness_step=True)
 
     print(f"Session data (after request): {session}")
-    return render_template('chatbot.html', response=response, zalogowany=session.get('zalogowany'), 
-            name=session.get('name'),)
-
-
-
-
-
-
-
+    return render_template('chatbot.html', response=response, zalogowany=session.get('zalogowany'), name=session.get('name'))
 
 
 
