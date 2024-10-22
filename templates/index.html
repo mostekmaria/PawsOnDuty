@@ -77,7 +77,7 @@
             {% endif %}
         {% endwith %}
     </div>
-    <form method="POST", action="/submit">
+    <form method="POST" action="/submit" enctype="multipart/form-data">
     <div class="formularz">
         <!-- <div class="card-container"> -->
             <div class="important fade-in">
@@ -178,6 +178,13 @@
             <script src="{{ url_for('static', filename='js/witnesses.js') }}"></script>
                 </div>
             </div>
+            <div class="photos-container fade-in">
+                <div class="titleicon">
+                    <span class="sb-title">Zdjęcia z miejsca zdarzenia</span>
+                </div>
+                <input type="file" name="photos" multiple>
+                <p>Wybierz zdjęcia z miejsca zdarzenia. Możesz przesłać wiele zdjęć (max 10).</p>
+            </div>            
     <br>
             {% if not zalogowany %}
                 <div class="civil-container">
