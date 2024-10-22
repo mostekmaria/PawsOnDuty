@@ -147,6 +147,44 @@ def insert_suspect_into_db(report_id, name, surname, address, birthdate, photo_b
         with open('report.json', 'w', encoding='utf-8') as f:
             f.write('')  # Zapisywanie pustego pliku
 
+def send_confirmation():
+    # Pobieramy adres e-mail od użytkownika z formularza
+    email = request.form.get('email', '').strip()
+    
+    # Tworzymy wiadomość e-mail
+    message = SendGridMail(
+        from_email='pawsondutywebapp@gmail.com',  # Twój e-mail nadawcy
+        to_emails='paulina.krok@onet.pl',  # Adres e-mail odbiorcy (użytkownika)
+        subject='Potwierdzenie zgłoszenia',  # Temat wiadomości
+        html_content='<p>Zgłoszenie zostało przesłane.</p><br><p>Dziękujemy za przesłanie zgłoszenia i dbanie o bezpieczeństwo naszego społeczeństwa! Zachęcamy do założenia konta w naszej aplikacji i śledzenia postępu w śledztwie!</p>'  # Treść wiadomości w HTML
+    )
+
+    # Sprawdzenie dostępności portów
+    try:
+        logger.debug("Sprawdzanie dostępności portu 587.")
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.settimeout(5)
+            sock.connect(("smtp.sendgrid.net", 587))
+            logger.debug("Port 587 jest dostępny.")
+    except socket.error as e:
+        logger.error(f"Błąd połączenia z portem 587: {e}")
+        flash('Port 587 nie jest dostępny. Proszę sprawdzić ustawienia sieciowe.', 'danger')
+        return redirect(url_for('main'))
+
+    try:
+        # Inicjalizacja klienta SendGrid za pomocą klucza API
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+
+        # Wysłanie wiadomości
+        response = sg.send(message)
+        logger.info(f"Wysłano wiadomość e-mail: {response.status_code}")
+        
+        flash('Twój e-mail został pomyślnie wysłany! Sprawdź swoją skrzynkę pocztową.', 'success')  # Sukces
+
+    except Exception as e:
+        logger.error(f"Wystąpił błąd podczas wysyłania e-maila: {e}")
+        flash('Wystąpił błąd podczas wysyłania e-maila. Prosimy spróbować ponownie.', 'danger')  # Błąd
+
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 def allowed_file(filename):
@@ -217,46 +255,8 @@ def submit_form():
 
     session['komunikat'] = "Zgłoszenie zostało zapisane pomyślnie!"  # Ustawienie komunikatu
 
-    # Pobieramy adres e-mail od użytkownika z formularza
-    email = request.form.get('email', '').strip()
-    
-    # Tworzymy wiadomość e-mail
-    message = SendGridMail(
-        from_email='pawsondutywebapp@gmail.com',  # Twój e-mail nadawcy
-        to_emails='paulina.krok@onet.pl',  # Adres e-mail odbiorcy (użytkownika)
-        subject='Potwierdzenie zgłoszenia',  # Temat wiadomości
-        html_content='<p>Zgłoszenie zostało przesłane.</p><br><p>Dziękujemy za przesłanie zgłoszenia i dbanie o bezpieczeństwo naszego społeczeństwa! Zachęcamy do założenia konta w naszej aplikacji i śledzenia postępu w śledztwie!</p>'  # Treść wiadomości w HTML
-    )
-
-    # Sprawdzenie dostępności portów
-    try:
-        logger.debug("Sprawdzanie dostępności portu 587.")
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-            sock.settimeout(5)
-            sock.connect(("smtp.sendgrid.net", 587))
-            logger.debug("Port 587 jest dostępny.")
-    except socket.error as e:
-        logger.error(f"Błąd połączenia z portem 587: {e}")
-        flash('Port 587 nie jest dostępny. Proszę sprawdzić ustawienia sieciowe.', 'danger')
-        return redirect(url_for('main'))
-
-    try:
-        # Inicjalizacja klienta SendGrid za pomocą klucza API
-        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-
-        # Wysłanie wiadomości
-        response = sg.send(message)
-        logger.info(f"Wysłano wiadomość e-mail: {response.status_code}")
-        
-        flash('Twój e-mail został pomyślnie wysłany! Sprawdź swoją skrzynkę pocztową.', 'success')  # Sukces
-        return redirect(url_for('main'))  # Przekierowanie na stronę wynikową
-
-    except Exception as e:
-        logger.error(f"Wystąpił błąd podczas wysyłania e-maila: {e}")
-        flash('Wystąpił błąd podczas wysyłania e-maila. Prosimy spróbować ponownie.', 'danger')  # Błąd
-        return redirect(url_for('main'))  # Przekierowanie na stronę wynikową
-
-
+    send_confirmation()
+    return redirect(url_for('main'))
 
 
 @app.route('/przegladanie.html')
@@ -264,8 +264,6 @@ def przegladanie():
     return render_template('przegladanie.html', zalogowany=session.get('zalogowany'), imie=session.get('name'))
 
 
-
-    
 @app.route('/rejestracja.html', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -571,6 +569,8 @@ def chatbot():
             insert_report_into_db()  # Wstawiamy dane do bazy danych
 
             session.pop('first_message', None)
+
+            send_confirmation()
             return redirect(url_for('main'))
 
         user_input = request.form.get('user_input')
