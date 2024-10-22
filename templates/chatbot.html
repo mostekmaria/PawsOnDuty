@@ -72,19 +72,15 @@
             
             <div class="message-field">
                 {% if witness_step %}
-                    <!-- Sekcja dodawania zdjęć po wprowadzeniu świadków -->
                     <form id="photoForm" action="{{ url_for('chatbot') }}" method="post" enctype="multipart/form-data">
                         <input type="file" name="photos" multiple>
-                        
+                        <button type="submit">Zakończ zgłoszenie</button>  <!-- Przycisk umieszczony w formularzu -->
                     </form>
                 {% else %}
                     <form id="chatForm" action="{{ url_for('chatbot') }}" method="post">
                         <input id="message-user" type="text" name="user_input" placeholder="Wpisz wiadomość">
                         <button class="send-sign" id="send" type="submit"></button>
                     </form>
-                {% endif %}
-                {% if witness_step %}
-                <button type="submit">Zakończ zgłoszenie</button>
                 {% endif %}
             </div>
         </div>

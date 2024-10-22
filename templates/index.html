@@ -23,13 +23,13 @@
         {% if not session.get('zalogowany') %}
         <a id="baroption" href="{{ url_for('register') }}">Zarejestruj się</a>
         <a id="baroption" href="{{ url_for('logowanie') }}">Zaloguj się</a>
-        <a id="baroption" href="{{ url_for('chatbot') }}">Chatbot</a>
+        <a id="baroption" href="{{ url_for('chatbot_clear') }}">Chatbot</a>
         {% else %}
         <a class="bar" id="barname">{{ session.get('name') }}</a>
         <br><br>
         <a id="baroption" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>
         <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
-        <a id="baroption" href="{{ url_for('chatbot') }}">Chatbot</a>
+        <a id="baroption" href="{{ url_for('chatbot_clear') }}">Chatbot</a>
         {% endif %}
     </div>
 
@@ -59,7 +59,7 @@
         <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
         {% endif %}
         <!-- Nowy przycisk do chatbota -->
-        <a id="link3" class="has-tooltip" data-tooltip="Chatbot" href="{{ url_for('chatbot') }}">Chatbot</a>
+        <a id="link3" class="has-tooltip" data-tooltip="Chatbot" href="{{ url_for('chatbot_clear') }}">Chatbot</a>
     </nav>  
 </header>  
 
@@ -225,7 +225,6 @@
     <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
     <p id="footer">© Maria Mostek, Patrycja Ruda. Kraków 2024.</p>
 </footer>
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const elements = document.querySelectorAll('.fade-in');

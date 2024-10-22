@@ -552,7 +552,6 @@ def update_status():
 def chatbot():
     response = None
     print(f"Session data (before request): {session}")
-
     if 'first_message' not in session:
         session['first_message'] = True
 
@@ -598,7 +597,13 @@ def chatbot():
     print(f"Session data (after request): {session}")
     return render_template('chatbot.html', response=response, zalogowany=session.get('zalogowany'), name=session.get('name'))
 
-
+@app.route('/chatbot_clear')
+def chatbot_clear():
+    if 'first_message' in session:
+        session.pop('first_message', None)
+    if 'previous_message' in session:
+        session.pop('previous_message', None)
+    return redirect(url_for('chatbot'))
 
 if __name__ == '__main__':
     app.run()
