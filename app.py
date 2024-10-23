@@ -149,12 +149,27 @@ def insert_suspect_into_db(report_id, name, surname, address, birthdate, photo_b
 
 def send_confirmation():
     # Pobieramy adres e-mail od użytkownika z formularza
-    email = request.form.get('email', '').strip()
+    if session.get('zalogowany'):
+        # Pobierz id użytkownika z sesji
+        user_id = session.get('user_id')
+        
+        # Pobierz e-mail użytkownika z bazy danych na podstawie id
+        email = get_user_email_by_id(user_id)
+        if not email:
+            flash('Nie znaleziono adresu e-mail dla zalogowanego użytkownika.', 'danger')
+            return redirect(url_for('main'))
+    else:
+        # Użytkownik niezalogowany, pobieramy e-mail z formularza
+        email = request.form.get('email', '').strip()
+        
+        if not email:
+            flash('Adres e-mail jest wymagany.', 'danger')
+            return redirect(url_for('main'))
     
     # Tworzymy wiadomość e-mail
     message = SendGridMail(
         from_email='pawsondutywebapp@gmail.com',  # Twój e-mail nadawcy
-        to_emails='paulina.krok@onet.pl',  # Adres e-mail odbiorcy (użytkownika)
+        to_emails=email,  # Adres e-mail odbiorcy (użytkownika)
         subject='Potwierdzenie zgłoszenia',  # Temat wiadomości
         html_content='<p>Zgłoszenie zostało przesłane.</p><br><p>Dziękujemy za przesłanie zgłoszenia i dbanie o bezpieczeństwo naszego społeczeństwa! Zachęcamy do założenia konta w naszej aplikacji i śledzenia postępu w śledztwie!</p>'  # Treść wiadomości w HTML
     )
@@ -177,7 +192,7 @@ def send_confirmation():
 
         # Wysłanie wiadomości
         response = sg.send(message)
-        logger.info(f"Wysłano wiadomość e-mail: {response.status_code}")
+        logger.info(f"Wysłano wiadomość e-mail: {response.status_code} na adres {email}")
         
         flash('Twój e-mail został pomyślnie wysłany! Sprawdź swoją skrzynkę pocztową.', 'success')  # Sukces
 
@@ -185,7 +200,30 @@ def send_confirmation():
         logger.error(f"Wystąpił błąd podczas wysyłania e-maila: {e}")
         flash('Wystąpił błąd podczas wysyłania e-maila. Prosimy spróbować ponownie.', 'danger')  # Błąd
 
+def get_user_email_by_id(user_id):
+    try:
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor()
+        # Wykonanie zapytania SQL do pobrania e-maila na podstawie user_id
+        query = "SELECT email FROM users WHERE user_id = %s"
+        cursor.execute(query, (user_id,))
 
+        # Pobranie wyniku zapytania
+        result = cursor.fetchone()
+
+        # Zamknięcie kursora i połączenia
+        cnx.close()
+
+        if result:
+            return result[0]  # Zwraca e-mail
+        else:
+            return None
+
+    except mysql.connector.Error as err:
+        print(f"Błąd: {err}")
+        return None
+    
+    
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 def allowed_file(filename):
     """Sprawdzenie, czy plik ma dozwolone rozszerzenie."""
