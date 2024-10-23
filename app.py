@@ -550,6 +550,11 @@ def update_status():
 def chatbot():
     response = None
     print(f"Session data (before request): {session}")
+    
+    # Inicjalizacja listy konwersacji, jeśli jej nie ma
+    if 'conversation' not in session:
+        session['conversation'] = []
+
     if 'first_message' not in session:
         session['first_message'] = True
 
@@ -578,24 +583,29 @@ def chatbot():
             print("User input is missing.")
             return "User input is required.", 400  # Wczesne zakończenie z błędem
 
+        # Przewidzenie intencji i uzyskanie odpowiedzi od chatbota
         intent_tag = predict_class(user_input)
         response = get_response(intents, intent_tag)
 
-        previous_message = session.get('previous_message', None)
+        # Dodajemy wiadomość użytkownika do konwersacji
+        session['conversation'].append({'sender': 'user', 'message': user_input})
+
+        # Dodajemy odpowiedź chatbota do konwersacji
+        session['conversation'].append({'sender': 'bot', 'message': response})
 
         if session['first_message']:
-            append_to_report("title", user_input, previous_message)
+            append_to_report("title", user_input, response)
             session['first_message'] = False
         else:
-            append_to_report(intent_tag, user_input, previous_message)
+            append_to_report(intent_tag, user_input, response)
 
-        session['previous_message'] = response
-
+        # Jeżeli chatbot pyta o zdjęcia, przechodzimy do następnego kroku
         if intent_tag == "witnesses":
-            return render_template('chatbot.html', response=response, witness_step=True)
+            return render_template('chatbot.html', conversation=session['conversation'], witness_step=True)
 
     print(f"Session data (after request): {session}")
-    return render_template('chatbot.html', response=response, zalogowany=session.get('zalogowany'), name=session.get('name'))
+    return render_template('chatbot.html', conversation=session['conversation'], zalogowany=session.get('zalogowany'), name=session.get('name'))
+
 
 @app.route('/chatbot_clear')
 def chatbot_clear():
@@ -603,6 +613,8 @@ def chatbot_clear():
         session.pop('first_message', None)
     if 'previous_message' in session:
         session.pop('previous_message', None)
+    if 'conversation' in session:
+        session.pop('conversation', None)
     return redirect(url_for('chatbot'))
 
 if __name__ == '__main__':

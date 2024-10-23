@@ -60,21 +60,32 @@
     <main>
         <div class="chatbot">
             <div class="chatbot-title">
-            <h1>Chatbot</h1>
-            <p style="width:100%">Opowiedz swojemu osobistemu asystentowi, co się wydarzyło.</p>
+                <h1>Chatbot</h1>
+                <p style="width:100%">Opowiedz swojemu osobistemu asystentowi, co się wydarzyło.</p>
             </div>
-            {% if response %}
-                <p>Chatbot: {{ response }}</p>
-            {% endif %}
+        
+            <div class="chatbox">
+                <!-- Wyświetlanie całej historii wiadomości -->
+                {% if conversation %}
+                    <div class="conversation">
+                        {% for message in conversation %}
+                            <p class="{{ 'user-message' if message.sender == 'user' else 'bot-message' }}">
+                                <strong>{{ 'Ty:' if message.sender == 'user' else 'Chatbot:' }}</strong> {{ message.message }}
+                            </p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        
             {% if witness_step %}
-            <p>Jeśli to możliwe, załącz zdjęcia ze zdarzenia:</p>
+                <p>Jeśli to możliwe, załącz zdjęcia ze zdarzenia:</p>
             {% endif %}
-            
+        
             <div class="message-field">
                 {% if witness_step %}
                     <form id="photoForm" action="{{ url_for('chatbot') }}" method="post" enctype="multipart/form-data">
                         <input type="file" name="photos" multiple>
-                        <button type="submit">Zakończ zgłoszenie</button>  <!-- Przycisk umieszczony w formularzu -->
+                        <button type="submit">Zakończ zgłoszenie</button>
                     </form>
                 {% else %}
                     <form id="chatForm" action="{{ url_for('chatbot') }}" method="post">
@@ -83,7 +94,7 @@
                     </form>
                 {% endif %}
             </div>
-        </div>
+        </div>        
     <main/>
 </body>
 </html>
