@@ -147,7 +147,83 @@ def insert_suspect_into_db(report_id, name, surname, address, birthdate, photo_b
         with open('report.json', 'w', encoding='utf-8') as f:
             f.write('')  # Zapisywanie pustego pliku
 
+def send_confirmation():
+    # Pobieramy adres e-mail od użytkownika z formularza
+    if session.get('zalogowany'):
+        # Pobierz id użytkownika z sesji
+        user_id = session.get('user_id')
+        
+        # Pobierz e-mail użytkownika z bazy danych na podstawie id
+        email = get_user_email_by_id(user_id)
+        if not email:
+            flash('Nie znaleziono adresu e-mail dla zalogowanego użytkownika.', 'danger')
+            return redirect(url_for('main'))
+    else:
+        # Użytkownik niezalogowany, pobieramy e-mail z formularza
+        email = request.form.get('email', '').strip()
+        
+        if not email:
+            flash('Adres e-mail jest wymagany.', 'danger')
+            return redirect(url_for('main'))
+    
+    # Tworzymy wiadomość e-mail
+    message = SendGridMail(
+        from_email='pawsondutywebapp@gmail.com',  # Twój e-mail nadawcy
+        to_emails=email,  # Adres e-mail odbiorcy (użytkownika)
+        subject='Potwierdzenie zgłoszenia',  # Temat wiadomości
+        html_content='<p>Zgłoszenie zostało przesłane.</p><br><p>Dziękujemy za przesłanie zgłoszenia i dbanie o bezpieczeństwo naszego społeczeństwa! Zachęcamy do założenia konta w naszej aplikacji i śledzenia postępu w śledztwie!</p>'  # Treść wiadomości w HTML
+    )
 
+    # Sprawdzenie dostępności portów
+    try:
+        logger.debug("Sprawdzanie dostępności portu 587.")
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.settimeout(5)
+            sock.connect(("smtp.sendgrid.net", 587))
+            logger.debug("Port 587 jest dostępny.")
+    except socket.error as e:
+        logger.error(f"Błąd połączenia z portem 587: {e}")
+        flash('Port 587 nie jest dostępny. Proszę sprawdzić ustawienia sieciowe.', 'danger')
+        return redirect(url_for('main'))
+
+    try:
+        # Inicjalizacja klienta SendGrid za pomocą klucza API
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+
+        # Wysłanie wiadomości
+        response = sg.send(message)
+        logger.info(f"Wysłano wiadomość e-mail: {response.status_code} na adres {email}")
+        
+        flash('Twój e-mail został pomyślnie wysłany! Sprawdź swoją skrzynkę pocztową.', 'success')  # Sukces
+
+    except Exception as e:
+        logger.error(f"Wystąpił błąd podczas wysyłania e-maila: {e}")
+        flash('Wystąpił błąd podczas wysyłania e-maila. Prosimy spróbować ponownie.', 'danger')  # Błąd
+
+def get_user_email_by_id(user_id):
+    try:
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor()
+        # Wykonanie zapytania SQL do pobrania e-maila na podstawie user_id
+        query = "SELECT email FROM users WHERE user_id = %s"
+        cursor.execute(query, (user_id,))
+
+        # Pobranie wyniku zapytania
+        result = cursor.fetchone()
+
+        # Zamknięcie kursora i połączenia
+        cnx.close()
+
+        if result:
+            return result[0]  # Zwraca e-mail
+        else:
+            return None
+
+    except mysql.connector.Error as err:
+        print(f"Błąd: {err}")
+        return None
+    
+    
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 def allowed_file(filename):
     """Sprawdzenie, czy plik ma dozwolone rozszerzenie."""
@@ -217,46 +293,8 @@ def submit_form():
 
     session['komunikat'] = "Zgłoszenie zostało zapisane pomyślnie!"  # Ustawienie komunikatu
 
-    # Pobieramy adres e-mail od użytkownika z formularza
-    email = request.form.get('email', '').strip()
-    
-    # Tworzymy wiadomość e-mail
-    message = SendGridMail(
-        from_email='pawsondutywebapp@gmail.com',  # Twój e-mail nadawcy
-        to_emails='paulina.krok@onet.pl',  # Adres e-mail odbiorcy (użytkownika)
-        subject='Potwierdzenie zgłoszenia',  # Temat wiadomości
-        html_content='<p>Zgłoszenie zostało przesłane.</p><br><p>Dziękujemy za przesłanie zgłoszenia i dbanie o bezpieczeństwo naszego społeczeństwa! Zachęcamy do założenia konta w naszej aplikacji i śledzenia postępu w śledztwie!</p>'  # Treść wiadomości w HTML
-    )
-
-    # Sprawdzenie dostępności portów
-    try:
-        logger.debug("Sprawdzanie dostępności portu 587.")
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-            sock.settimeout(5)
-            sock.connect(("smtp.sendgrid.net", 587))
-            logger.debug("Port 587 jest dostępny.")
-    except socket.error as e:
-        logger.error(f"Błąd połączenia z portem 587: {e}")
-        flash('Port 587 nie jest dostępny. Proszę sprawdzić ustawienia sieciowe.', 'danger')
-        return redirect(url_for('main'))
-
-    try:
-        # Inicjalizacja klienta SendGrid za pomocą klucza API
-        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-
-        # Wysłanie wiadomości
-        response = sg.send(message)
-        logger.info(f"Wysłano wiadomość e-mail: {response.status_code}")
-        
-        flash('Twój e-mail został pomyślnie wysłany! Sprawdź swoją skrzynkę pocztową.', 'success')  # Sukces
-        return redirect(url_for('main'))  # Przekierowanie na stronę wynikową
-
-    except Exception as e:
-        logger.error(f"Wystąpił błąd podczas wysyłania e-maila: {e}")
-        flash('Wystąpił błąd podczas wysyłania e-maila. Prosimy spróbować ponownie.', 'danger')  # Błąd
-        return redirect(url_for('main'))  # Przekierowanie na stronę wynikową
-
-
+    send_confirmation()
+    return redirect(url_for('main'))
 
 
 @app.route('/przegladanie.html')
@@ -264,8 +302,6 @@ def przegladanie():
     return render_template('przegladanie.html', zalogowany=session.get('zalogowany'), imie=session.get('name'))
 
 
-
-    
 @app.route('/rejestracja.html', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -552,6 +588,10 @@ def update_status():
 def chatbot():
     response = None
     print(f"Session data (before request): {session}")
+    
+    # Inicjalizacja listy konwersacji, jeśli jej nie ma
+    if 'conversation' not in session:
+        session['conversation'] = []
 
     if 'first_message' not in session:
         session['first_message'] = True
@@ -572,6 +612,8 @@ def chatbot():
             insert_report_into_db()  # Wstawiamy dane do bazy danych
 
             session.pop('first_message', None)
+
+            send_confirmation()
             return redirect(url_for('main'))
 
         user_input = request.form.get('user_input')
@@ -579,26 +621,39 @@ def chatbot():
             print("User input is missing.")
             return "User input is required.", 400  # Wczesne zakończenie z błędem
 
+        # Przewidzenie intencji i uzyskanie odpowiedzi od chatbota
         intent_tag = predict_class(user_input)
         response = get_response(intents, intent_tag)
 
-        previous_message = session.get('previous_message', None)
+        # Dodajemy wiadomość użytkownika do konwersacji
+        session['conversation'].append({'sender': 'user', 'message': user_input})
+
+        # Dodajemy odpowiedź chatbota do konwersacji
+        session['conversation'].append({'sender': 'bot', 'message': response})
 
         if session['first_message']:
-            append_to_report("title", user_input, previous_message)
+            append_to_report("title", user_input, response)
             session['first_message'] = False
         else:
-            append_to_report(intent_tag, user_input, previous_message)
+            append_to_report(intent_tag, user_input, response)
 
-        session['previous_message'] = response
-
+        # Jeżeli chatbot pyta o zdjęcia, przechodzimy do następnego kroku
         if intent_tag == "witnesses":
-            return render_template('chatbot.html', response=response, witness_step=True)
+            return render_template('chatbot.html', conversation=session['conversation'], witness_step=True)
 
     print(f"Session data (after request): {session}")
-    return render_template('chatbot.html', response=response, zalogowany=session.get('zalogowany'), name=session.get('name'))
+    return render_template('chatbot.html', conversation=session['conversation'], zalogowany=session.get('zalogowany'), name=session.get('name'))
 
 
+@app.route('/chatbot_clear')
+def chatbot_clear():
+    if 'first_message' in session:
+        session.pop('first_message', None)
+    if 'previous_message' in session:
+        session.pop('previous_message', None)
+    if 'conversation' in session:
+        session.pop('conversation', None)
+    return redirect(url_for('chatbot'))
 
 if __name__ == '__main__':
     app.run()
