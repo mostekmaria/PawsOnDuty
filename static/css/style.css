@@ -251,6 +251,7 @@ input {
   width: 100%;
   height: 75vh;
   align-items: center; /* Ustawienie w poziomie */
+
 }
 
 .chatbot-title {
@@ -260,6 +261,10 @@ input {
   align-items: center;
   justify-content: center;
   flex-direction: column;      /* Ustawienie kierunku na kolumnę */
+  position: fixed;
+  top: 10vh;
+  background-color: #BFCDFF;
+  padding-bottom: 4vh;
 }
 
 #message-user {
@@ -334,10 +339,86 @@ input {
   z-index: 1;
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
   width: 80%;
+  position: fixed;
+  bottom: 10vh; /* Ustawienie na dole okna */
 }
 
 #chatForm {
   height: 10px;
+  display: flex;
+  flex-direction:row;
+  gap: 20px;
+  padding-top: 20px;
+}
+
+.chatbox {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  overflow-y: auto; /* Pionowe przewijanie, jeśli wiadomości przekraczają wysokość */
+  padding: 10px;
+  border: 1px solid #ccc; /* Obramowanie */
+  border-radius: 10px; /* Zaokrąglone rogi */
+  height: 65vh; /* Wysokość pełnego ekranu */
+  padding-bottom: 20px;
+  scrollbar-width: none; /* Ukrywa pasek przewijania w Firefox */
+  -ms-overflow-style: none;  /* Ukrycie paska przewijania w Internet Explorer */
+}
+
+
+
+.user-message {
+  display: inline-block;
+  background-color: #378e25;
+  color: #ffffff;
+  border-collapse: collapse;
+  border: 5px solid #378e25;
+  border-radius: 25px; /* Zaokrąglone rogi panelu */
+  border-top-right-radius: 0%;
+  margin-bottom: 20px;
+  max-width: 90%;
+  word-wrap: break-word; /* Zawijanie słów w wiadomościach */
+  margin: 5px 0;
+  align-self: flex-end; /* Wiadomość użytkownika wyrównana do prawej */
+  text-align: right; /* Tekst wyrównany do prawej */
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.bot-message {
+  display: inline-block;
+  background-color: #ffffff;
+  color: #000;
+  border-collapse: collapse;
+  border: 5px solid #ffffff;
+  border-radius: 25px; /* Zaokrąglone rogi panelu */
+  border-top-left-radius: 0%;
+  margin-bottom: 20px;
+  max-width: 90%; /* Maksymalna szerokość wiadomości (70% szerokości okna czatu) */
+  word-wrap: break-word; /* Zawijanie słów w wiadomościach */
+  align-self: flex-start; /* Wiadomość chatbota wyrównana do lewej */
+  text-align: left; /* Tekst wyrównany do lewej */
+  margin-right: auto;
+  margin-left: 0;
+}
+
+strong {
+  font-weight: bold;
+}
+
+/* Styl dla każdej wiadomości */
+.user-message, .bot-message {
+  word-wrap: break-word; /* Zawijanie tekstu, gdy zbyt długi */
+  padding: 10px;
+  margin: 5px 0;
+  min-width: 50px !important; /* Minimalna szerokość dymka */
+}
+
+.conversation {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Odstęp między wiadomościami */
+  padding-top: 20vh;
 }
 
 .table-border {
