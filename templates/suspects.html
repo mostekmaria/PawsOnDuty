@@ -4,29 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formularz podejrzanego</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="static/logo.png"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <br><br>
+        <br><br>
+        <a href="index.html"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="80"></a>
+        <br><br>
+        <a class="bar" id="barname">{{ session.get('name') }}</a>
+        <br>  <!-- Używamy 'name' zamiast 'imie' -->
+        <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+        <a id="baroption" class="has-tooltip" href="przegladanie.html">Wyszukiwanie zgłoszenia</a>
+    </div>
+
+    {% if komunikat %}
+        <div class="komunikat">{{ komunikat }}</div>
+    {% endif %}
+
+    <header>
+        <div id="logo">
+        <a href = "index.html"><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="90" height="90"></a><br>
+        </div>
+        <img id="menu" src="static/menu.png" onclick="openCloseNav()">
+        <!-- OBSŁUGA SIDEBAR MENU -->
+        <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
+    <div id="header">
+        <a href = ><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="65"></a><br>
+    </div> 
+    <nav class="navbar navbar-dark bg-primary">
+        <span id="name">{{ imie }}</span>  
+            <a id="link2" class="has-tooltip" data-tooltip="Wyszukiwanie zgłoszenia" href="index.html">Wyszukiwanie zgłoszenia</a>   
+            <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+        </nav> 
+    </header> 
+
     <h1>Dodaj podejrzanego</h1>
     <form action="{{ url_for('handle_suspects') }}" method="POST" enctype="multipart/form-data">
-        <label for="name">Imię:</label>
-        <input type="text" id="name" name="name" required><br>
+        <div class="panel-suspect">
 
-        <label for="surname">Nazwisko:</label>
-        <input type="text" id="surname" name="surname" required><br>
+            <div class="titleicon">
+                <span for="name" class="sb-title">Imię:</span>
+            </div>
+            <input type="text" class="full-input" id="name" name="name" required>
 
-        <label for="address">Adres:</label>
-        <input type="text" id="address" name="address" required><br>
+            <div class="titleicon">
+                <span class="sb-title">Nazwisko:</span>
+            </div>
+            <input type="text" class="full-input" id="surname" name="surname" required>
 
-        <label for="birthdate">Data urodzenia:</label>
-        <input type="date" id="birthdate" name="birthdate"><br>
+            <div class="titleicon">
+                <span class="sb-title">Adres:</span>
+            </div>
+            <input type="text" class="full-input" id="address" name="address" required>
 
-        <label for="photo">Zdjęcie podejrzanego (jpg, png):</label>
-        <input type="file" id="photo" name="photo" accept=".jpg, .jpeg, .png"><br>
+            <div class="titleicon">
+                <span class="sb-title">Data urodzenia:</span>
+            </div>
+            <input type="date" class="full-input" id="birthdate" name="birthdate">
 
-        <!-- Ukryte pole na report_id -->
-        <input type="hidden" id="report_id" name="report_id" value="{{ report_id }}"><br>
+            <div class="titleicon">
+                <span class="sb-title">Zdjęcie podejrzanego (jpg, png):</span>
+            </div>
+            <input type="file" class="full-input" id="photo" name="photo" accept=".jpg, .jpeg, .png">
 
-        <input type="submit" value="Zapisz podejrzanego">
+
+            
+            <!-- Ukryte pole na report_id -->
+            <input type="hidden" class="full-input" id="report_id" name="report_id" value="{{ report_id }}">
+
+
+            <div class="button-container2">
+                <input type="submit" class="button" value="Zapisz podejrzanego">
+            </div>
+
+
+        </div>
     </form>
+    </div>
+    <footer>
+        <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
+        <p id="footer">© Maria Mostek, Patrycja Ruda. Kraków 2024.</p>
+    </footer>
 </body>
 </html>

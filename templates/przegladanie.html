@@ -21,6 +21,7 @@
             <a class="bar" id="barname">{{ session.get('name') }}</a>
             <br>  <!-- Używamy 'name' zamiast 'imie' -->
             <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+            <a id="baroption" class="has-tooltip" href="przegladanie.html">Wyszukiwanie zgłoszenia</a>
         </div>
         
         {% if komunikat %}
