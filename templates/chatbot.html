@@ -67,14 +67,14 @@
             <div class="chatbox">
                 <!-- Wyświetlanie całej historii wiadomości -->
                 {% if conversation %}
-                    <div class="conversation">
-                        {% for message in conversation %}
-                            <p class="{{ 'user-message' if message.sender == 'user' else 'bot-message' }}">
-                                <strong>{{ 'Ty:' if message.sender == 'user' else 'Chatbot:' }}</strong> {{ message.message }}
-                            </p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                <div class="conversation">
+                    {% for message in conversation %}
+                        <p class="{{ 'user-message' if message.sender == 'user' else 'bot-message' }}">
+                            <strong>{{ 'Ty:' if message.sender == 'user' else 'Chatbot:' }}</strong> {{ message.message }}
+                        </p>
+                    {% endfor %}
+                </div>
+            {% endif %}
             </div>
         
             {% if witness_step %}

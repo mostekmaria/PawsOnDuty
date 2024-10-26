@@ -589,9 +589,11 @@ def chatbot():
     response = None
     print(f"Session data (before request): {session}")
     
-    # Inicjalizacja listy konwersacji, jeśli jej nie ma
     if 'conversation' not in session:
         session['conversation'] = []
+    else:
+        # Kopiujemy rozmowę, aby zapobiec nadpisaniu
+        conversation_copy = list(session['conversation'])
 
     if 'first_message' not in session:
         session['first_message'] = True
@@ -625,11 +627,16 @@ def chatbot():
         intent_tag = predict_class(user_input)
         response = get_response(intents, intent_tag)
 
-        # Dodajemy wiadomość użytkownika do konwersacji
-        session['conversation'].append({'sender': 'user', 'message': user_input})
+        # Dodajemy wiadomość użytkownika do kopii konwersacji
+        conversation_copy.append({'sender': 'user', 'message': user_input})
 
-        # Dodajemy odpowiedź chatbota do konwersacji
-        session['conversation'].append({'sender': 'bot', 'message': response})
+        # Generujemy odpowiedź i dodajemy ją do kopii konwersacji
+        intent_tag = predict_class(user_input)
+        response = get_response(intents, intent_tag)
+        conversation_copy.append({'sender': 'bot', 'message': response})
+
+        # Przypisujemy uaktualnioną kopię do sesji
+        session['conversation'] = conversation_copy
 
         if session['first_message']:
             append_to_report("title", user_input, response)
@@ -642,6 +649,7 @@ def chatbot():
             return render_template('chatbot.html', conversation=session['conversation'], witness_step=True)
 
     print(f"Session data (after request): {session}")
+    print(f"Full conversation in session: {session['conversation']}")
     return render_template('chatbot.html', conversation=session['conversation'], zalogowany=session.get('zalogowany'), name=session.get('name'))
 
 
