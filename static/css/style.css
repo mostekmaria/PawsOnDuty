@@ -341,6 +341,7 @@ input {
   width: 80%;
   position: fixed;
   bottom: 10vh; /* Ustawienie na dole okna */
+  width: 55%;
 }
 
 #chatForm {
@@ -429,6 +430,18 @@ strong {
 
 #rejestracja{
   color:#000;
+}
+
+.panel-suspect {
+  padding: 40px;
+  background-color: #304ebb8e !important;
+  border-radius: 16px; /* Zaokrąglone rogi panelu */
+  margin-top: 15px;
+  color: #ffffff;
+  display: block;
+  margin-bottom: 20%;
+  box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
+  width:400px;
 }
 
 .panel-place {
@@ -739,8 +752,8 @@ tr {
 
 .button {
   height: 40px;
-  width: 50%; /* Szerokość przycisku ustawiona na 50% szerokości kontenera */
-  padding: 10px 20px;
+  width: auto; /* Szerokość przycisku ustawiona na 50% szerokości kontenera */
+  padding: 10px 10px 10px 10px;
   background: #378e25;
   color: white;
   font-size: 17px;
@@ -756,6 +769,40 @@ tr {
   box-sizing: border-box; /* Zapewnienie, że padding nie wpłynie na szerokość */
 }
 
+#photo {
+  color: white;
+  font-size: 17px;
+  text-transform: uppercase;
+  font-family: Calibri, sans-serif;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centrowanie tekstu w pionie */
+
+}
+
+
+.file-upload-container.drag-over {
+  background-color: #e1ffc7; /* Kolor tła podczas przeciągania */
+  border-color: #5cb85c; /* Zmiana koloru obramowania */
+}
+
+.custom-file-upload {
+  color: #666;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+}
+
+#file-upload {
+  display: none;
+}
+
+#come-back-button {
+  width:auto;
+}
 
 #button1 { width: 20% }
 .sb-title-icon{
@@ -829,7 +876,7 @@ width: 100px;
   font-weight: bold;
 }
 #baroption{
-  font-size: 30px;
+  font-size: 25px;
 }
 #barname{
   color: white;
@@ -932,10 +979,10 @@ nav, h5, #header, .title { display: none; }
     height: 90px;
   }
 }
-.submit-button, .edit-button {
-  height: 40px;
-  width: 120px;
-  padding: 10px 20px;
+.submit-button, .edit-button, .suspect-button {
+  height: auto;
+  width: auto;
+  padding: 5px 10px;
   background: #0004ff;
   color: white;
   font-size: 17px;
@@ -945,7 +992,9 @@ nav, h5, #header, .title { display: none; }
   border-radius: 3px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.48);
   cursor: pointer;
-  margin-top: 5px;
+  margin: 10px 10px 5px 10px;
+  align-items: center;
+  display: flex;
 }
 .status {
   display: flex;

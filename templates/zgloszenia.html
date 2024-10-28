@@ -65,12 +65,12 @@
             <tbody>
                 {% for zgloszenie in zgloszenia %}
                 <tr>
-                <td>{{ zgloszenie[0] }}</td>
-                <td>{{ zgloszenie[1] }}</td>
                 <td>{{ zgloszenie[2] }}</td>
+                <td>{{ zgloszenie[1] }}</td>
                 <td>{{ zgloszenie[3] }}</td>
                 <td>{{ zgloszenie[4] }}</td>
                 <td>{{ zgloszenie[5] }}</td>
+                <td>{{ zgloszenie[6] }}</td>
                 <script>
 function showFields(zgloszenieId) {
     const statusElement = document.querySelector(`.status[data-zgloszenie-id="${zgloszenieId}"]`);
@@ -104,12 +104,12 @@ function showFields(zgloszenieId) {
             </table>
     </div>
         {% else %}
-            <p>Brak zgłoszeń dla wybranej daty.</p>
+            <p style="text-align: center">Brak zgłoszeń</p><br><br>
         {% endif %}
-        <br><br>
-        <div class="link"><a id="link4" href=index.html class="has-tooltip" data-tooltip="Wróć do strony głównej">Wróć do strony głównej</a> </div> <br>
+        <div class="link">
+            <a id="come-back-button" href="przegladanie.html" class="button">Wróć do wyszukiwania zgłoszeń</a> 
+        </div> <br>
     </main><div class="tooltip"></div>
-     class="tooltip"></div>
     <!-- OBSŁUGA TOOLTIPÓW -->
     <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
 		<div id="div"></div>
