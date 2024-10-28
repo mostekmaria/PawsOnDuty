@@ -55,8 +55,8 @@ html {
 body {
   display: flex;
   flex-direction: column;
-  margin: 800px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   min-height: 100vh;
   background:#436cff56;
 }
@@ -202,12 +202,16 @@ form{
   margin-bottom: 10px;
 }
 
-.text-place h1,.text-place p, .text-description h1, .text-description p, .text-witnesses h1, .text-witnesses p{
+.text-place h1,.text-place p, .text-description h1, .text-description p, .text-witnesses h1, .text-witnesses p, .text-civil h1, .text-civil p{
   text-align: left;
   margin-left: 50px;
 }
 
-.text-time h1, .text-time p, .text-perpetrators h1, .text-perpetrators p, .text-civil h1, .text-civil p{
+.text-civil {
+  margin-right: 100px; /* Centrowanie w poziomie */
+}
+
+.text-time h1, .text-time p, .text-perpetrators h1, .text-perpetrators p, .text-photos h1, .text-photos p{
   text-align: right;
 }
 
@@ -344,6 +348,14 @@ input {
   width: 55%;
 }
 
+.zgloszenia tr {
+  cursor: pointer;
+}
+
+.zgloszenia a{
+  color: inherit; /* Zachowanie kolorów tekstu */
+}
+
 #chatForm {
   height: 10px;
   display: flex;
@@ -364,6 +376,7 @@ input {
   padding-bottom: 20px;
   scrollbar-width: none; /* Ukrywa pasek przewijania w Firefox */
   -ms-overflow-style: none;  /* Ukrycie paska przewijania w Internet Explorer */
+  flex-direction: column-reverse; /* Odwraca kierunek wyświetlania */
 }
 
 
@@ -478,14 +491,12 @@ strong {
   background-color: #304ebb8e !important;
   border-radius: 16px; /* Zaokrąglone rogi panelu */
   width: 550px !important; /* Maksymalna szerokość panelu */
-  height: 130px;
-  margin-top: 80px;
+  margin-top: 75px;
   color: #ffffff;
+  height: auto;
   display: block;
-  margin-left: 20px;
-  margin-right: 110px;
+  margin-bottom: 60px;
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
-
 }
 
 .time-container {
@@ -495,10 +506,11 @@ strong {
 }
 
 .civil-container {
-  display: flex;
-  flex-direction:row;
-  justify-content: center;
-  margin-bottom: 200px;
+  display: flex; /* Ustawia elementy obok siebie */
+  flex-direction: row; /* Elementy będą ustawione w jednym wierszu */
+  align-items: flex-start; /* Wyrównuje elementy do góry */
+  width: 100%; /* Upewnia się, że kontener zajmuje całą szerokość */
+  margin-bottom: 150px;
 }
 
 .panel-description {
@@ -538,11 +550,32 @@ strong {
   margin-left: 0;
 }
 
+.panel-photos {
+  padding-top: 20px;
+  background-color: #304ebb8e !important;
+  border-radius: 16px; /* Zaokrąglone rogi panelu */
+  width: 350px;
+  margin-top: 75px;
+  color: #ffffff;
+  height: auto;
+  display: block;
+  margin-bottom: 60px;
+  box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
+  margin-left: 0;
+}
+
 .perpetrators-container {
   display: flex;
   flex-direction:row;
   gap: 110px;
   margin-bottom: 100px;
+}
+
+.photos-container {
+  display: flex;
+  flex-direction:row;
+  gap: 110px;
+  margin-bottom: 50px;
 }
 
 .panel-sign {
@@ -683,7 +716,7 @@ tr {
       flex-direction: column; /* Zmieniamy układ na kolumnowy */
   }
 
-  .panel-place, .panel-time, .panel-description, .panel-perpetrators, .panel-sign, .panel-witnesses, .panel_civil{
+  .panel-place, .panel-time, .panel-description, .panel-perpetrators, .panel-sign, .panel-witnesses, .panel_civil, .panel-photos{
     margin-left: 0; /* Centrowanie w poziomie */
     margin-right: 6%; /* Centrowanie w poziomie */
   }
@@ -692,7 +725,7 @@ tr {
     margin-left: 4%; /* Centrowanie w poziomie */
   }
 
-  .text-time, .text-perpetrators, .text-civil {
+  .text-time, .text-perpetrators, .text-civil, .text-photos {
     margin-right: 0; /* Centrowanie w poziomie */
   }
 
@@ -769,39 +802,68 @@ tr {
   box-sizing: border-box; /* Zapewnienie, że padding nie wpłynie na szerokość */
 }
 
-#photo {
+.suspect-form {
+  margin-top: 150px;
+}
+
+/* Stylizacja kontenera dla inputa i etykiety */
+.file-upload-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: transparent;
+  color: #ffffff;
+  max-width: 150px; /* Mniejsza szerokość kontenera */
+  max-height: 200px; /* Mniejsza szerokość kontenera */
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Ukrycie domyślnego inputa */
+.full-input-photo {
+  display: none;
+}
+
+/* Stylizacja niestandardowego przycisku */
+.custom-file-label {
+  width: auto; /* Dopasowanie szerokości do zawartości */
+  max-height: 40px; /* Ustaw minimalną szerokość przycisku */
+  padding: 5px 10px; /* Mniejsze odstępy wewnątrz przycisku */
+  background: #378e25;
   color: white;
   font-size: 17px;
   text-transform: uppercase;
   font-family: Calibri, sans-serif;
-  border: 0;
   border-radius: 3px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.48);
   cursor: pointer;
   display: flex;
-  flex-direction: column;
+  justify-content: center; /* Centrowanie tekstu w poziomie */
   align-items: center; /* Centrowanie tekstu w pionie */
-
-}
-
-
-.file-upload-container.drag-over {
-  background-color: #e1ffc7; /* Kolor tła podczas przeciągania */
-  border-color: #5cb85c; /* Zmiana koloru obramowania */
-}
-
-.custom-file-upload {
-  color: #666;
-  font-size: 16px;
+  box-sizing: border-box; /* Zapewnienie, że padding nie wpłynie na szerokość */
   text-align: center;
-  cursor: pointer;
 }
 
-#file-upload {
-  display: none;
+.custom-file-label:hover {
+  background-color: #4cae4c; /* Zmiana koloru przycisku po najechaniu */
 }
+
+/* Stylizacja tekstu wyświetlającego nazwę pliku */
+.file-name {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+
 
 #come-back-button {
   width:auto;
+  align-items: center;
+  margin-bottom: 50px;
 }
 
 #button1 { width: 20% }
@@ -1008,7 +1070,7 @@ nav, h5, #header, .title { display: none; }
   align-items: center;
 }
 .status-select{
-  width: 120px;
+  width: 100px;
 }
 
 
