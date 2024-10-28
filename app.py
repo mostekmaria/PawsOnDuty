@@ -584,6 +584,11 @@ def update_status():
         cursor.close()
         cnx.close()
 
+
+@app.route('/report')
+def report():
+    return redirect(url_for('/report'))
+
 @app.route('/chatbot', methods=['GET', 'POST'])
 def chatbot():
     response = None
