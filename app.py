@@ -545,7 +545,7 @@ def handle_suspects():
         insert_suspect_into_db(report_id, name, surname, address, birthdate, photo_blob)
 
         # Przekierowanie lub renderowanie odpowiedzi
-        return redirect(url_for('przekierowanieZgloszenie'))
+        return redirect(url_for('report', report_id=report_id))
 
     # Jeśli metoda GET, wyświetlamy formularz suspects.html
     report_id = request.args.get('report_id')  # Pobieramy report_id z URL
@@ -553,23 +553,35 @@ def handle_suspects():
     return render_template('suspects.html', report_id=report_id)
 
 
+
 @app.route('/update_status', methods=['POST'])
 def update_status():
     zgloszenie_id = request.json['zgloszenieId']
     new_status = request.json['newStatus']
-    
-    print(f"Zgłoszenie ID: {zgloszenie_id}, Nowy status: {new_status}")  # Debugowanie
-    
+
+    print(f"Zgłoszenie ID: {zgloszenie_id}, Nowy status: {new_status}")  # Debugging
+
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
-    
+
     try:
-        update_query = f"UPDATE reports SET status = %s WHERE report_id = %s"
+        # Verify the existence of the report
+        cursor.execute("SELECT * FROM reports WHERE report_id = %s", (zgloszenie_id,))
+        if cursor.fetchone() is None:
+            print(f"Report with ID {zgloszenie_id} not found.")
+            return 'Nie znaleziono zgłoszenia', 404
+
+        # Update the status
+        update_query = "UPDATE reports SET status = %s WHERE report_id = %s"
         cursor.execute(update_query, (new_status, zgloszenie_id))
+        
+        # Check how many rows were affected (logging for debugging)
+        print(f"Rows affected: {cursor.rowcount}")
+
         cnx.commit()
         return 'OK', 200
     except Exception as e:
-        print('Błąd podczas aktualizacji statusu:', e)
+        print('Error updating status:', str(e))
         cnx.rollback()
         return 'Błąd podczas aktualizacji statusu', 500
     finally:
@@ -586,6 +598,7 @@ def report(report_id):
         # Zapytanie SQL do pobrania danych konkretnego zgłoszenia
         query = """
             SELECT 
+                r.report_id,
                 r.title, 
                 ef.event_description, 
                 ef.address, 

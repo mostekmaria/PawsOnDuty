@@ -23,20 +23,19 @@
             <a id="baroption" href="index.html">Wyszukiwanie zgłoszenia</a>
             <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
         </div>
-        
         {% if komunikat %}
             <div class="komunikat">{{ komunikat }}</div>
         {% endif %}
         
         <header>
             <div id="logo">
-            <a href = "{{ url_for('przegladanie') }}"><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="90" height="90"></a><br>
+            <a href = "{{ url_for('przegladanie') }}"><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="{{ url_for('static', filename='logo.png') }}" width="90" height="90"></a><br>
             </div>
             <img id="menu" src="static/menu.png" onclick="openCloseNav()">
                 <!-- OBSŁUGA SIDEBAR MENU -->
                 <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
             <div id="header">
-                <a href = "{{ url_for('przegladanie') }}"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="65"></a><br>
+                <a href = "{{ url_for('przegladanie') }}"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="{{ url_for('static', filename='logo.png') }}" width="auto" height="65"></a><br>
             </div> 
             <nav class="navbar navbar-dark bg-primary">
                 <span id="name">{{ imie }}</span>    
@@ -72,7 +71,7 @@
                     <td>{{ zgloszenie[5] }}</td>
                     <td>{{ zgloszenie[6] }}</td>
                     <td>{{ zgloszenie[7] }}</td>
-                <script>
+<script>
 function showFields(zgloszenieId) {
     const statusElement = document.querySelector(`.status[data-zgloszenie-id="${zgloszenieId}"]`);
     const editButton = statusElement.querySelector('.edit-button');
@@ -83,25 +82,12 @@ function showFields(zgloszenieId) {
     selectElement.style.display = "block";
     submitButton.style.display = "block";
 }
-                </script>
+</script>
 <td class="status" data-zgloszenie-id="{{ zgloszenie[0] }}" data-aktualny-status="{{ zgloszenie[11] }}">
-    <div class="button-container">
-      <div>
-        <button class="edit-button" onclick="showFields('{{ zgloszenie[0] }}')">Edytuj</button> <!-- Zmienione z [3] na [0] -->
-        <select class="status-select" name="status" data-zgloszenie-id="{{ zgloszenie[0] }}" style="display: none"> <!-- Zmienione z [3] na [0] -->
-            <option value="przyjęto">przyjęto</option>
-            <option value="zindentyfikowano">zindentyfikowano</option>
-            <option value="zakończono">zakończono</option>
-            <option value="porzucono">porzucono</option>
-        </select>
-      </div>
-      <button class="submit-button" onclick="submitChanges('{{ zgloszenie[0] }}')" style="display: none">Zatwierdź</button> <!-- Zmienione z [3] na [0] -->
-    </div>
-    <button class="suspect-button" onclick="addSuspect('{{ zgloszenie[0] }}'); event.stopPropagation();">Dodaj podejrzanego</button>
   </td>
  </tr>
-                    {% endfor %}
-                </tbody>
+    {% endfor %}
+            </tbody>
             </table>
     </div>
         {% else %}
@@ -113,51 +99,6 @@ function showFields(zgloszenieId) {
     </main><div class="tooltip"></div>
     <!-- OBSŁUGA TOOLTIPÓW -->
     <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
-		<div id="div"></div>
-        <script>
-            function addSuspect(reportId) {
-                // Przekierowanie na stronę suspects.html z ID zgłoszenia w URL
-                window.location.href = `/suspects.html?report_id=${reportId}`;
-            }
-            </script>          
-    <script>
-function submitChanges(zgloszenieId) {
-    const statusElement = document.querySelector(`.status[data-zgloszenie-id="${zgloszenieId}"]`);
-    const editButton = statusElement.querySelector('.edit-button');
-    const selectElement = statusElement.querySelector('.status-select');
-    const submitButton = statusElement.querySelector('.submit-button');
-
-    const newStatus = selectElement.value;
-
-    fetch('/update_status', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            zgloszenieId: zgloszenieId,
-            newStatus: newStatus,
-        }),
-    })
-    .then(response => {
-        if (response.ok) {
-            // Aktualizacja statusu na stronie bez ponownego ładowania
-            statusElement.setAttribute('data-aktualny-status', newStatus);
-            // Zmiana widoczności elementów
-            editButton.style.display = "block";
-            selectElement.style.display = "none";
-            submitButton.style.display = "none";
-        } else {
-            console.error('Wystąpił błąd podczas aktualizacji statusu');
-        }
-    })
-    .catch(error => {
-        console.error('Wystąpił błąd podczas aktualizacji statusu', error);
-    });
-}
-
-      </script>
-      
       <script>
         document.querySelectorAll('#link-table tr').forEach(row => {
             row.addEventListener('click', () => {
