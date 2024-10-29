@@ -50,7 +50,7 @@
 
     {% if zgloszenia %}
     <div class="panel-table">            
-        <table class="zgloszenia">
+        <table class="zgloszenia" id="link-table">
             <thead>
                 <tr id="column-title">
                     <th>Tytuł</th>
@@ -64,13 +64,13 @@
             </thead>
             <tbody>
                 {% for zgloszenie in zgloszenia %}
-                <tr>
-                <td>{{ zgloszenie[2] }}</td>
-                <td>{{ zgloszenie[1] }}</td>
-                <td>{{ zgloszenie[3] }}</td>
-                <td>{{ zgloszenie[4] }}</td>
-                <td>{{ zgloszenie[5] }}</td>
-                <td>{{ zgloszenie[6] }}</td>
+                <tr data-url="/report.html">
+                <td><a href="{{ url_for('report') }}">{{ zgloszenie[2] }}</a></td>
+                <td><a href="{{ url_for('report') }}">{{ zgloszenie[1] }}</a></td>
+                <td><a href="{{ url_for('report') }}">{{ zgloszenie[3] }}</a></td>
+                <td><a href="{{ url_for('report') }}">{{ zgloszenie[4] }}</a></td>
+                <td><a href="{{ url_for('report') }}">{{ zgloszenie[5] }}</a></td>
+                <td><a href="{{ url_for('report') }}">{{ zgloszenie[6] }}</a></td>
                 <script>
 function showFields(zgloszenieId) {
     const statusElement = document.querySelector(`.status[data-zgloszenie-id="${zgloszenieId}"]`);
@@ -157,6 +157,17 @@ function submitChanges(zgloszenieId) {
 
       </script>
       
+      <script>
+        document.querySelectorAll('#link-table tr').forEach(row => {
+            row.addEventListener('click', () => {
+                const url = row.getAttribute('data-url');
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        });
+    </script>
+
       <footer>
         <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
         <p id="footer">© Maria Mostek, Patrycja Ruda. Kraków 2024.</p>

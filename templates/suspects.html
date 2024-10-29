@@ -44,52 +44,69 @@
         </nav> 
     </header> 
 
-    <h1>Dodaj podejrzanego</h1>
-    <form action="{{ url_for('handle_suspects') }}" method="POST" enctype="multipart/form-data">
-        <div class="panel-suspect">
+    <div class="suspect-form">
+        <h1 style="text-align: center">Dodaj podejrzanego</h1>
+        <form action="{{ url_for('handle_suspects') }}" method="POST" enctype="multipart/form-data">
+            <div class="panel-suspect">
 
-            <div class="titleicon">
-                <span for="name" class="sb-title">Imię:</span>
+                <div class="titleicon">
+                    <span for="name" class="sb-title">Imię:</span>
+                </div>
+                <input type="text" class="full-input" id="name" name="name" required>
+
+                <div class="titleicon">
+                    <span class="sb-title">Nazwisko:</span>
+                </div>
+                <input type="text" class="full-input" id="surname" name="surname" required>
+
+                <div class="titleicon">
+                    <span class="sb-title">Adres:</span>
+                </div>
+                <input type="text" class="full-input" id="address" name="address" required>
+
+                <div class="titleicon">
+                    <span class="sb-title">Data urodzenia:</span>
+                </div>
+                <input type="date" class="full-input" id="birthdate" name="birthdate">
+
+                <div class="titleicon">
+                    <span class="sb-title">Zdjęcie podejrzanego (jpg, png):</span>
+                </div>
+                <div class="file-upload-wrapper">
+                    <input type="file" class="full-input-photo" id="photo" name="photo" accept=".jpg, .jpeg, .png">
+                    <label for="photo" class="custom-file-label">Wybierz plik</label>
+                    <span class="file-name">Nie wybrano pliku</span>
+                </div>            
+
+
+                
+                <!-- Ukryte pole na report_id -->
+                <input type="hidden" class="full-input" id="report_id" name="report_id" value="{{ report_id }}">
+
+
+                <div class="button-container2">
+                    <input type="submit" class="button" value="Zapisz podejrzanego">
+                </div>
+
+
             </div>
-            <input type="text" class="full-input" id="name" name="name" required>
-
-            <div class="titleicon">
-                <span class="sb-title">Nazwisko:</span>
-            </div>
-            <input type="text" class="full-input" id="surname" name="surname" required>
-
-            <div class="titleicon">
-                <span class="sb-title">Adres:</span>
-            </div>
-            <input type="text" class="full-input" id="address" name="address" required>
-
-            <div class="titleicon">
-                <span class="sb-title">Data urodzenia:</span>
-            </div>
-            <input type="date" class="full-input" id="birthdate" name="birthdate">
-
-            <div class="titleicon">
-                <span class="sb-title">Zdjęcie podejrzanego (jpg, png):</span>
-            </div>
-            <input type="file" class="full-input" id="photo" name="photo" accept=".jpg, .jpeg, .png">
-
-
-            
-            <!-- Ukryte pole na report_id -->
-            <input type="hidden" class="full-input" id="report_id" name="report_id" value="{{ report_id }}">
-
-
-            <div class="button-container2">
-                <input type="submit" class="button" value="Zapisz podejrzanego">
-            </div>
-
-
-        </div>
-    </form>
+        </form>
     </div>
     <footer>
         <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
         <p id="footer">© Maria Mostek, Patrycja Ruda. Kraków 2024.</p>
     </footer>
+    <script>
+        const fileInput = document.getElementById('photo');
+        const fileNameDisplay = document.querySelector('.file-name');
+
+        fileInput.addEventListener('change', function() {
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = fileInput.files[0].name;
+            } else {
+                fileNameDisplay.textContent = 'Nie wybrano pliku';
+            }
+        });
+</script>
 </body>
 </html>
