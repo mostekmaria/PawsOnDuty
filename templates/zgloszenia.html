@@ -64,13 +64,14 @@
             </thead>
             <tbody>
                 {% for zgloszenie in zgloszenia %}
-                <tr data-url="{{ url_for('report') }}">
-                    <td><a href="{{ url_for('report') }}">{{ zgloszenie[2] }}</a></td>
-                    <td><a href="{{ url_for('report') }}">{{ zgloszenie[1] }}</a></td>
-                    <td><a href="{{ url_for('report') }}">{{ zgloszenie[3] }}</a></td>
-                    <td><a href="{{ url_for('report') }}">{{ zgloszenie[4] }}</a></td>
-                    <td><a href="{{ url_for('report') }}">{{ zgloszenie[5] }}</a></td>
-                    <td><a href="{{ url_for('report') }}">{{ zgloszenie[6] }}</a></td>
+                <tr data-url="{{ url_for('report', report_id=zgloszenie[0]) }}">
+                    <td><a href="{{ url_for('report', report_id=zgloszenie[0]) }}">{{ zgloszenie[1] }}</a></td>
+                    <td>{{ zgloszenie[2] }}</td>
+                    <td>{{ zgloszenie[3] }}</td>
+                    <td>{{ zgloszenie[4] }}</td>
+                    <td>{{ zgloszenie[5] }}</td>
+                    <td>{{ zgloszenie[6] }}</td>
+                    <td>{{ zgloszenie[7] }}</td>
                 <script>
 function showFields(zgloszenieId) {
     const statusElement = document.querySelector(`.status[data-zgloszenie-id="${zgloszenieId}"]`);

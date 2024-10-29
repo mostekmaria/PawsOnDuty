@@ -48,34 +48,47 @@
     <h1 id="log">Zgłoszenie dla wybranej daty: {{ selected_date }}</h1>
     {% endif %}         
         
-        <table>
-            <tr>
-                <th>Tytuł</th> <td></td>
-            </tr>
-            <tr>
-                <th>Opis zdarzenia</th> <td></td>
-            </tr>
-            <tr>
-                <th>Adres</th> <td></td>
-            </tr>
-            <tr>
-                <th>Data</th> <td></td>
-            </tr>
-            <tr>
-                <th>Sprawcy</th> <td></td>
-            </tr>
-            <tr>
-                <th>Świadkowie</th> <td></td>
-            </tr>
-            <tr>
-                <th>Status</th> <td></td>
-            </tr>
-        </table>
+    <table>
+        <tr>
+            <th>Tytuł</th>
+            <td>{{ report_data[0] }}</td>
+        </tr>
+        <tr>
+            <th>Opis zdarzenia</th>
+            <td>{{ report_data[1] }}</td>
+        </tr>
+        <tr>
+            <th>Adres</th>
+            <td>{{ report_data[2] }}</td>
+        </tr>
+        <tr>
+            <th>Data zdarzenia</th>
+            <td>{{ report_data[3] }}</td>
+        </tr>
+        <tr>
+            <th>Sprawcy</th>
+            <td>{{ report_data[4] }}</td>
+        </tr>
+        <tr>
+            <th>Świadkowie</th>
+            <td>{{ report_data[5] }}</td>
+        </tr>
+        <tr>
+            <th>Data zgłoszenia</th>
+            <td>{{ report_data[6] }}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>{{ report_data[7] }}</td>
+        </tr>
+    </table>
+    
 
         <div class="link">
             <a id="come-back-button" href="przegladanie.html" class="button">Wróć do wyszukiwania zgłoszeń</a> 
         </div> <br>
-    </main><div class="tooltip"></div>
+    </main>
+    <div class="tooltip"></div>
     <!-- OBSŁUGA TOOLTIPÓW -->
     <script src="{{ url_for('static', filename='js/tooltip.js') }}" alt=""></script> 
 		<div id="div"></div>

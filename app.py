@@ -452,14 +452,12 @@ def moje_zgloszenia():
 
 @app.route('/zgloszenia.html', methods=['GET'])
 def zgloszenia():
-    selected_date = request.args.get('data')  # Pobranie parametru 'data' z zapytania GET
+    selected_date = request.args.get('data')
     try:
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
-        
+
         if selected_date:
-            # Zakładam, że format daty w report_time to 'YYYY-MM-DD HH:MM:SS'
-            # Używamy funkcji DATE() aby wyekstrahować część daty
             query = """
                 SELECT 
                     r.report_id, 
@@ -478,7 +476,6 @@ def zgloszenia():
             """
             cursor.execute(query, (selected_date,))
         else:
-            # Jeśli nie podano daty, pobieramy wszystkie zgłoszenia
             query = """
                 SELECT 
                     r.report_id, 
@@ -495,27 +492,22 @@ def zgloszenia():
                 JOIN witnesses w ON ef.event_feature_id = w.event_feature_id
             """
             cursor.execute(query)
-        
+
         zgloszenia = cursor.fetchall()
-        
-        # Opcjonalnie: Przekazanie wybranej daty do szablonu, aby ją wyświetlić
+
         return render_template(
             'zgloszenia.html', 
-            zgloszenia=zgloszenia, 
-            komunikat=None, 
-            zalogowany=session.get('zalogowany'), 
-            name=session.get('name'),
-            selected_date=selected_date
+            zgloszenia=zgloszenia,
+            selected_date=selected_date,
+            name=session.get('name')
         )
-        
+
     except mysql.connector.Error as err:
         print(f"Błąd podczas pobierania zgłoszeń: {err}")
-        zgloszenia = []
         return render_template(
             'zgloszenia.html', 
-            zgloszenia=zgloszenia, 
-            komunikat="Wystąpił błąd podczas pobierania zgłoszeń.", 
-            zalogowany=session.get('zalogowany'), 
+            zgloszenia=[],
+            komunikat="Wystąpił błąd podczas pobierania zgłoszeń.",
             name=session.get('name')
         )
     finally:
@@ -585,9 +577,55 @@ def update_status():
         cnx.close()
 
 
-@app.route('/report', methods=['GET', 'POST'])
-def report():
-    return render_template('report.html', name=session.get('name'))
+@app.route('/report/<int:report_id>', methods=['GET'])
+def report(report_id):
+    try:
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor()
+
+        # Zapytanie SQL do pobrania danych konkretnego zgłoszenia
+        query = """
+            SELECT 
+                r.title, 
+                ef.event_description, 
+                ef.address, 
+                ef.event_time, 
+                p.appearance, 
+                w.info_contact, 
+                r.report_time,
+                r.status
+            FROM reports r 
+            JOIN event_features ef ON r.report_id = ef.report_id 
+            JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id 
+            JOIN witnesses w ON ef.event_feature_id = w.event_feature_id
+            WHERE r.report_id = %s
+        """
+        cursor.execute(query, (report_id,))
+        report_data = cursor.fetchone()
+
+        if report_data:
+            return render_template(
+                'report.html',
+                report_data=report_data,
+                name=session.get('name')
+            )
+        else:
+            return render_template(
+                'report.html',
+                komunikat="Zgłoszenie nie zostało znalezione.",
+                name=session.get('name')
+            )
+
+    except mysql.connector.Error as err:
+        print(f"Błąd podczas pobierania zgłoszenia: {err}")
+        return render_template(
+            'report.html',
+            komunikat="Wystąpił błąd podczas ładowania zgłoszenia.",
+            name=session.get('name')
+        )
+    finally:
+        cursor.close()
+        cnx.close()
 
 @app.route('/chatbot', methods=['GET', 'POST'])
 def chatbot():
