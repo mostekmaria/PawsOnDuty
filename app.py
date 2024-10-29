@@ -585,9 +585,9 @@ def update_status():
         cnx.close()
 
 
-@app.route('/report')
+@app.route('/report', methods=['GET', 'POST'])
 def report():
-    return redirect(url_for('/report'))
+    return render_template('report.html', name=session.get('name'))
 
 @app.route('/chatbot', methods=['GET', 'POST'])
 def chatbot():

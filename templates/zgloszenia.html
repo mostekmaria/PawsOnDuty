@@ -64,13 +64,13 @@
             </thead>
             <tbody>
                 {% for zgloszenie in zgloszenia %}
-                <tr data-url="/report.html">
-                <td><a href="{{ url_for('report') }}">{{ zgloszenie[2] }}</a></td>
-                <td><a href="{{ url_for('report') }}">{{ zgloszenie[1] }}</a></td>
-                <td><a href="{{ url_for('report') }}">{{ zgloszenie[3] }}</a></td>
-                <td><a href="{{ url_for('report') }}">{{ zgloszenie[4] }}</a></td>
-                <td><a href="{{ url_for('report') }}">{{ zgloszenie[5] }}</a></td>
-                <td><a href="{{ url_for('report') }}">{{ zgloszenie[6] }}</a></td>
+                <tr data-url="{{ url_for('report') }}">
+                    <td><a href="{{ url_for('report') }}">{{ zgloszenie[2] }}</a></td>
+                    <td><a href="{{ url_for('report') }}">{{ zgloszenie[1] }}</a></td>
+                    <td><a href="{{ url_for('report') }}">{{ zgloszenie[3] }}</a></td>
+                    <td><a href="{{ url_for('report') }}">{{ zgloszenie[4] }}</a></td>
+                    <td><a href="{{ url_for('report') }}">{{ zgloszenie[5] }}</a></td>
+                    <td><a href="{{ url_for('report') }}">{{ zgloszenie[6] }}</a></td>
                 <script>
 function showFields(zgloszenieId) {
     const statusElement = document.querySelector(`.status[data-zgloszenie-id="${zgloszenieId}"]`);
@@ -167,6 +167,7 @@ function submitChanges(zgloszenieId) {
             });
         });
     </script>
+    
 
       <footer>
         <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
