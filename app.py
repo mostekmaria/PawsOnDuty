@@ -73,7 +73,7 @@ def insert_report_into_db():
         """
 
         # Obsługa zdjęć (photos)
-        uploaded_files = request.files.getlist("photos")
+        uploaded_files = request.files.getlist("photo")
         photos_data = []
 
         for file in uploaded_files:
