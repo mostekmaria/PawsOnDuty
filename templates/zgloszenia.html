@@ -96,7 +96,7 @@ function showFields(zgloszenieId) {
       </div>
       <button class="submit-button" onclick="submitChanges('{{ zgloszenie[0] }}')" style="display: none">Zatwierdź</button> <!-- Zmienione z [3] na [0] -->
     </div>
-    <button class="suspect-button" onclick="addSuspect('{{ zgloszenie[0] }}')">Dodaj podejrzanego</button>
+    <button class="suspect-button" onclick="addSuspect('{{ zgloszenie[0] }}'); event.stopPropagation();">Dodaj podejrzanego</button>
   </td>
  </tr>
                     {% endfor %}
