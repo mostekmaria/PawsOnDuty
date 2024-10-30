@@ -84,8 +84,15 @@
             <div class="message-field">
                 {% if witness_step %}
                     <form id="photoForm" action="{{ url_for('chatbot') }}" method="post" enctype="multipart/form-data">
-                        <input type="file" name="photos" multiple>
-                        <button type="submit">Zakończ zgłoszenie</button>
+                        <div class="titleicon">
+                            <span class="sb-title">Zdjęcia z miejsca zdarzenia (jpg, png):</span>
+                        </div>
+                        <div class="file-upload-wrapper-chatbot">
+                            <input type="file" class="full-input-photo" id="photo-chatbot" name="photos" accept=".jpg, .jpeg, .png">
+                            <label for="photo" class="custom-file-label">Wybierz plik</label>
+                            <span class="file-name">Nie wybrano pliku</span>
+                        </div>    
+                        <button class="button" type="submit">Zakończ zgłoszenie</button>
                     </form>
                 {% else %}
                     <form id="chatForm" action="{{ url_for('chatbot') }}" method="post">

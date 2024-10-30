@@ -247,6 +247,35 @@ input {
   border-bottom-right-radius: 16px;
 }
 
+
+.zgloszenie {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+
+.zgloszenie tr:first-of-type th:first-child {
+  border-top-left-radius: 16px;
+}
+
+.zgloszenie tr:first-of-type td {
+  border-top-right-radius: 16px;
+}
+
+.zgloszenie tr:last-of-type td {
+  border-bottom-right-radius: 16px;
+}
+.zgloszenie tr:last-of-type th {
+  border-bottom-left-radius: 16px;
+}
+
+.zgloszenie th {
+  background-color: #378e25;
+  color:#ffffff;
+  width: 25%;
+}
+
+
 .chatbot{
   display: flex;
   flex-direction:column;
@@ -338,7 +367,7 @@ input {
   z-index: -1;
   position: relative;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   z-index: 1;
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
@@ -356,12 +385,17 @@ input {
   color: inherit; /* Zachowanie kolorów tekstu */
 }
 
-#chatForm {
+#chatForm, #photoForm{
   height: 10px;
   display: flex;
   flex-direction:row;
   gap: 20px;
   padding-top: 20px;
+}
+
+#photo-chatbot {
+  margin-bottom: auto;
+  margin-top: auto;
 }
 
 .chatbox {
@@ -598,6 +632,7 @@ strong {
   display: block;
   margin-bottom: 20%;
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
+  width:100%;
 }
 
 .panel-search {
@@ -823,6 +858,23 @@ tr {
   margin-right: auto;
 }
 
+/* Stylizacja kontenera dla inputa i etykiety */
+.file-upload-wrapper-chatbot {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: transparent;
+  color: #ffffff;
+  max-width: 150px; /* Mniejsza szerokość kontenera */
+  max-height: 200px; /* Mniejsza szerokość kontenera */
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Ukrycie domyślnego inputa */
 .full-input-photo {
   display: none;
@@ -864,6 +916,12 @@ tr {
   width:auto;
   align-items: center;
   margin-bottom: 50px;
+}
+
+#report-come-back-button {
+  width:30%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #button1 { width: 20% }

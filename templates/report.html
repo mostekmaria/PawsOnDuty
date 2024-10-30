@@ -16,7 +16,7 @@
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
             <br><br>
             <br><br>
-            <a href="index.html"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="80"></a>
+            <a href="index.html"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="/static/logo-napis.png" width="auto" height="80"></a>
             <br><br>
             <a class="bar" id="barname">{{ session.get('name') }}</a>
             <br>
@@ -32,7 +32,7 @@
             <div id="logo">
             <a href = "{{ url_for('przegladanie') }}"><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="{{ url_for('static', filename='logo.png') }}" width="90" height="90"></a><br>
             </div>
-            <img id="menu" src="static/menu.png" onclick="openCloseNav()">
+            <img id="menu" src="/static/menu.png" onclick="openCloseNav()">
                 <!-- OBSŁUGA SIDEBAR MENU -->
                 <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
             <div id="header">
@@ -44,65 +44,70 @@
             </nav> 
         </header> 
         <main id="mainlog">
-            {% if selected_date %}
-            <h1 id="log">Zgłoszenie dla wybranej daty: {{ selected_date }}</h1>
-            {% endif %}
-            <div id="report-id" data-report-id="{{ report_data[0] }}" style="display: none;"></div>
-            <table>
-                <tr>
-                    <th>Tytuł</th>
-                    <td>{{ report_data[1] }}</td>
-                </tr>
-                <tr>
-                    <th>Opis zdarzenia</th>
-                    <td>{{ report_data[2] }}</td>
-                </tr>
-                <tr>
-                    <th>Adres</th>
-                    <td>{{ report_data[3] }}</td>
-                </tr>
-                <tr>
-                    <th>Data zdarzenia</th>
-                    <td>{{ report_data[4] }}</td>
-                </tr>
-                <tr>
-                    <th>Sprawcy</th>
-                    <td>{{ report_data[5] }}</td>
-                </tr>
-                <tr>
-                    <th>Świadkowie</th>
-                    <td>{{ report_data[6] }}</td>
-                </tr>
-                <tr>
-                    <th>Data zgłoszenia</th>
-                    <td>{{ report_data[7] }}</td>
-                </tr>
-                <tr>
-                    <th>Podejrzani</th>
-                    <td>
-                        <button class="suspect-button" onclick="addSuspect('{{ report_data[0] }}')">Dodaj podejrzanego</button>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Status</th>
-                    <td>
-                        <span id="current-status">{{ report_data[8] }}</span>
-                        <button id="edit-button" class="edit-button" onclick="showEditFields()">Edytuj</button>
-                        
-                        <!-- Pole wyboru statusu i przycisk zatwierdzenia -->
-                        <select id="status-select" style="display: none;">
-                            <option value="przyjęto">przyjęto</option>
-                            <option value="zindentyfikowano">zindentyfikowano</option>
-                            <option value="zakończono">zakończono</option>
-                            <option value="porzucono">porzucono</option>
-                        </select>
-                        <button id="submit-button" style="display: none;" onclick="submitStatus('{{ report_data[0] }}')">Zatwierdź</button>
-                    </td>
-                </tr>
-            </table>
-    
-            <div class="link">
-                <a id="come-back-button" href="{{ url_for('przegladanie') }}" class="button">Wróć do wyszukiwania zgłoszeń</a> 
+            <br><br><br><br><br><br>
+            <div class="panel-table">
+                <div id="report-table">
+                    {% if selected_date %}
+                    <h1 id="log">Zgłoszenie dla wybranej daty: {{ selected_date }}</h1>
+                    {% endif %}
+                    <div id="report-id" data-report-id="{{ report_data[0] }}" style="display: none;"></div>
+                    <table class="zgloszenie" id="report-table">
+                        <tr>
+                            <th>Tytuł</th>
+                            <td>{{ report_data[1] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Opis zdarzenia</th>
+                            <td>{{ report_data[2] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Adres</th>
+                            <td>{{ report_data[3] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Data zdarzenia</th>
+                            <td>{{ report_data[4] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Sprawcy</th>
+                            <td>{{ report_data[5] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Świadkowie</th>
+                            <td>{{ report_data[6] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Data zgłoszenia</th>
+                            <td>{{ report_data[7] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Podejrzani</th>
+                            <td>
+                                <button class="suspect-button" onclick="addSuspect('{{ report_data[0] }}')">Dodaj podejrzanego</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>
+                                <span id="current-status">{{ report_data[8] }}</span>
+                                <button id="edit-button" class="edit-button" onclick="showEditFields()">Edytuj</button>
+                                
+                                <!-- Pole wyboru statusu i przycisk zatwierdzenia -->
+                                <select id="status-select" style="display: none;">
+                                    <option value="przyjęto">przyjęto</option>
+                                    <option value="zindentyfikowano">zindentyfikowano</option>
+                                    <option value="zakończono">zakończono</option>
+                                    <option value="porzucono">porzucono</option>
+                                </select>
+                                <button id="submit-button" style="display: none;" onclick="submitStatus('{{ report_data[0] }}')">Zatwierdź</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <br><br>
+                    <div class="link">
+                        <a id="report-come-back-button" href="{{ url_for('przegladanie') }}" class="button">Wróć do wyszukiwania zgłoszeń</a> 
+                    </div>
+                </div>
             </div>
         </main>
     
