@@ -73,7 +73,7 @@ def insert_report_into_db():
         """
 
         # Obsługa zdjęć (photos)
-        uploaded_files = request.files.getlist("photos")
+        uploaded_files = request.files.getlist("photo")
         photos_data = []
 
         for file in uploaded_files:
@@ -452,14 +452,12 @@ def moje_zgloszenia():
 
 @app.route('/zgloszenia.html', methods=['GET'])
 def zgloszenia():
-    selected_date = request.args.get('data')  # Pobranie parametru 'data' z zapytania GET
+    selected_date = request.args.get('data')
     try:
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
-        
+
         if selected_date:
-            # Zakładam, że format daty w report_time to 'YYYY-MM-DD HH:MM:SS'
-            # Używamy funkcji DATE() aby wyekstrahować część daty
             query = """
                 SELECT 
                     r.report_id, 
@@ -478,7 +476,6 @@ def zgloszenia():
             """
             cursor.execute(query, (selected_date,))
         else:
-            # Jeśli nie podano daty, pobieramy wszystkie zgłoszenia
             query = """
                 SELECT 
                     r.report_id, 
@@ -495,27 +492,22 @@ def zgloszenia():
                 JOIN witnesses w ON ef.event_feature_id = w.event_feature_id
             """
             cursor.execute(query)
-        
+
         zgloszenia = cursor.fetchall()
-        
-        # Opcjonalnie: Przekazanie wybranej daty do szablonu, aby ją wyświetlić
+
         return render_template(
             'zgloszenia.html', 
-            zgloszenia=zgloszenia, 
-            komunikat=None, 
-            zalogowany=session.get('zalogowany'), 
-            name=session.get('name'),
-            selected_date=selected_date
+            zgloszenia=zgloszenia,
+            selected_date=selected_date,
+            name=session.get('name')
         )
-        
+
     except mysql.connector.Error as err:
         print(f"Błąd podczas pobierania zgłoszeń: {err}")
-        zgloszenia = []
         return render_template(
             'zgloszenia.html', 
-            zgloszenia=zgloszenia, 
-            komunikat="Wystąpił błąd podczas pobierania zgłoszeń.", 
-            zalogowany=session.get('zalogowany'), 
+            zgloszenia=[],
+            komunikat="Wystąpił błąd podczas pobierania zgłoszeń.",
             name=session.get('name')
         )
     finally:
@@ -553,7 +545,7 @@ def handle_suspects():
         insert_suspect_into_db(report_id, name, surname, address, birthdate, photo_blob)
 
         # Przekierowanie lub renderowanie odpowiedzi
-        return redirect(url_for('przekierowanieZgloszenie'))
+        return redirect(url_for('report', report_id=report_id))
 
     # Jeśli metoda GET, wyświetlamy formularz suspects.html
     report_id = request.args.get('report_id')  # Pobieramy report_id z URL
@@ -561,23 +553,35 @@ def handle_suspects():
     return render_template('suspects.html', report_id=report_id)
 
 
+
 @app.route('/update_status', methods=['POST'])
 def update_status():
     zgloszenie_id = request.json['zgloszenieId']
     new_status = request.json['newStatus']
-    
-    print(f"Zgłoszenie ID: {zgloszenie_id}, Nowy status: {new_status}")  # Debugowanie
-    
+
+    print(f"Zgłoszenie ID: {zgloszenie_id}, Nowy status: {new_status}")  # Debugging
+
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
-    
+
     try:
-        update_query = f"UPDATE reports SET status = %s WHERE report_id = %s"
+        # Verify the existence of the report
+        cursor.execute("SELECT * FROM reports WHERE report_id = %s", (zgloszenie_id,))
+        if cursor.fetchone() is None:
+            print(f"Report with ID {zgloszenie_id} not found.")
+            return 'Nie znaleziono zgłoszenia', 404
+
+        # Update the status
+        update_query = "UPDATE reports SET status = %s WHERE report_id = %s"
         cursor.execute(update_query, (new_status, zgloszenie_id))
+        
+        # Check how many rows were affected (logging for debugging)
+        print(f"Rows affected: {cursor.rowcount}")
+
         cnx.commit()
         return 'OK', 200
     except Exception as e:
-        print('Błąd podczas aktualizacji statusu:', e)
+        print('Error updating status:', str(e))
         cnx.rollback()
         return 'Błąd podczas aktualizacji statusu', 500
     finally:
@@ -585,9 +589,56 @@ def update_status():
         cnx.close()
 
 
-@app.route('/report')
-def report():
-    return redirect(url_for('/report'))
+@app.route('/report/<int:report_id>', methods=['GET'])
+def report(report_id):
+    try:
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor()
+
+        # Zapytanie SQL do pobrania danych konkretnego zgłoszenia
+        query = """
+            SELECT 
+                r.report_id,
+                r.title, 
+                ef.event_description, 
+                ef.address, 
+                ef.event_time, 
+                p.appearance, 
+                w.info_contact, 
+                r.report_time,
+                r.status
+            FROM reports r 
+            JOIN event_features ef ON r.report_id = ef.report_id 
+            JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id 
+            JOIN witnesses w ON ef.event_feature_id = w.event_feature_id
+            WHERE r.report_id = %s
+        """
+        cursor.execute(query, (report_id,))
+        report_data = cursor.fetchone()
+
+        if report_data:
+            return render_template(
+                'report.html',
+                report_data=report_data,
+                name=session.get('name')
+            )
+        else:
+            return render_template(
+                'report.html',
+                komunikat="Zgłoszenie nie zostało znalezione.",
+                name=session.get('name')
+            )
+
+    except mysql.connector.Error as err:
+        print(f"Błąd podczas pobierania zgłoszenia: {err}")
+        return render_template(
+            'report.html',
+            komunikat="Wystąpił błąd podczas ładowania zgłoszenia.",
+            name=session.get('name')
+        )
+    finally:
+        cursor.close()
+        cnx.close()
 
 @app.route('/chatbot', methods=['GET', 'POST'])
 def chatbot():
