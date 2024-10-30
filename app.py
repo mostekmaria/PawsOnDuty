@@ -661,7 +661,7 @@ def chatbot():
         print(f"Received form data: {request.form}")
         print(f"Received files: {request.files}")
 
-        if 'photos' in request.files and request.files['photos']:
+        if 'photo' in request.files and request.files['photo']:
             # Obsługa przesyłania zdjęć
             uploaded_files = request.files.getlist("photos")
             print(f"Uploaded files: {[file.filename for file in uploaded_files]}")

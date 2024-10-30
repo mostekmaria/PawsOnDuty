@@ -88,8 +88,8 @@
                             <span class="sb-title">Zdjęcia z miejsca zdarzenia (jpg, png):</span>
                         </div>
                         <div class="file-upload-wrapper-chatbot">
-                            <input type="file" class="full-input-photo" id="photo-chatbot" name="photos" accept=".jpg, .jpeg, .png">
-                            <label for="photo" class="custom-file-label">Wybierz plik</label>
+                            <input type="file" class="full-input-photo" id="photo-chatbot" name="photo" accept=".jpg, .jpeg, .png">
+                            <label for="photo-chatbot" class="custom-file-label">Wybierz plik</label>
                             <span class="file-name">Nie wybrano pliku</span>
                         </div>    
                         <button class="button" type="submit">Zakończ zgłoszenie</button>
@@ -104,6 +104,18 @@
         </div>        
     <main/>
     <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+    <script>
+        const fileInput = document.getElementById('photo-chatbot');
+        const fileNameDisplay = document.querySelector('.file-name');
+    
+        fileInput.addEventListener('change', function() {
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = fileInput.files[0].name;
+            } else {
+                fileNameDisplay.textContent = 'Nie wybrano pliku';
+            }
+        });
+    </script>
 </html>
 
 <footer>
