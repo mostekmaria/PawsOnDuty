@@ -1188,3 +1188,17 @@ nav, h5, #header, .title { display: none; }
   border: 1px solid #ddd;
   border-radius: 5px;
 }
+
+.suspects-gallery {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.suspect-photo {
+  max-width: 150px;
+  max-height: 150px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}

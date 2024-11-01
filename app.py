@@ -9,6 +9,7 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail as SendGridMail
 import logging
 import socket
+import base64
 
 
 # Konfiguracja połączenia z bazą danych
@@ -589,8 +590,6 @@ def update_status():
         cnx.close()
 
 
-import base64
-
 @app.route('/report/<int:report_id>', methods=['GET'])
 def report(report_id):
     try:
@@ -623,19 +622,36 @@ def report(report_id):
         if report_data[9] is not None:
             report_data[9] = base64.b64encode(report_data[9]).decode('utf-8')
 
+        # Pobranie podejrzanych dla danego zgłoszenia
+        query_suspects = """
+            SELECT suspect_id, name, surname, address, birthdate, photo
+            FROM suspects
+            WHERE report_id = %s
+        """
+        cursor.execute(query_suspects, (report_id,))
+        suspects = cursor.fetchall()
+
+        # Konwersja zdjęć podejrzanych do formatu base64
+        suspect_list = []
+        for suspect in suspects:
+            suspect_id, name, surname, address, birthdate, photo = suspect
+            photo_base64 = base64.b64encode(photo).decode('utf-8') if photo else None
+            suspect_list.append({
+                "suspect_id": suspect_id,
+                "name": name,
+                "surname": surname,
+                "address": address,
+                "birthdate": birthdate,
+                "photo": photo_base64
+            })
+
         # Przekazanie danych do szablonu
-        if report_data:
-            return render_template(
-                'report.html',
-                report_data=report_data,
-                name=session.get('name')
-            )
-        else:
-            return render_template(
-                'report.html',
-                komunikat="Zgłoszenie nie zostało znalezione.",
-                name=session.get('name')
-            )
+        return render_template(
+            'report.html',
+            report_data=report_data,
+            suspects=suspect_list,
+            name=session.get('name')
+        )
 
     except mysql.connector.Error as err:
         print(f"Błąd podczas pobierania zgłoszenia: {err}")
