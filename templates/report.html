@@ -87,6 +87,16 @@
                             </td>
                         </tr>
                         <tr>
+                            <th>Zdjęcia</th>
+                            <td>
+                                {% if report_data[9] %}
+                                    <img src="data:image/jpeg;base64,{{ report_data[9] }}" alt="Zdjęcie zgłoszenia" class="event-photo">
+                                {% else %}
+                                    Brak zdjęć
+                                {% endif %}
+                            </td>
+                        </tr>                                              
+                        <tr>
                             <th>Status</th>
                             <td>
                                 <span id="current-status">{{ report_data[8] }}</span>

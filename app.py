@@ -589,13 +589,15 @@ def update_status():
         cnx.close()
 
 
+import base64
+
 @app.route('/report/<int:report_id>', methods=['GET'])
 def report(report_id):
     try:
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
 
-        # Zapytanie SQL do pobrania danych konkretnego zgłoszenia
+        # Pobranie danych zgłoszenia z bazy
         query = """
             SELECT 
                 r.report_id,
@@ -606,7 +608,8 @@ def report(report_id):
                 p.appearance, 
                 w.info_contact, 
                 r.report_time,
-                r.status
+                r.status,
+                ef.photos  -- kolumna photos
             FROM reports r 
             JOIN event_features ef ON r.report_id = ef.report_id 
             JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id 
@@ -614,8 +617,13 @@ def report(report_id):
             WHERE r.report_id = %s
         """
         cursor.execute(query, (report_id,))
-        report_data = cursor.fetchone()
+        report_data = list(cursor.fetchone())
 
+        # Jeśli dane są w formacie binarnym, konwertujemy na base64
+        if report_data[9] is not None:
+            report_data[9] = base64.b64encode(report_data[9]).decode('utf-8')
+
+        # Przekazanie danych do szablonu
         if report_data:
             return render_template(
                 'report.html',
@@ -639,6 +647,7 @@ def report(report_id):
     finally:
         cursor.close()
         cnx.close()
+
 
 @app.route('/chatbot', methods=['GET', 'POST'])
 def chatbot():
