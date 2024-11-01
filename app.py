@@ -156,16 +156,14 @@ def send_confirmation():
         
         # Pobierz e-mail użytkownika z bazy danych na podstawie id
         email = get_user_email_by_id(user_id)
-        if not email:
-            flash('Nie znaleziono adresu e-mail dla zalogowanego użytkownika.', 'danger')
-            return redirect(url_for('main'))
     else:
         # Użytkownik niezalogowany, pobieramy e-mail z formularza
-        email = request.form.get('email', '').strip()
-        
-        if not email:
-            flash('Adres e-mail jest wymagany.', 'danger')
-            return redirect(url_for('main'))
+        email = request.form.get('email', '').strip() or None
+    
+    # Jeśli email jest pusty, pomiń wysyłanie wiadomości i zakończ funkcję
+    if not email:
+        logger.info("Adres e-mail nie podany. Zgłoszenie zapisane bez wysyłania potwierdzenia.")
+        return
     
     # Tworzymy wiadomość e-mail
     message = SendGridMail(
