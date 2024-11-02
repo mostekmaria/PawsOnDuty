@@ -1,8 +1,9 @@
 {
     "title": "Zgłaszam kradzież",
-    "event_desc": "Ile był wart ten przedmiot?: Czarna torebka, Proszę podaj lokalizację zdarzenia.: około 200 zł, Możesz oszacować wartość skradzionego przedmiotu?: Czarna torebka, Gdzie miało miejsce to zdarzenie?: około 2000zł, Jaką wartość miał skradziony przedmiot?: Czarna torebka, Gdzie miało miejsce to zdarzenie?: około 500 zł, Jaka jest przybliżona wartość skradzionego mienia?: Czarna torebka, Proszę podaj lokalizację zdarzenia.: około 2000zł, ",
-    "address": "Kraków ulica cystersów 5",
-    "event_time": "24.05.2024",
-    "appearance": "jedna osoba, mężczyzna około lat 40 siwy w czarnej czapcejedna osoba, mężczyzna około lat 40 siwy w czarnej czapcejedna osoba, mężczyzna około lat 40 siwy w czarnej czapcemężczyzna około lat 40 siwy w czarnej czapce",
-    "info_contact": "tylko ja, mój numer tel 432432"
+    "event_desc": "Jakie rzeczy zostały skradzione?: Czarna torebka, ",
+    "address": "",
+    "event_time": "",
+    "appearance": "",
+    "info_contact": "",
+    "status": "Zgłoszono"
 }

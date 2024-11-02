@@ -685,7 +685,7 @@ def chatbot():
     if request.method == 'POST':
         print(f"Received form data: {request.form}")
         print(f"Received files: {request.files}")
-
+        
         email = request.form.get('email', '').strip() or None
 
         if 'photo' in request.files:
@@ -715,19 +715,23 @@ def chatbot():
         # Dodajemy wiadomość użytkownika do kopii konwersacji
         conversation_copy.append({'sender': 'user', 'message': user_input})
 
+        # Pobierz ostatnią wiadomość chatbota, jeśli istnieje
+        last_bot_message = next(
+            (msg['message'] for msg in reversed(conversation_copy) if msg['sender'] == 'bot'), None
+        )
+
         # Generujemy odpowiedź i dodajemy ją do kopii konwersacji
-        intent_tag = predict_class(user_input)
-        response = get_response(intents, intent_tag)
         conversation_copy.append({'sender': 'bot', 'message': response})
 
         # Przypisujemy uaktualnioną kopię do sesji
         session['conversation'] = conversation_copy
 
+        # Zapisywanie do raportu z użyciem poprzedniej wiadomości bot
         if session['first_message']:
-            append_to_report("title", user_input, response)
+            append_to_report("title", user_input, last_bot_message)
             session['first_message'] = False
         else:
-            append_to_report(intent_tag, user_input, response)
+            append_to_report(intent_tag, user_input, last_bot_message)
 
         # Jeżeli chatbot pyta o zdjęcia, przechodzimy do następnego kroku
         if intent_tag == "witnesses":
@@ -738,15 +742,35 @@ def chatbot():
     return render_template('chatbot.html', conversation=session['conversation'], zalogowany=session.get('zalogowany'), name=session.get('name'))
 
 
+import json
+
 @app.route('/chatbot_clear')
 def chatbot_clear():
+    # Czyszczenie danych w sesji
     if 'first_message' in session:
         session.pop('first_message', None)
     if 'previous_message' in session:
         session.pop('previous_message', None)
     if 'conversation' in session:
         session.pop('conversation', None)
+    
+    # Zapisujemy pustą strukturę do report.json
+    initial_data = {
+        "title": "",
+        "event_desc": "",
+        "address": "",
+        "event_time": "",
+        "appearance": "",
+        "info_contact": "",
+        "status": "Zgłoszono"
+    }
+    
+    # Użycie kodowania UTF-8 przy zapisie do pliku
+    with open('report.json', 'w', encoding='utf-8') as report_file:
+        json.dump(initial_data, report_file, ensure_ascii=False, indent=4)
+    
     return redirect(url_for('chatbot'))
+
 
 if __name__ == '__main__':
     app.run()
