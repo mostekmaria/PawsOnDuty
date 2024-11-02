@@ -107,8 +107,8 @@
         const zalogowany = "{{ 'true' if session.get('zalogowany') else 'false' }}" === 'true';
         
         const submitPhotoButton = document.getElementById('submit-photo-button');
-        const submitLabel = document.getElementById('sb-title')
-        const choosingPhotoButton = document.getElementById('custom-file-label')
+        const submitLabel = document.getElementById('sb-title');
+        const choosingPhotoButton = document.getElementById('custom-file-label');
         const userEmailInput = document.getElementById('user-email');
         const finalSubmitButton = document.getElementById('final-submit-button');
         const chatConversation = document.querySelector('.conversation');  // Pobieramy element rozmowy
@@ -116,40 +116,59 @@
         const photoForm = document.getElementById('photoForm'); // Pobieramy formularz do przesyłania zdjęć
     
         submitPhotoButton.addEventListener('click', function() {
-    // Ukrywamy pole do przesyłania zdjęć oraz przycisk
-    photoInput.style.display = 'none';  // Ukrywamy pole do przesyłania zdjęć
-    submitPhotoButton.style.display = 'none';  // Ukrywamy przycisk "Prześlij zdjęcie"
-    submitLabel.style.display = 'none'; // Ukrywamy podpis do przesyłania
-    choosingPhotoButton.style.display = 'none'; // Ukrywam przycisk do wybierania pliku
+            if (photoInput.files.length > 0) {
+                const file = photoInput.files[0];
+                const reader = new FileReader();
 
-    // Wstawiamy wartość NULL dla zdjęć, jeśli nie ma przesłanych plików
-    if (!photoInput.files.length) {
-        // Jeśli nie ma plików, to dodajemy do formularza ukryte pole z wartością NULL
-        let nullInput = document.createElement('input');
-        nullInput.type = 'hidden';
-        nullInput.name = 'photos';
-        nullInput.value = 'NULL'; // Przesyłamy wartość NULL
-        photoForm.appendChild(nullInput);
-    }
+                reader.onload = function(e) {
+                    // Tworzymy nowy element wiadomości od użytkownika
+                    const userPhotoMessage = document.createElement('p');
+                    userPhotoMessage.classList.add('user-message');
+                    userPhotoMessage.innerHTML = `<strong>Ty:</strong> <img src="${e.target.result}" style="max-width: 200px; max-height: 200px;"/>`;
+                    
+                    // Dodajemy wiadomość do rozmowy
+                    chatConversation.appendChild(userPhotoMessage);
+                    // Scroll to bottom of conversation
+                    chatConversation.scrollTop = chatConversation.scrollHeight;
+                };
 
-    if (!zalogowany) {
-        // Tworzymy nowy element wiadomości od bota
-        const emailRequestMessage = document.createElement('p');
-        emailRequestMessage.classList.add('bot-message');  // Dodajemy klasę stylizującą wiadomość od chatbota
-        emailRequestMessage.innerHTML = "<strong>Chatbot:</strong> Aby uzyskać potwierdzenie przesłania zgłoszenia, podaj swój adres email.";
-        
-        // Dodajemy wiadomość do rozmowy
-        chatConversation.appendChild(emailRequestMessage);
+                reader.readAsDataURL(file);
+                
+                // Ukrywamy inne elementy po dodaniu zdjęcia
+                photoInput.style.display = 'none';
+                submitPhotoButton.style.display = 'none';
+                submitLabel.style.display = 'none'; // Ukrywamy podpis do przesyłania
+                choosingPhotoButton.style.display = 'none'; // Ukrywam przycisk do wybierania pliku
 
-        // Wyświetlamy pole na e-mail i przycisk końcowy
-        userEmailInput.style.display = 'block';
-        finalSubmitButton.style.display = 'block';
-    } else {
-        // Jeśli zalogowany, wysyłamy formularz
-        photoForm.submit();
-    }
-});
-    </script>    
+                // Wstawiamy wartość NULL dla zdjęć, jeśli nie ma przesłanych plików
+                if (!photoInput.files.length) {
+                    // Jeśli nie ma plików, to dodajemy do formularza ukryte pole z wartością NULL
+                    let nullInput = document.createElement('input');
+                    nullInput.type = 'hidden';
+                    nullInput.name = 'photos';
+                    nullInput.value = 'NULL'; // Przesyłamy wartość NULL
+                    photoForm.appendChild(nullInput);
+                }
+
+                if (!zalogowany) {
+                    // Tworzymy nowy element wiadomości od bota
+                    const emailRequestMessage = document.createElement('p');
+                    emailRequestMessage.classList.add('bot-message');  // Dodajemy klasę stylizującą wiadomość od chatbota
+                    emailRequestMessage.innerHTML = "<strong>Chatbot:</strong> Aby uzyskać potwierdzenie przesłania zgłoszenia, podaj swój adres email.";
+                    
+                    // Dodajemy wiadomość do rozmowy
+                    chatConversation.appendChild(emailRequestMessage);
+
+                    // Wyświetlamy pole na e-mail i przycisk końcowy
+                    userEmailInput.style.display = 'block';
+                    finalSubmitButton.style.display = 'block';
+                } else {
+                    // Jeśli zalogowany, wysyłamy formularz
+                    photoForm.submit();
+                }
+            }
+        });
+    </script>     
 </body>
 
 <footer>
