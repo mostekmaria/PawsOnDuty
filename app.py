@@ -79,14 +79,14 @@ def insert_report_into_db():
 
         for file in uploaded_files:
             if file and file.filename != '':
-                file_content = file.read()  # Odczytanie pliku jako binarny BLOB
+                file_content = file.read()  # Read file as binary BLOB
                 photos_data.append(file_content)
 
-        # Konwertowanie listy binariów do jednego BLOB
-        if photos_data:
-            photos_blob = b''.join(photos_data)  # Łączenie plików w jeden strumień binarny
+        # If no photos were uploaded
+        if not photos_data:
+            photos_blob = None  # Set to None if no files were uploaded
         else:
-            photos_blob = None  # Ustawiamy na None, jeśli nie ma przesłanych zdjęć
+            photos_blob = b''.join(photos_data)  # Combine files into a single binary stream
 
         cursor.execute(event_features_insert, (
             report_id,
