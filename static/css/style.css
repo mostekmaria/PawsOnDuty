@@ -302,7 +302,6 @@ input {
 
 .common-input-style {
   flex: 1; /* Element zajmuje dostępne miejsce */
-  position: absolute;
   left: 0;
   top: -12px;
   align-items: center;
@@ -316,7 +315,7 @@ input {
   z-index: 2;
   outline: none; /* Usunięcie domyślnego podświetlenia przeglądarki */
   box-shadow: 0 0 7px #378e25; /* Delikatny cień wokół pola */
-  width: 86%;
+  min-width: 0;
 }
 
 .send-sign {
@@ -359,6 +358,8 @@ input {
   opacity: 0; /* Cień powoli zanika */
 }
 
+
+
 .message-field {
   background-color: #ffffff;
   border: 60px solid #ffffff; /* Cień */
@@ -373,7 +374,7 @@ input {
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
   width: 80%;
   position: fixed;
-  bottom: 10vh; /* Ustawienie na dole okna */
+  bottom: 90px; /* Ustawienie na dole okna */
   width: 55%;
 }
 
@@ -385,7 +386,17 @@ input {
   color: inherit; /* Zachowanie kolorów tekstu */
 }
 
-#chatForm, #photoForm{
+#chatForm{
+  height: 10px;
+  display: flex;
+  flex-direction:row;
+  gap: 40px;
+  padding-top: 20px;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+#photoForm{
   height: 10px;
   display: flex;
   flex-direction:row;
@@ -632,7 +643,7 @@ strong {
   display: block;
   margin-bottom: 20%;
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
-  width:100%;
+  width:auto;
 }
 
 .panel-search {
@@ -709,6 +720,7 @@ strong {
   outline: none; /* Usunięcie domyślnego podświetlenia przeglądarki */
   box-shadow: 0 0 7px rgb(68, 255, 0); /* Delikatny cień wokół pola */
 }
+
 
 thead {
   background-color: #f9f9f9;
@@ -898,10 +910,6 @@ tr {
   align-items: center; /* Centrowanie tekstu w pionie */
   box-sizing: border-box; /* Zapewnienie, że padding nie wpłynie na szerokość */
   text-align: center;
-}
-
-.custom-file-label:hover {
-  background-color: #4cae4c; /* Zmiana koloru przycisku po najechaniu */
 }
 
 /* Stylizacja tekstu wyświetlającego nazwę pliku */
