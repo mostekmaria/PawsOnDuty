@@ -67,7 +67,7 @@ def insert_report_into_db():
         ))
         report_id = cursor.lastrowid
 
-        # Wstawienie danych do tabeli event_features (bez zdjęć na razie)
+        # Wstawienie danych do tabeli event_features (obsługa zdjęć)
         event_features_insert = """
             INSERT INTO event_features (report_id, event_description, address, event_time, photos) 
             VALUES (%s, %s, %s, %s, %s)
@@ -82,11 +82,11 @@ def insert_report_into_db():
                 file_content = file.read()  # Odczytanie pliku jako binarny BLOB
                 photos_data.append(file_content)
 
-        # Konwertowanie listy binariów do jednego BLOB (opcjonalnie można zapisać każde zdjęcie osobno)
+        # Konwertowanie listy binariów do jednego BLOB
         if photos_data:
             photos_blob = b''.join(photos_data)  # Łączenie plików w jeden strumień binarny
         else:
-            photos_blob = None
+            photos_blob = None  # Ustawiamy na None, jeśli nie ma przesłanych zdjęć
 
         cursor.execute(event_features_insert, (
             report_id,
@@ -113,6 +113,7 @@ def insert_report_into_db():
     finally:
         cursor.close()
         cnx.close()
+
 
 # Funkcja do wstawiania podejrzanych do tabeli suspects w bazie danych
 def insert_suspect_into_db(report_id, name, surname, address, birthdate, photo_blob):
@@ -684,10 +685,14 @@ def chatbot():
         print(f"Received form data: {request.form}")
         print(f"Received files: {request.files}")
 
+        email = request.form.get('email', '').strip() or None
+
         if 'photo' in request.files and request.files['photo']:
             # Obsługa przesyłania zdjęć
-            uploaded_files = request.files.getlist("photos")
+            uploaded_files = request.files.getlist("photo")
             print(f"Uploaded files: {[file.filename for file in uploaded_files]}")
+            if email:
+                session['user_email'] = email  # Przechowujemy e-mail w sesji do późniejszego użycia
 
             # Wstawiamy dane do bazy danych
             insert_report_into_db()  # Wstawiamy dane do bazy danych
@@ -730,7 +735,6 @@ def chatbot():
     print(f"Session data (after request): {session}")
     print(f"Full conversation in session: {session['conversation']}")
     return render_template('chatbot.html', conversation=session['conversation'], zalogowany=session.get('zalogowany'), name=session.get('name'))
-
 
 @app.route('/chatbot_clear')
 def chatbot_clear():

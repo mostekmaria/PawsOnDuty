@@ -1,4 +1,3 @@
-<!-- templates/chatbot.html -->
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -11,7 +10,6 @@
     <link rel="shortcut icon" href="static/logo.png"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
-    <!-- OBSŁUGA MAP -->
     <script src="{{ url_for('static', filename='js/mapscript.js') }}" alt=""></script>
 </head>
 
@@ -39,7 +37,6 @@
             <a href="index.html"><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="90" height="90"></a><br>
         </div>
         <img id="menu" src="static/menu.png" onclick="openCloseNav()">
-        <!-- OBSŁUGA SIDEBAR MENU -->
         <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
         <div id="header">
             <a href="index.html"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="65"></a><br>
@@ -53,7 +50,6 @@
             <a id="link2" class="has-tooltip" data-tooltip="Moje zgłoszenia" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>   
             <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
             {% endif %}
-            <!-- Nowy przycisk do chatbota -->
             <a id="link3" class="has-tooltip" data-tooltip="Chatbot" href="{{ url_for('chatbot') }}">Chatbot</a>
         </nav>  
     </header>  
@@ -65,8 +61,6 @@
             </div>
         
             <div class="chatbox">
-                <!-- Wyświetlanie całej historii wiadomości -->
-                {% if conversation %}
                 <div class="conversation">
                     {% for message in conversation %}
                         <p class="{{ 'user-message' if message.sender == 'user' else 'bot-message' }}">
@@ -74,8 +68,8 @@
                         </p>
                     {% endfor %}
                 </div>
-            {% endif %}
             </div>
+            
         
             {% if witness_step %}
                 <p>Jeśli to możliwe, załącz zdjęcia ze zdarzenia:</p>
@@ -85,40 +79,71 @@
                 {% if witness_step %}
                     <form id="photoForm" action="{{ url_for('chatbot') }}" method="post" enctype="multipart/form-data">
                         <div class="titleicon">
-                            <span class="sb-title">Zdjęcia z miejsca zdarzenia (jpg, png):</span>
+                            <span class="sb-title" id="sb-title">Zdjęcia z miejsca zdarzenia (jpg, png):</span>
                         </div>
                         <div class="file-upload-wrapper-chatbot">
                             <input type="file" class="full-input-photo" id="photo-chatbot" name="photo" accept=".jpg, .jpeg, .png">
-                            <label for="photo-chatbot" class="custom-file-label">Wybierz plik</label>
+                            <label for="photo-chatbot" class="custom-file-label" id="custom-file-label">Wybierz plik</label>
                             <span class="file-name">Nie wybrano pliku</span>
-                        </div>    
-                        <button class="button" type="submit">Zakończ zgłoszenie</button>
+                        </div>
+                        <button class="button" type="button" id="submit-photo-button">Prześlij zdjęcie</button>
+                        <p id="email-request" class="bot-message" style="display:none;">
+                            <strong>Chatbot:</strong> Jeśli chcesz otrzymać potwierdzenie przesłania zgłoszenia, podaj swój adres email.
+                        </p>
+                        <input id="user-email" type="email" name="email" class = "common-input-style" placeholder="Twój adres email" style="display:none;">
+                        <button class="button" type="submit" style="display:none;" id="final-submit-button">Prześlij zgłoszenie</button>
                     </form>
                 {% else %}
                     <form id="chatForm" action="{{ url_for('chatbot') }}" method="post">
-                        <input id="message-user" type="text" name="user_input" placeholder="Wpisz wiadomość">
+                        <input id="message-user" type="text" name="user_input" class = "common-input-style" placeholder="Wpisz wiadomość">
                         <button class="send-sign" id="send" type="submit"></button>
                     </form>
                 {% endif %}
-            </div>
+            </div>            
         </div>        
     <main/>
     <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
     <script>
-        const fileInput = document.getElementById('photo-chatbot');
-        const fileNameDisplay = document.querySelector('.file-name');
+        const zalogowany = "{{ 'true' if session.get('zalogowany') else 'false' }}" === 'true';
+        
+        const submitPhotoButton = document.getElementById('submit-photo-button');
+        const submitLabel = document.getElementById('sb-title')
+        const choosingPhotoButton = document.getElementById('custom-file-label')
+        const userEmailInput = document.getElementById('user-email');
+        const finalSubmitButton = document.getElementById('final-submit-button');
+        const chatConversation = document.querySelector('.conversation');  // Pobieramy element rozmowy
+        const photoInput = document.getElementById('photo-chatbot'); // Pobieramy pole do przesyłania zdjęć
+        const photoForm = document.getElementById('photoForm'); // Pobieramy formularz do przesyłania zdjęć
     
-        fileInput.addEventListener('change', function() {
-            if (fileInput.files.length > 0) {
-                fileNameDisplay.textContent = fileInput.files[0].name;
+        submitPhotoButton.addEventListener('click', function() {
+            // Ukrywamy pole do przesyłania zdjęć oraz przycisk
+            photoInput.style.display = 'none';  // Ukrywamy pole do przesyłania zdjęć
+            submitPhotoButton.style.display = 'none';  // Ukrywamy przycisk "Prześlij zdjęcie"
+            submitLabel.style.display = 'none'; //ukrywamy podpis do przesyłania
+            choosingPhotoButton.style.display = 'none'; //ukrywam przycisk do wybierania pliku
+    
+            if (!zalogowany) {
+                // Tworzymy nowy element wiadomości od bota
+                const emailRequestMessage = document.createElement('p');
+                emailRequestMessage.classList.add('bot-message');  // Dodajemy klasę stylizującą wiadomość od chatbota
+                emailRequestMessage.innerHTML = "<strong>Chatbot:</strong> Aby uzyskać potwierdzenie przesłania zgłoszenia, podaj swój adres email.";
+                
+                // Dodajemy wiadomość do rozmowy
+                chatConversation.appendChild(emailRequestMessage);
+    
+                // Wyświetlamy pole na e-mail i przycisk końcowy
+                userEmailInput.style.display = 'block';
+                finalSubmitButton.style.display = 'block';
             } else {
-                fileNameDisplay.textContent = 'Nie wybrano pliku';
+                // Jeśli zalogowany, wysyłamy formularz
+                photoForm.submit();
             }
         });
-    </script>
-</html>
+    </script>    
+</body>
 
 <footer>
     <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
     <p id="footer">© Maria Mostek, Patrycja Ruda. Kraków 2024.</p>
 </footer>
+</html>
