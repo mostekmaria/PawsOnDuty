@@ -9,6 +9,7 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail as SendGridMail
 import logging
 import socket
+import base64
 
 
 # Konfiguracja połączenia z bazą danych
@@ -66,7 +67,7 @@ def insert_report_into_db():
         ))
         report_id = cursor.lastrowid
 
-        # Wstawienie danych do tabeli event_features (bez zdjęć na razie)
+        # Wstawienie danych do tabeli event_features (obsługa zdjęć)
         event_features_insert = """
             INSERT INTO event_features (report_id, event_description, address, event_time, photos) 
             VALUES (%s, %s, %s, %s, %s)
@@ -78,14 +79,14 @@ def insert_report_into_db():
 
         for file in uploaded_files:
             if file and file.filename != '':
-                file_content = file.read()  # Odczytanie pliku jako binarny BLOB
+                file_content = file.read()  # Read file as binary BLOB
                 photos_data.append(file_content)
 
-        # Konwertowanie listy binariów do jednego BLOB (opcjonalnie można zapisać każde zdjęcie osobno)
-        if photos_data:
-            photos_blob = b''.join(photos_data)  # Łączenie plików w jeden strumień binarny
+        # If no photos were uploaded
+        if not photos_data:
+            photos_blob = None  # Set to None if no files were uploaded
         else:
-            photos_blob = None
+            photos_blob = b''.join(photos_data)  # Combine files into a single binary stream
 
         cursor.execute(event_features_insert, (
             report_id,
@@ -112,6 +113,8 @@ def insert_report_into_db():
     finally:
         cursor.close()
         cnx.close()
+
+
 
 # Funkcja do wstawiania podejrzanych do tabeli suspects w bazie danych
 def insert_suspect_into_db(report_id, name, surname, address, birthdate, photo_blob):
@@ -155,16 +158,14 @@ def send_confirmation():
         
         # Pobierz e-mail użytkownika z bazy danych na podstawie id
         email = get_user_email_by_id(user_id)
-        if not email:
-            flash('Nie znaleziono adresu e-mail dla zalogowanego użytkownika.', 'danger')
-            return redirect(url_for('main'))
     else:
         # Użytkownik niezalogowany, pobieramy e-mail z formularza
-        email = request.form.get('email', '').strip()
-        
-        if not email:
-            flash('Adres e-mail jest wymagany.', 'danger')
-            return redirect(url_for('main'))
+        email = request.form.get('email', '').strip() or None
+    
+    # Jeśli email jest pusty, pomiń wysyłanie wiadomości i zakończ funkcję
+    if not email:
+        logger.info("Adres e-mail nie podany. Zgłoszenie zapisane bez wysyłania potwierdzenia.")
+        return
     
     # Tworzymy wiadomość e-mail
     message = SendGridMail(
@@ -595,7 +596,7 @@ def report(report_id):
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
 
-        # Zapytanie SQL do pobrania danych konkretnego zgłoszenia
+        # Pobranie danych zgłoszenia z bazy
         query = """
             SELECT 
                 r.report_id,
@@ -606,7 +607,8 @@ def report(report_id):
                 p.appearance, 
                 w.info_contact, 
                 r.report_time,
-                r.status
+                r.status,
+                ef.photos  -- kolumna photos
             FROM reports r 
             JOIN event_features ef ON r.report_id = ef.report_id 
             JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id 
@@ -614,20 +616,42 @@ def report(report_id):
             WHERE r.report_id = %s
         """
         cursor.execute(query, (report_id,))
-        report_data = cursor.fetchone()
+        report_data = list(cursor.fetchone())
 
-        if report_data:
-            return render_template(
-                'report.html',
-                report_data=report_data,
-                name=session.get('name')
-            )
-        else:
-            return render_template(
-                'report.html',
-                komunikat="Zgłoszenie nie zostało znalezione.",
-                name=session.get('name')
-            )
+        # Jeśli dane są w formacie binarnym, konwertujemy na base64
+        if report_data[9] is not None:
+            report_data[9] = base64.b64encode(report_data[9]).decode('utf-8')
+
+        # Pobranie podejrzanych dla danego zgłoszenia
+        query_suspects = """
+            SELECT suspect_id, name, surname, address, birthdate, photo
+            FROM suspects
+            WHERE report_id = %s
+        """
+        cursor.execute(query_suspects, (report_id,))
+        suspects = cursor.fetchall()
+
+        # Konwersja zdjęć podejrzanych do formatu base64
+        suspect_list = []
+        for suspect in suspects:
+            suspect_id, name, surname, address, birthdate, photo = suspect
+            photo_base64 = base64.b64encode(photo).decode('utf-8') if photo else None
+            suspect_list.append({
+                "suspect_id": suspect_id,
+                "name": name,
+                "surname": surname,
+                "address": address,
+                "birthdate": birthdate,
+                "photo": photo_base64
+            })
+
+        # Przekazanie danych do szablonu
+        return render_template(
+            'report.html',
+            report_data=report_data,
+            suspects=suspect_list,
+            name=session.get('name')
+        )
 
     except mysql.connector.Error as err:
         print(f"Błąd podczas pobierania zgłoszenia: {err}")
@@ -639,6 +663,7 @@ def report(report_id):
     finally:
         cursor.close()
         cnx.close()
+
 
 @app.route('/chatbot', methods=['GET', 'POST'])
 def chatbot():
@@ -661,10 +686,14 @@ def chatbot():
         print(f"Received form data: {request.form}")
         print(f"Received files: {request.files}")
 
-        if 'photos' in request.files and request.files['photos']:
+        email = request.form.get('email', '').strip() or None
+
+        if 'photo' in request.files:
             # Obsługa przesyłania zdjęć
-            uploaded_files = request.files.getlist("photos")
+            uploaded_files = request.files.getlist("photo")
             print(f"Uploaded files: {[file.filename for file in uploaded_files]}")
+            if email:
+                session['user_email'] = email  # Przechowujemy e-mail w sesji do późniejszego użycia
 
             # Wstawiamy dane do bazy danych
             insert_report_into_db()  # Wstawiamy dane do bazy danych

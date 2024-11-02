@@ -87,6 +87,52 @@
                             </td>
                         </tr>
                         <tr>
+                            <th>Zdjęcia</th>
+                            <td>
+                                {% if report_data[9] %}
+                                    <img src="data:image/jpeg;base64,{{ report_data[9] }}" alt="Zdjęcie zgłoszenia" class="event-photo">
+                                {% else %}
+                                    Brak zdjęć
+                                {% endif %}
+                            </td>
+                        </tr>                                              
+                        <tr>
+                            <tr>
+                                <th>Podejrzani</th>
+                                <td>                            
+                                    {% if suspects %}
+                                    <table class="suspects-table">
+                                        <tr>
+                                            <th>Imię</th>
+                                            <th>Nazwisko</th>
+                                            <th>Adres</th>
+                                            <th>Data urodzenia</th>
+                                            <th>Zdjęcie</th>
+                                        </tr>
+                                        {% for suspect in suspects %}
+                                        <tr>
+                                            <td>{{ suspect.name }}</td>
+                                            <td>{{ suspect.surname }}</td>
+                                            <td>{{ suspect.address }}</td>
+                                            <td>{{ suspect.birthdate }}</td>
+                                            <td>
+                                                <div class="suspects-gallery">
+                                                    {% if suspect.photo %}
+                                                        <img src="data:image/jpeg;base64,{{ suspect.photo }}" alt="Zdjęcie podejrzanego" class="suspect-photo">
+                                                    {% else %}
+                                                        Brak zdjęcia
+                                                    {% endif %}
+                                                </div>
+                                            </td>                                            
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                    {% else %}
+                                    Brak podejrzanych
+                                    {% endif %}
+                                    <button class="suspect-button" onclick="addSuspect('{{ report_data[0] }}')">Dodaj podejrzanego</button>
+                                </td>
+                            </tr>                            
                             <th>Status</th>
                             <td>
                                 <span id="current-status">{{ report_data[8] }}</span>

@@ -29,14 +29,14 @@
 
     <header>
         <div id="logo">
-        <a href = "index.html"><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="90" height="90"></a><br>
+            <a href = "index.html"><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="static/logo.png" width="90" height="90"></a><br>
         </div>
         <img id="menu" src="static/menu.png" onclick="openCloseNav()">
-        <!-- OBSŁUGA SIDEBAR MENU -->
-        <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
-    <div id="header">
-        <a href = ><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="65"></a><br>
-    </div> 
+            <!-- OBSŁUGA SIDEBAR MENU -->
+            <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
+        <div id="header">
+            <a href = "index.html"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="65"></a><br>
+        </div>
     <nav class="navbar navbar-dark bg-primary">
         <span id="name">{{ imie }}</span>  
             <a id="link2" class="has-tooltip" data-tooltip="Wyszukiwanie zgłoszenia" href="index.html">Wyszukiwanie zgłoszenia</a>   
