@@ -115,6 +115,7 @@ def insert_report_into_db():
         cnx.close()
 
 
+
 # Funkcja do wstawiania podejrzanych do tabeli suspects w bazie danych
 def insert_suspect_into_db(report_id, name, surname, address, birthdate, photo_blob):
     try:
@@ -687,7 +688,7 @@ def chatbot():
 
         email = request.form.get('email', '').strip() or None
 
-        if 'photo' in request.files and request.files['photo']:
+        if 'photo' in request.files:
             # Obsługa przesyłania zdjęć
             uploaded_files = request.files.getlist("photo")
             print(f"Uploaded files: {[file.filename for file in uploaded_files]}")
@@ -735,6 +736,7 @@ def chatbot():
     print(f"Session data (after request): {session}")
     print(f"Full conversation in session: {session['conversation']}")
     return render_template('chatbot.html', conversation=session['conversation'], zalogowany=session.get('zalogowany'), name=session.get('name'))
+
 
 @app.route('/chatbot_clear')
 def chatbot_clear():
