@@ -597,59 +597,89 @@ def report(report_id):
         cursor = cnx.cursor()
 
         # Pobranie danych zgłoszenia z bazy
-        query = """
+        query_report = """
             SELECT 
                 r.report_id,
                 r.title, 
+                r.report_time, 
+                r.status
+            FROM reports r 
+            WHERE r.report_id = %s
+        """
+        cursor.execute(query_report, (report_id,))
+        report_data = cursor.fetchone()
+
+        if report_data is None:
+            return render_template(
+                'report.html',
+                komunikat="Nie znaleziono zgłoszenia o podanym ID.",
+                name=session.get('name')
+            )
+
+        # Zmienna report_id, która będzie używana w późniejszych zapytaniach
+        report_id = report_data[0]
+
+        # Pobranie event_feature_id dla danego report_id
+        query_event_features = """
+            SELECT 
+                ef.event_feature_id, 
                 ef.event_description, 
                 ef.address, 
                 ef.event_time, 
-                p.appearance, 
-                w.info_contact, 
-                r.report_time,
-                r.status,
                 ef.photos  -- kolumna photos
-            FROM reports r 
-            JOIN event_features ef ON r.report_id = ef.report_id 
-            JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id 
-            JOIN witnesses w ON ef.event_feature_id = w.event_feature_id
-            WHERE r.report_id = %s
+            FROM event_features ef
+            WHERE ef.report_id = %s
         """
-        cursor.execute(query, (report_id,))
-        report_data = list(cursor.fetchone())
+        cursor.execute(query_event_features, (report_id,))
+        event_features = cursor.fetchall()
 
-        # Jeśli dane są w formacie binarnym, konwertujemy na base64
-        if report_data[9] is not None:
-            report_data[9] = base64.b64encode(report_data[9]).decode('utf-8')
+        # Przygotowanie listy na dane event_features
+        event_feature_list = []
 
-        # Pobranie podejrzanych dla danego zgłoszenia
-        query_suspects = """
-            SELECT suspect_id, name, surname, address, birthdate, photo
-            FROM suspects
-            WHERE event_feature_id = %s
-        """
-        cursor.execute(query_suspects, (report_id,))
-        suspects = cursor.fetchall()
+        for event_feature in event_features:
+            event_feature_id, event_description, address, event_time, photos = event_feature
 
-        # Konwersja zdjęć podejrzanych do formatu base64
-        suspect_list = []
-        for suspect in suspects:
-            suspect_id, name, surname, address, birthdate, photo = suspect
-            photo_base64 = base64.b64encode(photo).decode('utf-8') if photo else None
-            suspect_list.append({
-                "suspect_id": suspect_id,
-                "name": name,
-                "surname": surname,
+            # Konwertowanie zdjęć do formatu base64
+            photo_base64 = base64.b64encode(photos).decode('utf-8') if photos else None
+
+            # Pobranie podejrzanych dla danego event_feature_id
+            query_suspects = """
+                SELECT suspect_id, name, surname, address, birthdate, photo
+                FROM suspects
+                WHERE event_feature_id = %s
+            """
+            cursor.execute(query_suspects, (event_feature_id,))
+            suspects = cursor.fetchall()
+
+            # Konwersja zdjęć podejrzanych do formatu base64
+            suspect_list = []
+            for suspect in suspects:
+                suspect_id, name, surname, address, birthdate, photo = suspect
+                photo_base64 = base64.b64encode(photo).decode('utf-8') if photo else None
+                suspect_list.append({
+                    "suspect_id": suspect_id,
+                    "name": name,
+                    "surname": surname,
+                    "address": address,
+                    "birthdate": birthdate,
+                    "photo": photo_base64
+                })
+
+            # Dodanie danych event_feature do listy
+            event_feature_list.append({
+                "event_feature_id": event_feature_id,
+                "event_description": event_description,
                 "address": address,
-                "birthdate": birthdate,
-                "photo": photo_base64
+                "event_time": event_time,
+                "photos": photo_base64,
+                "suspects": suspect_list
             })
 
         # Przekazanie danych do szablonu
         return render_template(
             'report.html',
             report_data=report_data,
-            suspects=suspect_list,
+            event_features=event_feature_list,
             name=session.get('name')
         )
 
@@ -741,6 +771,8 @@ def chatbot():
     print(f"Full conversation in session: {session['conversation']}")
     return render_template('chatbot.html', conversation=session['conversation'], zalogowany=session.get('zalogowany'), name=session.get('name'))
 
+
+import json
 
 @app.route('/chatbot_clear')
 def chatbot_clear():

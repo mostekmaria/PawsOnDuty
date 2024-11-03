@@ -1,200 +1,184 @@
 <!DOCTYPE html>
 <html lang="pl">
-    <head>
-        <meta charset="UTF-8">
-        <title>PawsOnDuty - zgłoszenie</title>
-        <link rel="shortcut icon" href="static/logo.png"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <div id="mySidebar" class="sidebar">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-            <br><br>
-            <br><br>
-            <a href="index.html"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="/static/logo-napis.png" width="auto" height="80"></a>
-            <br><br>
-            <a class="bar" id="barname">{{ session.get('name') }}</a>
-            <br>
-            <a id="baroption" href="index.html">Wyszukiwanie zgłoszenia</a>
-            <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+<head>
+    <meta charset="UTF-8">
+    <title>PawsOnDuty - zgłoszenie</title>
+    <link rel="shortcut icon" href="static/logo.png"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <br><br>
+        <a href="index.html"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="/static/logo-napis.png" width="auto" height="80"></a>
+        <br><br>
+        <a class="bar" id="barname">{{ session.get('name') }}</a>
+        <br>
+        <a id="baroption" href="index.html">Wyszukiwanie zgłoszenia</a>
+        <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+    </div>
+    
+    {% if komunikat %}
+        <div class="komunikat">{{ komunikat }}</div>
+    {% endif %}
+    
+    <header>
+        <div id="logo">
+            <a href="{{ url_for('przegladanie') }}">
+                <img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="{{ url_for('static', filename='logo.png') }}" width="90" height="90">
+            </a><br>
         </div>
-        
-        {% if komunikat %}
-            <div class="komunikat">{{ komunikat }}</div>
-        {% endif %}
-        
-        <header>
-            <div id="logo">
-            <a href = "{{ url_for('przegladanie') }}"><img class="has-tooltip" data-tooltip="Przejdź do strony głównej" src="{{ url_for('static', filename='logo.png') }}" width="90" height="90"></a><br>
-            </div>
-            <img id="menu" src="/static/menu.png" onclick="openCloseNav()">
-                <!-- OBSŁUGA SIDEBAR MENU -->
-                <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
-            <div id="header">
-                <a href = "{{ url_for('przegladanie') }}"><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="{{ url_for('static', filename='logo-napis.png') }}" width="auto" height="65"></a><br>
-            </div> 
-            <nav class="navbar navbar-dark bg-primary">
-                <span id="name">{{ imie }}</span>    
-                <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
-            </nav> 
-        </header> 
-        <main id="mainlog">
-            <br><br><br><br><br><br>
-            <div class="panel-table">
-                <div id="report-table">
-                    {% if selected_date %}
+        <img id="menu" src="/static/menu.png" onclick="openCloseNav()">
+        <script src="{{ url_for('static', filename='js/sidebar.js') }}" alt=""></script>
+        <div id="header">
+            <a href="{{ url_for('przegladanie') }}">
+                <img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="{{ url_for('static', filename='logo-napis.png') }}" width="auto" height="65">
+            </a><br>
+        </div> 
+        <nav class="navbar navbar-dark bg-primary">
+            <span id="name">{{ imie }}</span>    
+            <a id="link1" class="has-tooltip" data-tooltip="Wyloguj się" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
+        </nav> 
+    </header> 
+    <main id="mainlog">
+        <br><br><br><br><br><br>
+        <div class="panel-table">
+            <div id="report-table">
+                {% if selected_date %}
                     <h1 id="log">Zgłoszenie dla wybranej daty: {{ selected_date }}</h1>
-                    {% endif %}
-                    <div id="report-id" data-report-id="{{ report_data[0] }}" style="display: none;"></div>
-                    <table class="zgloszenie" id="report-table">
-                        <tr>
-                            <th>Tytuł</th>
-                            <td>{{ report_data[1] }}</td>
-                        </tr>
-                        <tr>
-                            <th>Opis zdarzenia</th>
-                            <td>{{ report_data[2] }}</td>
-                        </tr>
-                        <tr>
-                            <th>Adres</th>
-                            <td>{{ report_data[3] }}</td>
-                        </tr>
-                        <tr>
-                            <th>Data zdarzenia</th>
-                            <td>{{ report_data[4] }}</td>
-                        </tr>
-                        <tr>
-                            <th>Sprawcy</th>
-                            <td>{{ report_data[5] }}</td>
-                        </tr>
-                        <tr>
-                            <th>Świadkowie</th>
-                            <td>{{ report_data[6] }}</td>
-                        </tr>
-                        <tr>
-                            <th>Data zgłoszenia</th>
-                            <td>{{ report_data[7] }}</td>
-                        </tr>
-                        <tr>
-                            <th>Podejrzani</th>
-                            <td>
-                                <button class="suspect-button" onclick="addSuspect('{{ report_data[0] }}')">Dodaj podejrzanego</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Zdjęcia</th>
-                            <td>
-                                {% if report_data[9] %}
-                                    <img src="data:image/jpeg;base64,{{ report_data[9] }}" alt="Zdjęcie zgłoszenia" class="event-photo">
-                                {% else %}
-                                    Brak zdjęć
-                                {% endif %}
-                            </td>
-                        </tr>                                              
-                        <tr>
-                            <tr>
-                                <th>Podejrzani</th>
-                                <td>                            
-                                    {% if suspects %}
-                                    <table class="suspects-table">
-                                        <tr>
-                                            <th>Imię</th>
-                                            <th>Nazwisko</th>
-                                            <th>Adres</th>
-                                            <th>Data urodzenia</th>
-                                            <th>Zdjęcie</th>
-                                        </tr>
-                                        {% for suspect in suspects %}
-                                        <tr>
-                                            <td>{{ suspect.name }}</td>
-                                            <td>{{ suspect.surname }}</td>
-                                            <td>{{ suspect.address }}</td>
-                                            <td>{{ suspect.birthdate }}</td>
-                                            <td>
-                                                <div class="suspects-gallery">
-                                                    {% if suspect.photo %}
-                                                        <img src="data:image/jpeg;base64,{{ suspect.photo }}" alt="Zdjęcie podejrzanego" class="suspect-photo">
-                                                    {% else %}
-                                                        Brak zdjęcia
-                                                    {% endif %}
-                                                </div>
-                                            </td>                                            
-                                        </tr>
-                                        {% endfor %}
-                                    </table>
-                                    {% else %}
-                                    Brak podejrzanych
-                                    {% endif %}
-                                    <button class="suspect-button" onclick="addSuspect('{{ report_data[0] }}')">Dodaj podejrzanego</button>
-                                </td>
-                            </tr>                            
-                            <th>Status</th>
-                            <td>
-                                <span id="current-status">{{ report_data[8] }}</span>
-                                <button id="edit-button" class="edit-button" onclick="showEditFields()">Edytuj</button>
-                                
-                                <!-- Pole wyboru statusu i przycisk zatwierdzenia -->
-                                <select id="status-select" style="display: none;">
-                                    <option value="przyjęto">przyjęto</option>
-                                    <option value="zindentyfikowano">zindentyfikowano</option>
-                                    <option value="zakończono">zakończono</option>
-                                    <option value="porzucono">porzucono</option>
-                                </select>
-                                <button id="submit-button" class="button" style="display: none;" onclick="submitStatus('{{ report_data[0] }}')">Zatwierdź</button>
-                            </td>
-                        </tr>
-                    </table>
-                    <br><br>
-                    <div class="link">
-                        <a id="report-come-back-button" href="{{ url_for('przegladanie') }}" class="button">Wróć do wyszukiwania zgłoszeń</a> 
-                    </div>
+                {% endif %}
+                <div id="report-id" data-report-id="{{ report_data[0] }}" style="display: none;"></div>
+                <table class="zgloszenie" id="report-table">
+                    <tr>
+                        <th>Tytuł</th>
+                        <td>{{ report_data[1] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Opis zdarzenia</th>
+                        <td>{{ event_features[0].event_description }}</td>
+                    </tr>
+                    <tr>
+                        <th>Adres</th>
+                        <td>{{ event_features[0].address }}</td>
+                    </tr>
+                    <tr>
+                        <th>Data zdarzenia</th>
+                        <td>{{ event_features[0].event_time }}</td>
+                    </tr>
+                    <tr>
+                        <th>Data zgłoszenia</th>
+                        <td>{{ report_data[2] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Podejrzani</th>
+                        <td>
+                            {% if suspects %}
+                                <table class="suspects-table">
+                                    <tr>
+                                        <th>Imię</th>
+                                        <th>Nazwisko</th>
+                                        <th>Adres</th>
+                                        <th>Data urodzenia</th>
+                                        <th>Zdjęcie</th>
+                                    </tr>
+                                    {% for suspect in suspects %}
+                                    <tr>
+                                        <td>{{ suspect.name }}</td>
+                                        <td>{{ suspect.surname }}</td>
+                                        <td>{{ suspect.address }}</td>
+                                        <td>{{ suspect.birthdate }}</td>
+                                        <td>
+                                            <div class="suspects-gallery">
+                                                {% if suspect.photo %}
+                                                    <img src="data:image/jpeg;base64,{{ suspect.photo }}" alt="Zdjęcie podejrzanego" class="suspect-photo">
+                                                {% else %}
+                                                    Brak zdjęcia
+                                                {% endif %}
+                                            </div>
+                                        </td>                                            
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            {% else %}
+                                Brak podejrzanych
+                            {% endif %}
+                            <button class="suspect-button" onclick="addSuspect('{{ report_data[0] }}')">Dodaj podejrzanego</button>
+                        </td>
+                    </tr>                    
+                    <tr>
+                        <th>Zdjęcia</th>
+                        <td>
+                            {% if event_features[0].photos %}
+                                <img src="data:image/jpeg;base64,{{ event_features[0].photos }}" alt="Zdjęcie zgłoszenia" class="event-photo">
+                            {% else %}
+                                Brak zdjęć
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>
+                            <span id="current-status">{{ report_data[3] }}</span>
+                            <button id="edit-button" class="edit-button" onclick="showEditFields()">Edytuj</button>
+                            
+                            <select id="status-select" style="display: none;">
+                                <option value="przyjęto">przyjęto</option>
+                                <option value="zindentyfikowano">zindentyfikowano</option>
+                                <option value="zakończono">zakończono</option>
+                                <option value="porzucono">porzucono</option>
+                            </select>
+                            <button id="submit-button" class="button" style="display: none;" onclick="submitStatus('{{ report_data[0] }}')">Zatwierdź</button>
+                        </td>
+                    </tr>
+                </table>
+                <br><br>
+                <div class="link">
+                    <a id="report-come-back-button" href="{{ url_for('przegladanie') }}" class="button">Wróć do wyszukiwania zgłoszeń</a> 
                 </div>
             </div>
-        </main>
-    
-        <script>
-            function showEditFields() {
-                document.getElementById("edit-button").style.display = "none";
-                document.getElementById("status-select").style.display = "block";
-                document.getElementById("submit-button").style.display = "block";
-            }
-    
-            function submitStatus(zgloszenieId) {
-    const newStatus = document.getElementById("status-select").value;
+        </div>
+    </main>
 
-    fetch('/update_status', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ zgloszenieId: zgloszenieId, newStatus: newStatus })
-    })
-    .then(response => {
-        if (response.ok) {
-            document.getElementById("current-status").textContent = newStatus;
-            document.getElementById("edit-button").style.display = "block";
-            document.getElementById("status-select").style.display = "none";
-            document.getElementById("submit-button").style.display = "none";
-        } else {
-            alert("Error updating status. Please try again later.");
+    <script>
+        function showEditFields() {
+            document.getElementById("edit-button").style.display = "none";
+            document.getElementById("status-select").style.display = "block";
+            document.getElementById("submit-button").style.display = "block";
         }
-    })
-    .catch(error => {
-        console.error("Błąd:", error);
-        alert("A network error occurred. Please try again.");
-    });
-}
-        </script>
 
-<script>
-    function addSuspect(reportId) {
-        // Przekierowanie na stronę suspects.html z ID zgłoszenia w URL
-        window.location.href = `/suspects.html?report_id=${reportId}`;
-    }
-</script>
+        function submitStatus(zgloszenieId) {
+            const newStatus = document.getElementById("status-select").value;
 
-    </body>
-    </html>
+            fetch('/update_status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ zgloszenieId: zgloszenieId, newStatus: newStatus })
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById("current-status").textContent = newStatus;
+                    document.getElementById("edit-button").style.display = "block";
+                    document.getElementById("status-select").style.display = "none";
+                    document.getElementById("submit-button").style.display = "none";
+                } else {
+                    alert("Błąd podczas aktualizacji statusu. Spróbuj ponownie później.");
+                }
+            })
+            .catch(error => {
+                console.error("Błąd:", error);
+                alert("Wystąpił błąd sieciowy. Spróbuj ponownie.");
+            });
+        }
+
+        function addSuspect(reportId) {
+            // Przekierowanie na stronę suspects.html z ID zgłoszenia w URL
+            window.location.href = `/suspects.html?report_id=${reportId}`;
+        }
+    </script>
+</body>
+</html>
