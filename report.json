@@ -1,8 +1,9 @@
 {
-    "title": "hej",
-    "event_desc": "",
+    "title": "Zgłaszam kradzież",
+    "event_desc": "Jakie rzeczy zostały skradzione?: Czarna torebka, ",
     "address": "",
     "event_time": "",
     "appearance": "",
-    "info_contact": "możesz mi pomóc?"
+    "info_contact": "",
+    "status": "Zgłoszono"
 }
