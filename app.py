@@ -626,7 +626,7 @@ def report(report_id):
         query_suspects = """
             SELECT suspect_id, name, surname, address, birthdate, photo
             FROM suspects
-            WHERE report_id = %s
+            WHERE event_feature_id = %s
         """
         cursor.execute(query_suspects, (report_id,))
         suspects = cursor.fetchall()
@@ -741,8 +741,6 @@ def chatbot():
     print(f"Full conversation in session: {session['conversation']}")
     return render_template('chatbot.html', conversation=session['conversation'], zalogowany=session.get('zalogowany'), name=session.get('name'))
 
-
-import json
 
 @app.route('/chatbot_clear')
 def chatbot_clear():
