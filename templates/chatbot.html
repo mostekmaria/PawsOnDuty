@@ -74,107 +74,95 @@
                     {% endfor %}
                 </div>
                 
-            
-            {% if witness_step %}
-                <p>Jeśli to możliwe, załącz zdjęcia ze zdarzenia:</p>
-            {% endif %}
-        
-            <div class="message-field">
                 {% if witness_step %}
-                    <form id="photoForm" action="{{ url_for('chatbot') }}" method="post" enctype="multipart/form-data">
-                        <div class="titleicon">
-                            <span class="sb-title" id="sb-title">Zdjęcia z miejsca zdarzenia (jpg, png):</span>
-                        </div>
-                        <div class="file-upload-wrapper-chatbot">
-                            <input type="file" class="full-input-photo" id="photo-chatbot" name="photo" accept=".jpg, .jpeg, .png">
-                            <label for="photo-chatbot" class="custom-file-label" id="custom-file-label">Wybierz plik</label>
-                            <span class="file-name">Nie wybrano pliku</span>
-                        </div>
-                        <button class="button" type="button" id="submit-photo-button">Prześlij zdjęcie</button>
-                         {% if not session.get('zalogowany') %}
-                        <p id="email-request" class="bot-message" style="display:none;">
-                            <strong>Chatbot:</strong> Jeśli chcesz otrzymać potwierdzenie przesłania zgłoszenia, podaj swój adres email.
-                        </p>
-                        <input id="user-email" type="email" name="email" class="common-input-style" placeholder="Twój adres email" style="display:none;">
-                            {% endif %}
-                        <button class="button" type="submit" style="display:none;" id="final-submit-button">Prześlij zgłoszenie</button>                       
-                    </form>
-                {% else %}
-                    <form id="chatForm" action="{{ url_for('chatbot') }}" method="post">
-                        <input id="message-user" type="text" name="user_input" class="common-input-style" placeholder="Wpisz wiadomość">
-                        <button class="send-sign" id="send" type="submit"></button>
-                    </form>
+                    <p>Jeśli to możliwe, załącz zdjęcia ze zdarzenia:</p>
                 {% endif %}
-            </div>            
-        </div>        
-    <main/>
-    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
-    <script>
-        const zalogowany = "{{ 'true' if session.get('zalogowany') else 'false' }}" === 'true';
         
-        const submitPhotoButton = document.getElementById('submit-photo-button');
-        const submitLabel = document.getElementById('sb-title');
-        const choosingPhotoButton = document.getElementById('custom-file-label');
-        const userEmailInput = document.getElementById('user-email');
-        const finalSubmitButton = document.getElementById('final-submit-button');
-        const chatConversation = document.querySelector('.conversation');  // Pobieramy element rozmowy
-        const photoInput = document.getElementById('photo-chatbot'); // Pobieramy pole do przesyłania zdjęć
-        const photoForm = document.getElementById('photoForm'); // Pobieramy formularz do przesyłania zdjęć
-
-        submitPhotoButton.addEventListener('click', function() {
-    if (photoInput.files.length > 0) {
-        const file = photoInput.files[0];
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            // Create new message element from user with the uploaded photo
-            const userPhotoMessage = document.createElement('p');
-            userPhotoMessage.classList.add('user-message');
-            userPhotoMessage.innerHTML = `<strong>Ty:</strong> <img src="${e.target.result}" style="max-width: 200px; max-height: 200px;"/>`;
+                <div class="message-field">
+                    {% if witness_step %}
+                        <form id="photoForm" action="{{ url_for('chatbot') }}" method="post" enctype="multipart/form-data">
+                            <div class="titleicon">
+                                <span class="sb-title" id="sb-title">Zdjęcia z miejsca zdarzenia (jpg, png):</span>
+                            </div>
+                            <div class="file-upload-wrapper-chatbot">
+                                <input type="file" class="full-input-photo" id="photo-chatbot" name="photo" accept=".jpg, .jpeg, .png">
+                                <label for="photo-chatbot" class="custom-file-label" id="custom-file-label">Wybierz plik</label>
+                                <span class="file-name">Nie wybrano pliku</span>
+                            </div>
+                            <button class="button" type="button" id="submit-photo-button">Prześlij zdjęcie</button>
+                            <p id="email-request" class="bot-message" style="display:none;">
+                                <strong>Chatbot:</strong> Jeśli chcesz otrzymać potwierdzenie przesłania zgłoszenia, podaj swój adres email.
+                            </p>
+                            <input id="user-email" type="email" name="email" class="common-input-style" placeholder="Twój adres email" style="display:none;">
+                            <button class="button" type="submit" style="display:none;" id="final-submit-button">Prześlij zgłoszenie</button>                       
+                        </form>
+                    {% else %}
+                        <form id="chatForm" action="{{ url_for('chatbot') }}" method="post">
+                            <input id="message-user" type="text" name="user_input" class="common-input-style" placeholder="Wpisz wiadomość">
+                            <button class="send-sign" id="send" type="submit"></button>
+                        </form>
+                    {% endif %}
+                </div>            
+            </div>        
+        </main>
+        <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+        <script>
+            const zalogowany = "{{ 'true' if session.get('zalogowany') else 'false' }}" === 'true';
             
-            chatConversation.appendChild(userPhotoMessage);
-            chatConversation.scrollTop = chatConversation.scrollHeight;
+            const submitPhotoButton = document.getElementById('submit-photo-button');
+            const submitLabel = document.getElementById('sb-title');
+            const choosingPhotoButton = document.getElementById('custom-file-label');
+            const userEmailInput = document.getElementById('user-email');
+            const finalSubmitButton = document.getElementById('final-submit-button');
+            const chatConversation = document.querySelector('.conversation');  // Pobieramy element rozmowy
+            const photoInput = document.getElementById('photo-chatbot'); // Pobieramy pole do przesyłania zdjęć
+            const photoForm = document.getElementById('photoForm'); // Pobieramy formularz do przesyłania zdjęć
+        
+            submitPhotoButton.addEventListener('click', function() {
+                // Hide input elements
+                photoInput.style.display = 'none';
+                submitPhotoButton.style.display = 'none';
+                submitLabel.style.display = 'none';
+                choosingPhotoButton.style.display = 'none';
 
-            // Hide other elements after adding the photo
-            photoInput.style.display = 'none';
-            submitPhotoButton.style.display = 'none';
-            submitLabel.style.display = 'none';
-            choosingPhotoButton.style.display = 'none';
+                // Create and append a message indicating whether a photo was uploaded or not
+                const userPhotoMessage = document.createElement('p');
+                userPhotoMessage.classList.add('user-message');
+                
+                // Add user photo or message about absence of photo
+                if (photoInput.files.length > 0) {
+                    const file = photoInput.files[0];
+                    const reader = new FileReader();
 
-            // Show email request message
-            const emailRequestMessage = document.getElementById('email-request');
-            emailRequestMessage.style.display = 'block';
-            chatConversation.appendChild(emailRequestMessage);
+                    reader.onload = function(e) {
+                        userPhotoMessage.innerHTML = `<strong>Ty:</strong> <img src="${e.target.result}" style="max-width: 200px; max-height: 200px;"/>`;
+                        chatConversation.appendChild(userPhotoMessage);
+                        chatConversation.scrollTop = chatConversation.scrollHeight;
+                    };
 
-            // Show email input and final submit button
-            userEmailInput.style.display = 'block';
-            finalSubmitButton.style.display = 'block';
-        };
+                    reader.readAsDataURL(file);
+                } else {
+                    userPhotoMessage.innerHTML = '<strong>Ty:</strong> Brak przesłanych zdjęć';
+                    chatConversation.appendChild(userPhotoMessage);
+                    chatConversation.scrollTop = chatConversation.scrollHeight;
+                }
 
-        reader.readAsDataURL(file);
-    } else {
-        // If no file is selected, append the "Brak przesłanych zdjęć" message
-        const noPhotoMessage = document.createElement('p');
-        noPhotoMessage.classList.add('user-message');
-        noPhotoMessage.innerHTML = '<strong>Ty:</strong> Brak przesłanych zdjęć';
-        chatConversation.appendChild(noPhotoMessage);
-        chatConversation.scrollTop = chatConversation.scrollHeight;
-
-        // Optional: Show email request message if needed
-        const emailRequestMessage = document.getElementById('email-request');
-        emailRequestMessage.style.display = 'block';
-        chatConversation.appendChild(emailRequestMessage);
-
-        photoInput.style.display = 'none';
-            submitPhotoButton.style.display = 'none';
-            submitLabel.style.display = 'none';
-            choosingPhotoButton.style.display = 'none';
-
-        // Show email input and final submit button
-        userEmailInput.style.display = 'block';
-        finalSubmitButton.style.display = 'block';
-    }
-});
-    </script>
-</body>
+                // If user is not logged in, show email request message
+                if (!zalogowany) {
+                    const emailRequestMessage = document.getElementById('email-request');
+                    emailRequestMessage.style.display = 'block';
+                    chatConversation.appendChild(emailRequestMessage);
+                    
+                    // Show email input and final submit button
+                    userEmailInput.style.display = 'block';
+                } else {
+                    // Directly show the final submit button if logged in
+                    finalSubmitButton.style.display = 'block';
+                }
+                
+                // Always show the final submit button
+                finalSubmitButton.style.display = 'block';
+            });
+        </script>    
+    </body>
 </html>
