@@ -77,39 +77,42 @@
                     <tr>
                         <th>Podejrzani</th>
                         <td>
-                            {% if suspects %}
-                                <table class="suspects-table">
-                                    <tr>
-                                        <th>Imię</th>
-                                        <th>Nazwisko</th>
-                                        <th>Adres</th>
-                                        <th>Data urodzenia</th>
-                                        <th>Zdjęcie</th>
-                                    </tr>
-                                    {% for suspect in suspects %}
-                                    <tr>
-                                        <td>{{ suspect.name }}</td>
-                                        <td>{{ suspect.surname }}</td>
-                                        <td>{{ suspect.address }}</td>
-                                        <td>{{ suspect.birthdate }}</td>
-                                        <td>
-                                            <div class="suspects-gallery">
-                                                {% if suspect.photo %}
-                                                    <img src="data:image/jpeg;base64,{{ suspect.photo }}" alt="Zdjęcie podejrzanego" class="suspect-photo">
-                                                {% else %}
-                                                    Brak zdjęcia
-                                                {% endif %}
-                                            </div>
-                                        </td>                                            
-                                    </tr>
-                                    {% endfor %}
-                                </table>
-                            {% else %}
-                                Brak podejrzanych
-                            {% endif %}
+                            {% for event_feature in event_features %}
+                                {% if event_feature.suspects %}
+                                    <h3>Szczegóły podejrzanych dla zdarzenia: {{ event_feature.event_description }}</h3>
+                                    <table class="suspects-table">
+                                        <tr>
+                                            <th>Imię</th>
+                                            <th>Nazwisko</th>
+                                            <th>Adres</th>
+                                            <th>Data urodzenia</th>
+                                            <th>Zdjęcie</th>
+                                        </tr>
+                                        {% for suspect in event_feature.suspects %}
+                                        <tr>
+                                            <td>{{ suspect.name }}</td>
+                                            <td>{{ suspect.surname }}</td>
+                                            <td>{{ suspect.address }}</td>
+                                            <td>{{ suspect.birthdate }}</td>
+                                            <td>
+                                                <div class="suspects-gallery">
+                                                    {% if suspect.photo %}
+                                                        <img src="data:image/jpeg;base64,{{ suspect.photo }}" alt="Zdjęcie podejrzanego" class="suspect-photo">
+                                                    {% else %}
+                                                        Brak zdjęcia
+                                                    {% endif %}
+                                                </div>
+                                            </td>                                            
+                                        </tr>
+                                        {% endfor %}
+                                    </table>
+                                {% else %}
+                                    <p>Brak podejrzanych dla tego zdarzenia.</p>
+                                {% endif %}
+                            {% endfor %}
                             <button class="suspect-button" onclick="addSuspect('{{ report_data[0] }}')">Dodaj podejrzanego</button>
                         </td>
-                    </tr>                    
+                    </tr>                                       
                     <tr>
                         <th>Zdjęcia</th>
                         <td>
@@ -119,7 +122,7 @@
                                 Brak zdjęć
                             {% endif %}
                         </td>
-                    </tr>
+                    </tr>           
                     <tr>
                         <th>Status</th>
                         <td>
