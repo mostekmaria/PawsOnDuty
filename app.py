@@ -117,25 +117,25 @@ def insert_report_into_db():
 
 
 # Funkcja do wstawiania podejrzanych do tabeli suspects w bazie danych
-def insert_suspect_into_db(report_id, name, surname, address, birthdate, photo_blob):
+def insert_suspect_into_db(event_feature_id, name, surname, address, birthdate, photo_blob):
     try:
         cnx = mysql.connector.connect(**db_config)
         cursor = cnx.cursor()
 
         # Zapytanie SQL
         suspect_insert = """
-            INSERT INTO suspects (report_id, name, surname, address, birthdate, photo) 
+            INSERT INTO suspects (event_feature_id, name, surname, address, birthdate, photo) 
             VALUES (%s, %s, %s, %s, %s, %s)
         """
         
         # Wstawienie danych do tabeli suspects
         cursor.execute(suspect_insert, (
-            report_id,  # Upewnij się, że to jest report_id
+            event_feature_id,
             name,
             surname,
             address,
             birthdate,
-            photo_blob  # Upewnij się, że photo_blob jest przekazywane
+            photo_blob
         ))
 
         # Zatwierdzenie transakcji
@@ -147,8 +147,7 @@ def insert_suspect_into_db(report_id, name, surname, address, birthdate, photo_b
     finally:
         cursor.close()
         cnx.close()
-        with open('report.json', 'w', encoding='utf-8') as f:
-            f.write('')  # Zapisywanie pustego pliku
+
 
 def send_confirmation():
     # Pobieramy adres e-mail od użytkownika z formularza
@@ -515,16 +514,20 @@ def zgloszenia():
         cursor.close()
         cnx.close()
 
-
 @app.route('/suspects.html', methods=['GET', 'POST'])
 def handle_suspects():
+    report_id = request.args.get('report_id')  # Ustawienie report_id z zapytania GET
     if request.method == 'POST':
         # Pobieranie danych z formularza
-        name = request.form.get('name') or None
-        surname = request.form.get('surname') or None
-        address = request.form.get('address') or None
-        birthdate = request.form.get('birthdate') or None
-        report_id = request.form.get('report_id') or None
+        name = request.form.get('name')
+        surname = request.form.get('surname')
+        address = request.form.get('address')
+        birthdate = request.form.get('birthdate')
+        report_id = request.form.get('report_id')  # Upewnij się, że jest tutaj
+
+        # Walidacja danych
+        if not name or not surname or not report_id:
+            return "Brak wymaganych danych", 400
 
         # Pobieranie pliku zdjęcia
         if 'photo' not in request.files:
@@ -533,25 +536,49 @@ def handle_suspects():
 
         # Sprawdzanie, czy plik jest poprawny
         if photo and allowed_file(photo.filename):
-            # Odczyt pliku jako danych binarnych (BLOB)
             photo_blob = photo.read()
         else:
             return "Nieprawidłowy plik. Dozwolone formaty to JPG i PNG", 400
 
-        # Walidacja danych
-        if not name or not surname or not report_id:
-            return "Brak wymaganych danych", 400
+        # Pobranie event_feature_id na podstawie report_id
+        event_feature_id = get_event_feature_id(report_id)
+        if event_feature_id is None:
+            return "Nie znaleziono event_feature_id dla podanego report_id", 400
 
         # Wstawienie podejrzanego do bazy danych, razem z plikiem BLOB
-        insert_suspect_into_db(report_id, name, surname, address, birthdate, photo_blob)
+        try:
+            insert_suspect_into_db(event_feature_id, name, surname, address, birthdate, photo_blob)
+            print("Dane zostały pomyślnie wstawione do bazy danych.")  # Debugging
+        except Exception as e:
+            print(f"Wystąpił błąd: {e}")  # Logowanie błędu
 
         # Przekierowanie lub renderowanie odpowiedzi
         return redirect(url_for('report', report_id=report_id))
 
-    # Jeśli metoda GET, wyświetlamy formularz suspects.html
-    report_id = request.args.get('report_id')  # Pobieramy report_id z URL
-
     return render_template('suspects.html', report_id=report_id)
+
+
+
+def get_event_feature_id(report_id):
+    try:
+        cnx = mysql.connector.connect(**db_config)
+        cursor = cnx.cursor()
+        
+        # Zapytanie SQL
+        query = "SELECT event_feature_id FROM event_features WHERE report_id = %s"
+        cursor.execute(query, (report_id,))
+        
+        result = cursor.fetchone()  # Pobierz pierwszy wiersz wyniku
+        if result:
+            return result[0]  # Zwróć event_feature_id
+        else:
+            return None
+    except mysql.connector.Error as err:
+        print(f"Błąd podczas pobierania event_feature_id: {err}")
+        return None
+    finally:
+        cursor.close()
+        cnx.close()
 
 
 
@@ -597,59 +624,89 @@ def report(report_id):
         cursor = cnx.cursor()
 
         # Pobranie danych zgłoszenia z bazy
-        query = """
+        query_report = """
             SELECT 
                 r.report_id,
                 r.title, 
+                r.report_time, 
+                r.status
+            FROM reports r 
+            WHERE r.report_id = %s
+        """
+        cursor.execute(query_report, (report_id,))
+        report_data = cursor.fetchone()
+
+        if report_data is None:
+            return render_template(
+                'report.html',
+                komunikat="Nie znaleziono zgłoszenia o podanym ID.",
+                name=session.get('name')
+            )
+
+        # Zmienna report_id, która będzie używana w późniejszych zapytaniach
+        report_id = report_data[0]
+
+        # Pobranie event_feature_id dla danego report_id
+        query_event_features = """
+            SELECT 
+                ef.event_feature_id, 
                 ef.event_description, 
                 ef.address, 
                 ef.event_time, 
-                p.appearance, 
-                w.info_contact, 
-                r.report_time,
-                r.status,
                 ef.photos  -- kolumna photos
-            FROM reports r 
-            JOIN event_features ef ON r.report_id = ef.report_id 
-            JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id 
-            JOIN witnesses w ON ef.event_feature_id = w.event_feature_id
-            WHERE r.report_id = %s
+            FROM event_features ef
+            WHERE ef.report_id = %s
         """
-        cursor.execute(query, (report_id,))
-        report_data = list(cursor.fetchone())
+        cursor.execute(query_event_features, (report_id,))
+        event_features = cursor.fetchall()
 
-        # Jeśli dane są w formacie binarnym, konwertujemy na base64
-        if report_data[9] is not None:
-            report_data[9] = base64.b64encode(report_data[9]).decode('utf-8')
+        # Przygotowanie listy na dane event_features
+        event_feature_list = []
 
-        # Pobranie podejrzanych dla danego zgłoszenia
-        query_suspects = """
-            SELECT suspect_id, name, surname, address, birthdate, photo
-            FROM suspects
-            WHERE report_id = %s
-        """
-        cursor.execute(query_suspects, (report_id,))
-        suspects = cursor.fetchall()
+        for event_feature in event_features:
+            event_feature_id, event_description, address, event_time, photos = event_feature
 
-        # Konwersja zdjęć podejrzanych do formatu base64
-        suspect_list = []
-        for suspect in suspects:
-            suspect_id, name, surname, address, birthdate, photo = suspect
-            photo_base64 = base64.b64encode(photo).decode('utf-8') if photo else None
-            suspect_list.append({
-                "suspect_id": suspect_id,
-                "name": name,
-                "surname": surname,
+            # Konwertowanie zdjęć do formatu base64
+            photo_base64 = base64.b64encode(photos).decode('utf-8') if photos else None
+
+            # Pobranie podejrzanych dla danego event_feature_id
+            query_suspects = """
+                SELECT suspect_id, name, surname, address, birthdate, photo
+                FROM suspects
+                WHERE event_feature_id = %s
+            """
+            cursor.execute(query_suspects, (event_feature_id,))
+            suspects = cursor.fetchall()
+
+            # Konwersja zdjęć podejrzanych do formatu base64
+            suspect_list = []
+            for suspect in suspects:
+                suspect_id, name, surname, address, birthdate, photo = suspect
+                photo_base64_sus = base64.b64encode(photo).decode('utf-8') if photo else None
+                suspect_list.append({
+                    "suspect_id": suspect_id,
+                    "name": name,
+                    "surname": surname,
+                    "address": address,
+                    "birthdate": birthdate,
+                    "photo": photo_base64_sus
+                })
+
+            # Dodanie danych event_feature do listy
+            event_feature_list.append({
+                "event_feature_id": event_feature_id,
+                "event_description": event_description,
                 "address": address,
-                "birthdate": birthdate,
-                "photo": photo_base64
+                "event_time": event_time,
+                "photos": photo_base64,
+                "suspects": suspect_list
             })
 
         # Przekazanie danych do szablonu
         return render_template(
             'report.html',
             report_data=report_data,
-            suspects=suspect_list,
+            event_features=event_feature_list,
             name=session.get('name')
         )
 
@@ -741,8 +798,6 @@ def chatbot():
     print(f"Full conversation in session: {session['conversation']}")
     return render_template('chatbot.html', conversation=session['conversation'], zalogowany=session.get('zalogowany'), name=session.get('name'))
 
-
-import json
 
 @app.route('/chatbot_clear')
 def chatbot_clear():
