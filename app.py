@@ -538,7 +538,7 @@ def handle_suspects():
         if photo and allowed_file(photo.filename):
             photo_blob = photo.read()
         else:
-            return "Nieprawidłowy plik. Dozwolone formaty to JPG i PNG", 400
+            photo_blob = None
 
         # Pobranie event_feature_id na podstawie report_id
         event_feature_id = get_event_feature_id(report_id)
@@ -801,13 +801,8 @@ def chatbot():
 
 @app.route('/chatbot_clear')
 def chatbot_clear():
-    # Czyszczenie danych w sesji
-    if 'first_message' in session:
-        session.pop('first_message', None)
-    if 'previous_message' in session:
-        session.pop('previous_message', None)
-    if 'conversation' in session:
-        session.pop('conversation', None)
+
+    session.clear()
     
     # Zapisujemy pustą strukturę do report.json
     initial_data = {
