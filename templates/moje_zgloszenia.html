@@ -75,7 +75,7 @@
                     <p style="color: red;">{{ komunikat }}</p>
                 {% endif %}  
                 <div class="panel-table">          
-                    <table class="zgloszenia">
+                    <table class="zgloszenia" id="link-table">
                         <thead>
                             <tr id="column-title">
                                 <th>Tytuł</th>
@@ -89,14 +89,14 @@
                         </thead>
                         <tbody>
                             {% for zgloszenie in zgloszenia %}
-                                <tr id="record">
-                                    <td>{{ zgloszenie[0] }}</td>
-                                    <td>{{ zgloszenie[1] }}</td>
+                                <tr id="record" data-url="{{ url_for('report', report_id=zgloszenie[0]) }}">
+                                    <td><a href="{{ url_for('report', report_id=zgloszenie[0]) }}">{{ zgloszenie[1] }}</a></td>
                                     <td>{{ zgloszenie[2] }}</td>
                                     <td>{{ zgloszenie[3] }}</td>
                                     <td>{{ zgloszenie[4] }}</td>
                                     <td>{{ zgloszenie[5] }}</td>
                                     <td>{{ zgloszenie[6] }}</td>
+                                    <td>{{ zgloszenie[7] }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -113,7 +113,17 @@
         <div class="tooltip"></div>
         <!-- OBSŁUGA TOOLTIPÓW --> 
         <script src="{{ url_for('static', filename='js/tooltip.js') }}"></script> 
-
+        <script>
+            document.querySelectorAll('#link-table tr').forEach(row => {
+                row.addEventListener('click', () => {
+                    const url = row.getAttribute('data-url');
+                    if (url) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        </script>
+        
         <div id="div"></div>
         <footer>
             <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
