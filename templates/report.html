@@ -46,12 +46,8 @@
         </nav> 
     </header> 
     <main id="mainlog">
-        <br><br><br><br><br><br>
         <div class="panel-table">
             <div id="report-table">
-                {% if selected_date %}
-                    <h1 id="log">Zgłoszenie dla wybranej daty: {{ selected_date }}</h1>
-                {% endif %}
                 <div id="report-id" data-report-id="{{ report_data[0] }}" style="display: none;"></div>
                 <table class="zgloszenie" id="report-table">
                     <tr>
@@ -76,11 +72,11 @@
                     </tr>
                     <tr>
                         <th>Podejrzani</th>
-                        <td>
+                        <td id="no-hover-td">
                             {% for event_feature in event_features %}
                                 {% if event_feature.suspects %}
                                     <h3>Szczegóły podejrzanych dla zdarzenia: {{ event_feature.event_description }}</h3>
-                                    <table class="suspects-table">
+                                    <table class="suspects-table" id="suspect-id">
                                         <tr>
                                             <th>Imię</th>
                                             <th>Nazwisko</th>
