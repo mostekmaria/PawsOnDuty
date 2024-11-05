@@ -801,10 +801,15 @@ def chatbot():
 
 @app.route('/chatbot_clear')
 def chatbot_clear():
-
-    session.clear()
+    # Czyszczenie danych tylko dla konwersacji chatbota
+    if 'conversation' in session:
+        session.pop('conversation')  # Usuwa historię konwersacji
+    if 'first_message' in session:
+        session.pop('first_message')  # Resetuje flagę pierwszej wiadomości
+    if 'previous_message' in session:
+        session.pop('previous_message')  # Usuwa poprzednią wiadomość (jeśli istnieje)
     
-    # Zapisujemy pustą strukturę do report.json
+    # Opcjonalne: Zresetowanie struktury w pliku report.json, jeśli jest częścią konwersacji
     initial_data = {
         "title": "",
         "event_desc": "",
@@ -815,10 +820,10 @@ def chatbot_clear():
         "status": "Zgłoszono"
     }
     
-    # Użycie kodowania UTF-8 przy zapisie do pliku
     with open('report.json', 'w', encoding='utf-8') as report_file:
         json.dump(initial_data, report_file, ensure_ascii=False, indent=4)
     
+    # Przekierowanie do chatbota, aby załadować początkowy widok
     return redirect(url_for('chatbot'))
 
 
