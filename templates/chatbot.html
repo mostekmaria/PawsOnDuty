@@ -105,6 +105,10 @@
                 </div>            
             </div>        
         </main>
+        <footer>
+            <p id="footer">Aplikacja webowa stworzona jako projekt pracy inżynierskiej AGH.</p>
+            <p id="footer">© Maria Mostek, Patrycja Ruda. Kraków 2024.</p>
+        </footer>
         <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
         <script>
             const zalogowany = "{{ 'true' if session.get('zalogowany') else 'false' }}" === 'true';

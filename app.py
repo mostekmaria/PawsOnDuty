@@ -540,6 +540,9 @@ def handle_suspects():
         else:
             photo_blob = None
 
+            #return "Nieprawidłowy plik. Dozwolone formaty to JPG i PNG", 400
+
+
         # Pobranie event_feature_id na podstawie report_id
         event_feature_id = get_event_feature_id(report_id)
         if event_feature_id is None:
