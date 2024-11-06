@@ -442,7 +442,7 @@ def moje_zgloszenia():
 
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
-    query = "SELECT r.title, ef.event_description, ef.address, ef.event_time, p.appearance, w.info_contact, r.status FROM reports r JOIN event_features ef ON r.report_id = ef.report_id JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id JOIN witnesses w ON ef.event_feature_id = w.event_feature_id " \
+    query = "SELECT r.report_id, r.title, ef.event_description, ef.address, ef.event_time, p.appearance, w.info_contact, r.status FROM reports r JOIN event_features ef ON r.report_id = ef.report_id JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id JOIN witnesses w ON ef.event_feature_id = w.event_feature_id " \
         "WHERE r.user_id = %s " \
         "ORDER BY ef.event_time DESC"
     cursor.execute(query, (user_id,))
@@ -539,7 +539,9 @@ def handle_suspects():
             photo_blob = photo.read()
         else:
             photo_blob = None
+
             #return "Nieprawidłowy plik. Dozwolone formaty to JPG i PNG", 400
+
 
         # Pobranie event_feature_id na podstawie report_id
         event_feature_id = get_event_feature_id(report_id)
@@ -641,7 +643,8 @@ def report(report_id):
             return render_template(
                 'report.html',
                 komunikat="Nie znaleziono zgłoszenia o podanym ID.",
-                name=session.get('name')
+                name=session.get('name'),
+                role=session.get('role')
             )
 
         # Zmienna report_id, która będzie używana w późniejszych zapytaniach
@@ -654,7 +657,7 @@ def report(report_id):
                 ef.event_description, 
                 ef.address, 
                 ef.event_time, 
-                ef.photos  -- kolumna photos
+                ef.photos
             FROM event_features ef
             WHERE ef.report_id = %s
         """
@@ -666,11 +669,8 @@ def report(report_id):
 
         for event_feature in event_features:
             event_feature_id, event_description, address, event_time, photos = event_feature
-
-            # Konwertowanie zdjęć do formatu base64
             photo_base64 = base64.b64encode(photos).decode('utf-8') if photos else None
 
-            # Pobranie podejrzanych dla danego event_feature_id
             query_suspects = """
                 SELECT suspect_id, name, surname, address, birthdate, photo
                 FROM suspects
@@ -679,7 +679,6 @@ def report(report_id):
             cursor.execute(query_suspects, (event_feature_id,))
             suspects = cursor.fetchall()
 
-            # Konwersja zdjęć podejrzanych do formatu base64
             suspect_list = []
             for suspect in suspects:
                 suspect_id, name, surname, address, birthdate, photo = suspect
@@ -693,7 +692,6 @@ def report(report_id):
                     "photo": photo_base64_sus
                 })
 
-            # Dodanie danych event_feature do listy
             event_feature_list.append({
                 "event_feature_id": event_feature_id,
                 "event_description": event_description,
@@ -703,24 +701,27 @@ def report(report_id):
                 "suspects": suspect_list
             })
 
-        # Przekazanie danych do szablonu
         return render_template(
             'report.html',
             report_data=report_data,
             event_features=event_feature_list,
-            name=session.get('name')
+            name=session.get('name'),
+            role=session.get('role')
         )
 
     except mysql.connector.Error as err:
-        print(f"Błąd podczas pobierania zgłoszenia: {err}")
+        print(f"Błąd bazy danych: {err}")
         return render_template(
             'report.html',
-            komunikat="Wystąpił błąd podczas ładowania zgłoszenia.",
-            name=session.get('name')
+            komunikat="Wystąpił błąd podczas pobierania danych zgłoszenia.",
+            name=session.get('name'),
+            role=session.get('role')
         )
+
     finally:
         cursor.close()
         cnx.close()
+
 
 
 @app.route('/chatbot', methods=['GET', 'POST'])
@@ -802,15 +803,15 @@ def chatbot():
 
 @app.route('/chatbot_clear')
 def chatbot_clear():
-    # Czyszczenie danych w sesji
-    if 'first_message' in session:
-        session.pop('first_message', None)
-    if 'previous_message' in session:
-        session.pop('previous_message', None)
+    # Czyszczenie danych tylko dla konwersacji chatbota
     if 'conversation' in session:
-        session.pop('conversation', None)
+        session.pop('conversation')  # Usuwa historię konwersacji
+    if 'first_message' in session:
+        session.pop('first_message')  # Resetuje flagę pierwszej wiadomości
+    if 'previous_message' in session:
+        session.pop('previous_message')  # Usuwa poprzednią wiadomość (jeśli istnieje)
     
-    # Zapisujemy pustą strukturę do report.json
+    # Opcjonalne: Zresetowanie struktury w pliku report.json, jeśli jest częścią konwersacji
     initial_data = {
         "title": "",
         "event_desc": "",
@@ -821,10 +822,10 @@ def chatbot_clear():
         "status": "Zgłoszono"
     }
     
-    # Użycie kodowania UTF-8 przy zapisie do pliku
     with open('report.json', 'w', encoding='utf-8') as report_file:
         json.dump(initial_data, report_file, ensure_ascii=False, indent=4)
     
+    # Przekierowanie do chatbota, aby załadować początkowy widok
     return redirect(url_for('chatbot'))
 
 

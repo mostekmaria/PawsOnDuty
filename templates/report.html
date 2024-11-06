@@ -85,30 +85,32 @@
                                             <th>Zdjęcie</th>
                                         </tr>
                                         {% for suspect in event_feature.suspects %}
-                                        <tr>
-                                            <td>{{ suspect.name }}</td>
-                                            <td>{{ suspect.surname }}</td>
-                                            <td>{{ suspect.address }}</td>
-                                            <td>{{ suspect.birthdate }}</td>
-                                            <td>
-                                                <div class="suspects-gallery">
-                                                    {% if suspect.photo %}
-                                                        <img src="data:image/jpeg;base64,{{ suspect.photo }}" alt="Zdjęcie podejrzanego" class="suspect-photo">
-                                                    {% else %}
-                                                        Brak zdjęcia
-                                                    {% endif %}
-                                                </div>
-                                            </td>                                            
-                                        </tr>
+                                            <tr>
+                                                <td>{{ suspect.name }}</td>
+                                                <td>{{ suspect.surname }}</td>
+                                                <td>{{ suspect.address }}</td>
+                                                <td>{{ suspect.birthdate }}</td>
+                                                <td>
+                                                    <div class="suspects-gallery">
+                                                        {% if suspect.photo %}
+                                                            <img src="data:image/jpeg;base64,{{ suspect.photo }}" alt="Zdjęcie podejrzanego" class="suspect-photo">
+                                                        {% else %}
+                                                            Brak zdjęcia
+                                                        {% endif %}
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         {% endfor %}
                                     </table>
                                 {% else %}
                                     <p>Brak podejrzanych dla tego zdarzenia.</p>
                                 {% endif %}
                             {% endfor %}
-                            <button class="suspect-button" onclick="addSuspect('{{ report_data[0] }}')">Dodaj podejrzanego</button>
+                            {% if session.get('role') == 'funkcjonariusz' %}
+                                <button class="suspect-button" onclick="addSuspect('{{ report_data[0] }}')">Dodaj podejrzanego</button>
+                            {% endif %}
                         </td>
-                    </tr>                                       
+                    </tr>                                   
                     <tr>
                         <th>Zdjęcia</th>
                         <td>
@@ -123,21 +125,26 @@
                         <th>Status</th>
                         <td>
                             <span id="current-status">{{ report_data[3] }}</span>
-                            <button id="edit-button" class="edit-button" onclick="showEditFields()">Edytuj</button>
-                            
-                            <select id="status-select" style="display: none;">
-                                <option value="przyjęto">przyjęto</option>
-                                <option value="zindentyfikowano">zindentyfikowano</option>
-                                <option value="zakończono">zakończono</option>
-                                <option value="porzucono">porzucono</option>
-                            </select>
-                            <button id="submit-button" class="button" style="display: none;" onclick="submitStatus('{{ report_data[0] }}')">Zatwierdź</button>
+                            {% if session.get('role') == 'funkcjonariusz' %}
+                                <button id="edit-button" class="edit-button" onclick="showEditFields()">Edytuj</button>
+                                <select id="status-select" style="display: none;">
+                                    <option value="przyjęto">przyjęto</option>
+                                    <option value="zidentyfikowano">zidentyfikowano</option>
+                                    <option value="zakończono">zakończono</option>
+                                    <option value="porzucono">porzucono</option>
+                                </select>
+                                <button id="submit-button" class="button" style="display: none;" onclick="submitStatus('{{ report_data[0] }}')">Zatwierdź</button>
+                            {% endif %}
                         </td>
                     </tr>
                 </table>
                 <br><br>
                 <div class="link">
+                    {% if session.get('role') == 'funkcjonariusz' %}
                     <a id="report-come-back-button" href="{{ url_for('przegladanie') }}" class="button">Wróć do wyszukiwania zgłoszeń</a> 
+                    {% else %}
+                    <a id="report-come-back-button" href="{{ url_for('moje_zgloszenia') }}" class="button">Wróć do wyszukiwania zgłoszeń</a> 
+                    {% endif %}
                 </div>
             </div>
         </div>
