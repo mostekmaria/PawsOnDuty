@@ -13,12 +13,13 @@
 }
 
 #map{
-  width: 100%;
+  width: 70% !important;
   border: 20px solid #304ebb8e; /* Ramka o grubości 5px w kolorze czarnym */
   padding: 10px; /* Opcjonalne: odstęp między ramką a mapą */
   border-radius: 16px; /* Zaokrąglone rogi panelu */
   margin-bottom: 50px;
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
+  margin: 0 auto;
 }
 
 #latlng, #submit-map {
@@ -118,6 +119,12 @@ header {
   color: #17255a;
   font-weight: bold;
   text-align: center;
+  width:60%;
+  margin: 0 auto;
+}
+
+.important {
+  margin-top: 100px;
 }
 
 #menu 
@@ -157,7 +164,7 @@ main {
   align-items: center;
 }
 #log{
-  margin-top: 15%;
+  margin-top: 120px;
 }
 
 .title {
@@ -214,7 +221,7 @@ form{
 }
 
 .text-civil {
-  margin-right: 100px; /* Centrowanie w poziomie */
+  margin-right: 40px; /* Centrowanie w poziomie */
 }
 
 .text-time h1, .text-time p, .text-perpetrators h1, .text-perpetrators p, .text-photos h1, .text-photos p{
@@ -232,7 +239,6 @@ input {
   flex: 1; /* Rozciąga pole formularza, aby wypełnić dostępną przestrzeń
 } */
 .zgloszenia {
-  width: 100%;
   border-collapse: collapse;
 }
 
@@ -538,7 +544,6 @@ strong {
   display: block;
   margin-bottom: 15px;
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
-  margin-left: 50px;
 }
 
 .panel-time {
@@ -574,13 +579,12 @@ strong {
   display: flex;
   flex-direction:row;
   justify-content: center;
-  gap:20px;
 }
 
 .civil-container {
   display: flex; /* Ustawia elementy obok siebie */
   flex-direction: row; /* Elementy będą ustawione w jednym wierszu */
-  align-items: flex-start; /* Wyrównuje elementy do góry */
+  align-items: center; /* Wyrównuje elementy do góry */
   width: 100%; /* Upewnia się, że kontener zajmuje całą szerokość */
   margin-bottom: 150px;
   justify-content: center;
@@ -603,7 +607,6 @@ strong {
 .description-container {
   display: flex; /* Ustawia elementy obok siebie */
   flex-direction: row; /* Elementy będą ustawione w jednym wierszu */
-  gap: 45px; /* Dodaje odstęp między elementami */
   align-items: flex-start; /* Wyrównuje elementy do góry */
   width: 100%; /* Upewnia się, że kontener zajmuje całą szerokość */
   justify-content: center;
@@ -667,12 +670,12 @@ strong {
   padding: 40px;
   background-color: #304ebb8e !important;
   border-radius: 16px; /* Zaokrąglone rogi panelu */
-  margin-top: 150px;
+  margin-top: 50px;
   color: #ffffff;
   display: block;
-  margin-bottom: 20%;
   box-shadow: 4px 4px 10px rgb(0, 0, 0); /* Delikatny cień wokół pola */
-  width:auto;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 .panel-search {
@@ -703,7 +706,7 @@ strong {
 .witnesses-container, .place-container {
   display: flex; /* Ustawia elementy obok siebie */
   flex-direction: row; /* Elementy będą ustawione w jednym wierszu */
-  gap: 100px; /* Dodaje odstęp między elementami */
+  gap: 60px; /* Dodaje odstęp między elementami */
   align-items: flex-start; /* Wyrównuje elementy do góry */
   width: 100%; /* Upewnia się, że kontener zajmuje całą szerokość */
   margin-bottom: 70px;
@@ -765,6 +768,7 @@ th {
 tr:nth-child(even) {
   background-color: #f2f2f2;
 }
+
 tr:hover {
   background-color: #142252;
   color: #e9e9e9;
@@ -788,32 +792,50 @@ tr {
   margin-bottom: 50px;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 600px) {
   .formularz {
       flex-direction: column; /* Zmieniamy układ na kolumnowy */
   }
 
+  .important{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .place-container, .time-container, .description-container, .perpetrators-container, .witnesses-container, .photos-container, .civil-container {
+    flex-direction: column;
+    margin: 30px auto;
+    gap: 30px;
+  }
+
   .panel-place, .panel-time, .panel-description, .panel-perpetrators, .panel-sign, .panel-witnesses, .panel_civil, .panel-photos{
-    margin-left: 0; /* Centrowanie w poziomie */
-    margin-right: 6%; /* Centrowanie w poziomie */
+    margin: 0 0;
+  }
+
+  .text-time h1, .text-time p, .text-perpetrators h1, .text-perpetrators p, .text-photos h1, .text-photos p{
+    text-align: right;
+    width: 100%;
   }
 
   .text-place,  .text-description, .text-witnesses{
-    margin-left: 4%; /* Centrowanie w poziomie */
+    margin: 0 0;
+    width: 100%;
   }
 
   .text-time, .text-perpetrators, .text-civil, .text-photos {
-    margin-right: 0; /* Centrowanie w poziomie */
+    margin: 0 0;
   }
 
-  .important, .text-place, .panel-place, .map {
+  .important, .text-place, .panel-place, .map, .text-photos {
       order: 0; /* Element 1 teraz jest drugi */
   }
 
-  #map{
+  .map{
     margin: 0 auto;
-    width: 98%;
-    margin-bottom: -20px;
+    width: 100% !important;
+    padding: 0;
   }
 
   .text-time {
@@ -831,12 +853,29 @@ tr {
     order: 4;
   }
 
-  .button-container1 {
+  .text-witnesses {
     order: 5;
   }
 
-  .important-end {
+  .panel-witnesses {
     order: 6;
+  }
+
+  .text-photos {
+    order: 7;
+  }
+
+  .panel-photos {
+    order: 8;
+  }
+
+  .button-container1 {
+    order: 9;
+  }
+
+  .important-end {
+    order: 10;
+    width: 90%;
   }
 }
 
@@ -1143,6 +1182,20 @@ nav, h5, #header, .title { display: none; }
     text-align: left;
     height: 90px;
   }
+
+  .zgloszenia td:nth-child(even) {
+    background-color: #2daa001f;
+  }
+
+  .zgloszenia td:nth-child(even):hover {
+    background-color: #2daa001f;
+  }
+
+  .zgloszenia td:hover {
+    background-color: #142252;
+    color: #e9e9e9;
+  }
+
 }
 .submit-button, .edit-button, .suspect-button {
   height: auto;
