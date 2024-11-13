@@ -72,6 +72,7 @@
                         <td>{{ report_data[2] }}</td>
                     </tr>
                     <tr>
+                        {% if session.get('role') == 'funkcjonariusz' %}
                         <th>Podejrzani</th>
                         <td id="no-hover-td">
                             {% for event_feature in event_features %}
@@ -107,7 +108,6 @@
                                     <p>Brak podejrzanych dla tego zdarzenia.</p>
                                 {% endif %}
                             {% endfor %}
-                            {% if session.get('role') == 'funkcjonariusz' %}
                                 <button class="suspect-button" onclick="addSuspect('{{ report_data[0] }}')">Dodaj podejrzanego</button>
                             {% endif %}
                         </td>
