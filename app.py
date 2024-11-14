@@ -15,7 +15,7 @@ import base64
 # Konfiguracja połączenia z bazą danych
 db_config = {
     'user': 'administrator',
-    'password': 'haslo',
+    'password': os.environ.get('DB_PASS'),
     'host': '127.0.0.1',
     'database': 'crimedb', #tu sobie ja musze zmieniać na 2
     'raise_on_warnings': True
