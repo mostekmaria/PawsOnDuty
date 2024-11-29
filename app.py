@@ -164,6 +164,7 @@ def send_confirmation():
     # Jeśli email jest pusty, pomiń wysyłanie wiadomości i zakończ funkcję
     if not email:
         logger.info("Adres e-mail nie podany. Zgłoszenie zapisane bez wysyłania potwierdzenia.")
+        flash("Zgłoszenie zostało wysłane")
         return
     
     # Tworzymy wiadomość e-mail
