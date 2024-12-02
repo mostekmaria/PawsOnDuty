@@ -174,8 +174,8 @@
                             <img class="sb-title-icon" src="{{ url_for('static', filename='user.png') }}" alt="">
                             <span class="sb-title">Dane kontaktowe do świadka</span>
                         </div>
-                        <input placeholder="Liczba świadków" type="number" id="liczba-swiadkow" name="liczba" min="0" max="10" oninput="this.value = Math.round(this.value);" required>
-                        <div id="divek-witnesses"></div>
+                        <input placeholder="Liczba świadków" type="number" id="liczba-swiadkow" name="liczba-swiadkow" min="0" max="10" oninput="this.value = Math.round(this.value);" required>
+                        <div id="divek-witnesses"></div>                        
                 <!-- OBSŁUGA DODAWANIA SPRAWCÓW -->
                 <script src="{{ url_for('static', filename='js/witnesses.js') }}"></script>
                     </div>

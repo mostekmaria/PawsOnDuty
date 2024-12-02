@@ -272,6 +272,20 @@ def submit_form():
     # Tworzenie opisu sprawców
     appearance = f"{len(sprawcy_opisy)} - {', '.join(sprawcy_opisy)}"
 
+    # Pobieranie liczby świadków
+    liczba_swiadkow = int(request.form.get('liczba-swiadkow', '0'))
+    logger.debug(f"Liczba świadków: {liczba_swiadkow}")
+
+    # Pobieranie danych kontaktowych świadków
+    swiadkowie_info = [request.form.get(f'świadek{i}', '') for i in range(1, liczba_swiadkow + 1)]
+    swiadkowie_info = [info for info in swiadkowie_info if info]  # Filtrujemy puste dane
+
+    # Sprawdzamy, czy dane świadków zostały poprawnie pobrane
+    logger.debug(f"Dane świadków: {swiadkowie_info}")
+
+    # Przekonwertowanie listy świadków na jeden ciąg tekstowy
+    info_contact = ', '.join(swiadkowie_info) if swiadkowie_info else "Brak danych kontaktowych"
+
     # Tworzenie obiektu JSON
     report_data = {
         "title": title,
@@ -279,7 +293,7 @@ def submit_form():
         "address": address.strip(),
         "event_time": event_time.strip(),
         "appearance": appearance,
-        "info_contact": "anonimowy",
+        "info_contact": info_contact,  # Zmieniamy listę na string
         "status": "Zgłoszono"
     }
 
@@ -745,7 +759,6 @@ def report(report_id):
     finally:
         cursor.close()
         cnx.close()
-
 
 
 @app.route('/chatbot', methods=['GET', 'POST'])
