@@ -7,13 +7,11 @@ function areas() {
         var textarea = document.createElement('textarea');
         var br = document.createElement('br');
         textarea.setAttribute("placeholder", "Dane kontaktowe " + i + ". świadka...");
-        textarea.setAttribute("id", "świadek" + i);
-        textarea.setAttribute("name", "świadek" + i);
-        textarea.classList.add('witness'); // Dodajemy klasę zamiast id
+        textarea.setAttribute("name", "świadek" + i);  // Zmieniamy name na unikalne dla każdego świadka
+        textarea.classList.add('witness');
         divek.appendChild(textarea);
         divek.appendChild(br);
     }
-
 }
 
 // Wywołanie funkcji areas() przy zmianie wartości pola liczba
