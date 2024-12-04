@@ -322,7 +322,7 @@ def przegladanie():
 def register():
     if request.method == 'POST':
         # Pobranie danych z formularza
-        name = request.form['name']
+        name = request.form['suspect_name']
         surname = request.form['surname']
         email = request.form['email']
         login = request.form['login']
@@ -530,7 +530,7 @@ def handle_suspects():
     report_id = request.args.get('report_id')  # Ustawienie report_id z zapytania GET
     if request.method == 'POST':
         # Pobieranie danych z formularza
-        name = request.form.get('name')
+        name = request.form.get('suspect_name')
         surname = request.form.get('surname')
         address = request.form.get('address')
         birthdate = request.form.get('birthdate')
@@ -836,6 +836,7 @@ def chatbot():
     print(f"Session data (after request): {session}")
     print(f"Full conversation in session: {session['conversation']}")
     return render_template('chatbot.html', conversation=session['conversation'], zalogowany=session.get('zalogowany'), name=session.get('name'))
+
 
 
 @app.route('/chatbot_clear')
