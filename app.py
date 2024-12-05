@@ -838,7 +838,6 @@ def chatbot():
     return render_template('chatbot.html', conversation=session['conversation'], zalogowany=session.get('zalogowany'), name=session.get('name'))
 
 
-
 @app.route('/chatbot_clear')
 def chatbot_clear():
     # Czyszczenie danych tylko dla konwersacji chatbota
