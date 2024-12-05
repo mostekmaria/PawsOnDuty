@@ -84,21 +84,21 @@
                             <div class="titleicon">
                                 <span class="sb-title" id="sb-title">Zdjęcia z miejsca zdarzenia (jpg, png):</span>
                             </div>
-                            <div class="file-upload-wrapper-chatbot">
+                            <div class="file-upload-wrapper-chatbot" id="element1">
                                 <input type="file" class="full-input-photo" id="photo-chatbot" name="photo" accept=".jpg, .jpeg, .png">
                                 <label for="photo-chatbot" class="custom-file-label" id="custom-file-label">Wybierz plik</label>
                                 <span class="file-name">Nie wybrano pliku</span>
                             </div>
-                            <button class="button" type="button" id="submit-photo-button">Prześlij zdjęcie</button>
+                            <button class="button" type="button" id="submit-photo-button" onclick="zmienElement()">Prześlij zdjęcie</button>
                             <p id="email-request" class="bot-message" style="display:none;">
                                 <strong>Chatbot:</strong> Jeśli chcesz otrzymać potwierdzenie przesłania zgłoszenia, podaj swój adres email.
                             </p>
                             <input id="user-email" type="email" name="email" class="common-input-style" placeholder="Twój adres email" style="display:none;">
-                            <button class="button" type="submit" style="display:none;" id="final-submit-button">Prześlij zgłoszenie</button>                       
+                            <button class="button" type="submit" style="display:none;" id="final-submit-button" >Prześlij zgłoszenie</button>                       
                         </form>
                     {% else %}
                         <form id="chatForm" action="{{ url_for('chatbot') }}" method="post">
-                            <input id="message-user" type="text" name="user_input" class="common-input-style" placeholder="Wpisz wiadomość">
+                            <input id="message-user" type="text" name="user_input" class="common-input-style" placeholder="Wpisz wiadomość" required>
                             <button class="send-sign" id="send" type="submit"></button>
                         </form>
                     {% endif %}
@@ -167,6 +167,15 @@
                 // Always show the final submit button
                 finalSubmitButton.style.display = 'block';
             });
-        </script>    
+        </script>   
+        <script>
+            function zmienElement() {
+                // Ukryj pierwszy element
+                document.getElementById('element1').style.display = 'none';
+                // Pokaż drugi element
+                document.getElementById('user-email').style.display = 'block';
+                document.getElementById('final-submit-button').style.display = 'block';
+            }
+        </script> 
     </body>
 </html>
