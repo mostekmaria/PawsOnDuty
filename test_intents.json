@@ -1,0 +1,1194 @@
+{
+  "intents": [
+    {
+      "tag": "greetings",
+      "patterns": [
+        "Cześć",
+        "Hejka",
+        "Dzień dobry",
+        "Witam",
+        "Dobry wieczór"
+      ],
+      "responses": [
+        "Cześć!",
+        "Hej!",
+        "Witam!"
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "Do zobaczenia",
+        "Cześć na razie",
+        "Miłego dnia"
+      ],
+      "responses": [
+        "Do zobaczenia wkrótce!",
+        "Cześć!",
+        "Miłego dnia!"
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": [
+        "Wielkie dzięki",
+        "Dziękuję serdecznie",
+        "Bardzo dziękuję"
+      ],
+      "responses": [
+        "Cała przyjemność po mojej stronie!",
+        "Nie ma sprawy!",
+        "Proszę bardzo!"
+      ]
+    },
+    {
+      "tag": "help_request",
+      "patterns": [
+        "Czy możesz mi pomóc?",
+        "Nie rozumiem tego",
+        "Co powinienem zrobić?"
+      ],
+      "responses": [
+        "Powiedz, w czym problem, a razem coś wymyślimy!",
+        "Postaram się pomóc najlepiej, jak potrafię!",
+        "Śmiało zapytaj, jestem tutaj, by pomóc!"
+      ]
+    },
+    {
+      "tag": "report_theft",
+      "patterns": [
+        "Chcę zgłosić przestępstwo kradzieży",
+        "Doszło do przestępstwa kradzieży",
+        "Zgłaszam kradzież",
+        "Ktoś ukradł moje rzeczy",
+        "Chciałbym zgłosić kradzież",
+        "Zdarzyła się kradzież i chcę to zgłosić",
+        "Jestem ofiarą przestępstwa kradzieży",
+        "Potrzebuję zgłosić kradzież",
+        "Ktoś ukradł coś ważnego",
+        "Kradzież – zgłaszam incydent",
+        "Zgłaszam kradzież",
+        "Proszę zgłosić kradzież",
+        "Zostałem okradziony, proszę pomóc",
+        "Zginęły mi rzeczy w wyniku kradzieży",
+        "Ktoś mnie okradł",
+        "Okradli mnie w pracy, chcę zgłosić kradzież",
+        "Kradzież – proszę o pomoc",
+        "Kradzież mojej torby – co zrobić?"
+      ],
+      "responses": [
+        "Co dokładnie zostało skradzione?",
+        "Proszę opisać, co się stało.",
+        "Czy możesz podać szczegóły dotyczące kradzieży?",
+        "Kiedy doszło do kradzieży?"
+      ]
+    },     
+    {
+      "tag": "report_theft_item_description",
+      "patterns": [
+        "Zegarek Tommy Hilfiger, srebrny",
+        "Plecak North Face, zielony z czarnymi detalami",
+        "Tablety Apple iPad Pro, 12.9 cala, srebrny",
+        "Kamera cyfrowa Sony, czarna",
+        "Smartphone Huawei P40 Pro, złoty",
+        "Pieniądze w dolarach amerykańskich, 500 USD",
+        "Torba na laptopa, czarna skórzana",
+        "Buty skórzane męskie, czarne, rozmiar 42",
+        "Słuchawki Sony WH-1000XM4, czarne",
+        "Kolczyki złote z perłą",
+        "Zegarek Seiko, klasyczny, stal nierdzewna",
+        "Torebka skórzana, granatowa, na ramię",
+        "Lustrzanka Canon EOS 5D Mark IV z obiektywem 24-105mm",
+        "Rower BMX, czerwony",
+        "Lornetka Swarovski, 8x42",
+        "Zegarek Casio G-Shock, czarny z metalowymi detalami",
+        "Telefon Apple iPhone 14, złoty",
+        "Rower szosowy marki Specialized, biały z czerwonymi akcentami",
+        "Torebka w kolorze beżowym z ozdobnym zapięciem"
+      ],
+      "responses": [
+        "Jaką wartość miały skradzione rzeczy?",
+        "Podaj szacunkową wartość utraconych przedmiotów.",
+        "Czy wiesz, ile były warte skradzione przedmioty?",
+        "Oszacuj przybliżoną wartość tych rzeczy."
+      ]
+    },    
+    {
+      "tag": "report_theft_item_value",
+      "patterns": [
+        "Utracone rzeczy mają wartość 1800 zł",
+        "Myślę, że to kosztowało 220 zł",
+        "Szacuję, że to warte 7000 jenów",
+        "Rzeczy, które zostały skradzione, miały wartość około 3000 zł",
+        "Nie jestem pewien, ale myślę, że to było warte 450 dolarów",
+        "Szacuję, że wartość przedmiotów to 1200 euro",
+        "Zgubiłem rzeczy warte około 400 zł",
+        "Myślę, że całość kosztowała 900 dolarów",
+        "Koszt skradzionych rzeczy wynosi około 5000 zł",
+        "Szacuję, że wartość to około 150 franków",
+        "Utracone przedmioty miały wartość 800 dolarów",
+        "Wartość tych rzeczy to około 250 zł",
+        "Rzeczy, które straciłem, kosztowały około 2000 dolarów",
+        "Wartość mienia to około 100 franków szwajcarskich",
+        "Koszt przedmiotów to około 3000 zł",
+        "Utracone mienie było warte około 1000 dolarów",
+        "Rzeczy te były warte około 150 zł",
+        "Szacuję, że utracone przedmioty kosztowały 500 zł"
+      ],
+      "responses": [
+        "Podaj miejsce, gdzie miała miejsce kradzież.",
+        "Gdzie doszło do tego zdarzenia?",
+        "W jakiej lokalizacji doszło do incydentu?",
+        "Proszę o podanie adresu lub miejsca kradzieży."
+      ]
+    },    
+    {
+      "tag": "drinking_in_public",
+      "patterns": [
+        "Zauważyłem grupę pijącą alkohol obok kina",
+        "Ktoś pił piwo na przystanku tramwajowym",
+        "Widziałem osoby pijące alkohol przy wejściu do muzeum",
+        "Grupa osób pijących piwo na ulicy przy rynku",
+        "Piją alkohol przy pomniku w centrum miasta",
+        "Ktoś spożywał alkohol na ławce w parku miejskim",
+        "Widziałem ludzi pijących wino na tarasie kawiarni",
+        "Ludzie piją piwo na boisku sportowym",
+        "Widziałem, jak ktoś pije piwo przy placu zabaw",
+        "Grupa osób z alkoholem na terenie stadionu",
+        "Osoby pijące alkohol na ścieżce rowerowej",
+        "Ktoś pił wódkę na przystanku tramwajowym",
+        "Grupa osób spożywających piwo na deptaku przy plaży",
+        "Widziałem, jak ktoś pije piwo na chodniku",
+        "Ludzie piją alkohol w pobliżu baru na rogu ulicy",
+        "Ktoś pił cydr przy wejściu do parku",
+        "Grupa osób z alkoholem w parku przy jeziorze",
+        "Piją alkohol na deptaku nad morzem",
+        "Zauważyłem kogoś pijącego wino na mostku w parku",
+        "Ktoś pije piwo w okolicach fontanny na rynku"
+      ],
+      "responses": [
+        "Czy osoby spożywające alkohol wyglądają na pełnoletnie?",
+        "Czy możesz opisać, co dokładnie widziałeś?",
+        "Czy widzisz, czy osoby pijące są pełnoletnie?"
+      ]
+    },    
+    {
+      "tag": "drinking_in_public_age_of_drinking_people",
+      "patterns": [
+        "Ci ludzie sprawiają wrażenie młodzieży",
+        "Wygląda na to, że nie wszyscy są pełnoletni",
+        "Niektórzy mogą być bardzo młodzi",
+        "Osoby te wydają się być w wieku około 18 lat",
+        "Nie można określić wieku wszystkich ludzi tutaj",
+        "Kilka osób wygląda na osoby niepełnoletnie",
+        "Wydają się być osobami w różnym wieku",
+        "Nie wiem ile mają lat, skąd mam wiedzieć?",
+        "Niektórzy wyglądają na dzieci, inni na młodych dorosłych",
+        "Nie wiem, czy wszyscy ci ludzie są w wieku powyżej 18 lat",
+        "Wyglądają na grupę młodzieży, ale trudno to ocenić",
+        "Kilka osób mogłoby być poniżej wieku dorosłego",
+        "Nie można jednoznacznie stwierdzić wieku tych ludzi"
+      ],
+      "responses": [
+        "Czy te osoby zachowują się agresywnie?",
+        "Czy są jakieś objawy agresji?",
+        "Czy osoby pijące są agresywne?",
+        "Jakie jest ich zachowanie?"
+      ]
+    },    
+    {
+      "tag": "drinking_in_public_are_drinking_people_aggresive",
+      "patterns": [
+        "Widać, że ci ludzie mogą zacząć zachowywać się w sposób agresywny, jeżeli sytuacja się zaostrzy",
+        "Ich postawa jest wrogo nastawiona i może prowadzić do niepotrzebnych konfrontacji",
+        "Mimo że na razie są spokojni, ich ton głosu i wyraz twarzy wskazują na możliwą agresję",
+        "Jestem pewny, że ci ludzie nie będą w stanie zachować spokoju, jeśli pojawi się jakakolwiek prowokacja",
+        "Zachowanie tych osób może szybko przekształcić się w agresję, zwłaszcza gdy zaczną pić",
+        "Ci ludzie wykazują wyraźne oznaki agresji, szczególnie, gdy rozmawiają ze sobą",
+        "Wyglądają na osoby, które łatwo wpadają w złość, szczególnie w towarzystwie alkoholu",
+        "Ci ludzie mają takie zachowanie, które może łatwo przekształcić się w fizyczną agresję",
+        "Obawiam się, że ci ludzie nie będą w stanie utrzymać kontroli nad swoimi emocjami, gdy tylko poczują się zagrożeni",
+        "Wygląda na to, że ci ludzie mają skłonność do wybuchów złości, szczególnie gdy są pod wpływem alkoholu",
+        "Ich postawa wobec innych wskazuje na to, że mogą szybko stracić panowanie nad sobą",
+        "Są bardzo rozdrażnieni i mogą reagować agresywnie na najmniejszy bodziec",
+        "Ci ludzie zachowują się w sposób, który może wywołać w przyszłości agresywną reakcję",
+        "Ich gesty i ton głosu pokazują, że mogą być w stanie dość szybko przejść do bardziej agresywnego zachowania",
+        "Obawiam się, że ich zachowanie może eskalować, jeśli napotkają jakikolwiek opór",
+        "To osoby, które wydają się gotowe do agresywnych działań, gdy tylko poczują się zagrożone",
+        "Ci ludzie mogą być niebezpieczni, jeżeli ktoś zacznie z nimi wchodzić w konflikt",
+        "Ich zachowanie jest nieprzewidywalne, a alkohol może tylko zaostrzyć ich agresję",
+        "Wobec mnie nic nie zrobili, ale obawiam się, że jakbym podeszła to mogłoby być niefajnie",
+        "Jeżeli będą kontynuować takie zachowanie, mogą łatwo wywołać awanturę",
+        "Wydaje się, że ci ludzie mogą stracić panowanie nad sobą i zacząć wywoływać zamieszanie",
+        "Ci ludzie są tak rozdrażnieni, że może dojść do wybuchu agresji w każdej chwili"
+      ],
+      "responses": [
+        "Czy w pobliżu znajdują się osoby niepełnoletnie?",
+        "Czy w pobliżu są dzieci?",
+        "Czy w okolicy są nieletni?",
+        "Czy w pobliżu znajdują się osoby poniżej 18 roku życia?"
+      ]
+    },    
+    {
+      "tag": "drinking_in_public_are_underaged_people_nearby",
+      "patterns": [
+        "Widziałem grupę młodszych ludzi w pobliżu, ale nie jestem pewien ich wieku",
+        "W tej okolicy bawią się dzieci, ale nie wiem, czy są pełnoletni",
+        "Zauważyłem, że w pobliżu przebywa młodzież, ale nie jestem pewien, czy są pełnoletni",
+        "W okolicy znajdują się osoby w młodym wieku, ale nie mogę stwierdzić, czy są nieletnie",
+        "W pobliżu widziałem grupę nastolatków, którzy bawią się w parku, ale nie wiem, czy są pełnoletni",
+        "Nie widziałem dzieci, ale zauważyłem młodsze osoby w tej okolicy",
+        "Zauważyłem w pobliżu grupę ludzi, którzy mogą być niepełnoletni",
+        "W tej okolicy zauważyłem osoby, które wyglądają na młodsze niż 18 lat",
+        "W pobliżu widziałem dzieci, ale nie mam pewności, czy są pełnoletnie",
+        "Zauważyłem grupę młodych ludzi, ale nie wiem, czy są niepełnoletni",
+        "Na pewno to ludzie z tej grupy są niepełnoletni",
+        "W okolicy przebywają osoby w młodym wieku, ale nie znam ich dokładnego wieku",
+        "Widziałem młodszych ludzi, ale nie wiem, czy są pełnoletni",
+        "W tej okolicy zauważyłem grupę młodzieży, ale nie jestem pewien ich wieku",
+        "Nie widzę dzieci, ale zauważyłem osoby w wieku poniżej 18 lat",
+        "W tej okolicy bawią się młodsze osoby, ale nie wiem, czy są pełnoletnie",
+        "Zauważyłem grupę dzieci w pobliżu, ale nie mogę stwierdzić, czy są pełnoletnie"
+      ],
+      "responses": [
+        "Podaj mi adres tego zdarzenia",
+        "Gdzie to się dzieje?",
+        "Jaki jest adres tego miejsca?",
+        "Proszę podaj lokalizację"
+      ]
+    },    
+    {
+      "tag": "assault",
+      "patterns": [
+        "Zaatakowano mnie brutalnie na ulicy, byłem sam",
+        "Ktoś rzucił się na mojego kolegę w parku miejskim, a potem uciekł",
+        "Zauważyłem, że dwóch mężczyzn zaatakowało kobietę na przystanku autobusowym",
+        "Zaatakowano mężczyznę w centrum handlowym, próbował się bronić",
+        "Widziałem, jak ktoś zaatakował młodą dziewczynę w tramwaju, krzyczała o pomoc",
+        "Napadnięto moją koleżankę w pobliżu sklepu spożywczego, uciekli w stronę parku",
+        "Zaatakowano mnie podczas spaceru po parku, sprawca szybko uciekł",
+        "Zostałem napadnięty przez grupę osób na skwerze, nie wiem kto to był",
+        "Ktoś brutalnie napadł na mojego kolegę w okolicach dworca, szybko uciekł",
+        "Byłem świadkiem napaści na ulicy, gdy dwóch młodych ludzi zaatakowało starszą kobietę",
+        "Napadnięto mnie w ciemnej uliczce, nie mogłem się bronić",
+        "Ktoś na mnie prawie napadł z nożem w ręku",
+        "Widziałem, jak napadnięto grupę młodych ludzi w parku, byli bezradni",
+        "Zaatakowano mojego przyjaciela na stacji metra, ledwo udało mu się uciec",
+        "Napadnięto kobietę w kawiarni, cała sytuacja była bardzo szokująca",
+        "Ktoś zaatakował mnie w ścisłym centrum, nie zauważyłem sprawcy do momentu, gdy było za późno",
+        "Widzę, że kogoś zaatakowano na ulicy, sprawca biegnie w stronę parku"
+      ],
+      "responses": [
+        "Czy sprawca nadal znajduje się na miejscu?",
+        "Czy napastnik jest w pobliżu?",
+        "Czy napastnik wciąż tu jest?",
+        "Czy sprawca był znajomym ofiary?",
+        "Czy poszkodowany potrzebuje pomocy medycznej?"
+      ]
+    },    
+    {
+      "tag": "assault_perpetrator_present",
+      "patterns": [
+        "Z tego co wiem, ten, który mnie zaatakował, może być jeszcze blisko",
+        "Czuję, że sprawca nie oddalił się, wciąż czuję obecność napastnika",
+        "Wydaje mi się, że napastnik jeszcze tu jest, ale nie mam pewności",
+        "Prawdopodobnie osoba, która mnie napadła, nie opuściła miejsca zdarzenia",
+        "Mam wrażenie, że napastnik się nie oddalił, ale nie widzę go teraz",
+        "Osoba, która zaatakowała mnie, jest wciąż w tej okolicy, ale nie jestem tego pewna",
+        "Nadal czuję, że ktoś może tu być, ale nie widzę wyraźnie tej osoby",
+        "Jest gdzieś tu w pobliżu, nie mógł uciec daleko, ale boję się to sprawdzać",
+        "Osoba, która mnie zaatakowała, może być tu w pobliżu, ale nie jestem pewna",
+        "Zauważyłam kogoś w pobliżu, ale nie jestem pewna, czy to ta sama osoba",
+        "Może być tu jeszcze ktoś, ale nie jestem tego pewna, czuję się niepewnie",
+        "Ktoś się kręci w pobliżu, ale nie mam pewności, czy to sprawca",
+        "Czuję, że ktoś zbliża się do miejsca, gdzie byłam napadnięta, ale nie wiem, czy to napastnik",
+        "Być może napastnik oddalił się, ale wydaje mi się, że ktoś nadal jest tu blisko",
+        "Wydaje się, że sprawca nie oddalił się, ale nie jestem pewna, gdzie teraz się znajduje"
+      ],
+      "responses": [
+        "Czy napastnik jest uzbrojony? Jeśli tak, to w co?",
+        "Czy sprawca ma przy sobie broń? Jeśli tak, to jaką?",
+        "Czy widzisz jakieś narzędzie w rękach napastnika? Jeśli tak, to jakie?",
+        "Czy napastnik posiada jakieś niebezpieczne narzędzie? Jeśli tak, to jakie?",
+        "Czy osoba atakująca ma broń? Jeśli tak, to jaką?"
+      ]
+    },    
+    {
+      "tag": "assault_perpetrator_present_has_gun",
+      "patterns": [
+        "Wydaje mi się, że trzyma coś, co może być bronią, ale nie jestem pewna",
+        "Nie widzę wyraźnie, co to jest, ale coś ma w ręku, może to być broń",
+        "Trzyma w ręce przedmiot, który przypomina pistolet, ale nie jestem tego pewna",
+        "Nie widzę, co to jest, ale wygląda, jakby miał coś, co może być bronią",
+        "Wygląda na to, że ma przy sobie coś, co przypomina broń, ale nie widzę tego dokładnie",
+        "Może to być broń, ale trzyma coś w ręku, co nie wygląda na pistolet",
+        "Nie widzę, co ma w ręku, ale wydaje mi się, że trzyma coś, co może być niebezpieczne",
+        "Ma coś w dłoni, ale nie jestem pewna, czy to broń, czy narzędzie",
+        "Nie wiem, co to jest, ale coś trzyma w ręku, co wygląda podejrzanie",
+        "Trzyma coś, ale nie widzę tego dokładnie, może to być nóż, a może broń",
+        "Nie jestem pewna, ale coś trzyma w ręku, co wygląda jak broń palna",
+        "Może to być nóż, ale nie jestem tego pewna, nie widzę dokładnie",
+        "Coś ma, ale nie jestem pewna co",
+        "Wydaje mi się, że trzyma coś ostrego, ale nie wiem, czy to nóż, czy broń",
+        "Trzyma coś, co wygląda na niebezpieczne narzędzie, ale nie wiem, co to dokładnie",
+        "Nie wiem, co to jest, ale trzyma coś, co może być bronią lub nożem",
+        "Czuję, że może mieć broń, ale nie widzę tego wyraźnie",
+        "Wygląda, jakby miał coś w ręku, ale nie jestem pewna, co to jest",
+        "Nie widzę, co ma w dłoni, ale coś przypomina broń",
+        "Nie wiem, co to jest, ale wygląda na to, że trzyma coś niebezpiecznego",
+        "Trzyma coś w ręku, ale nie widzę, co to jest, może to broń, a może narzędzie"
+      ],
+      "responses": [
+        "Czy ktoś został ranny?",
+        "Czy ktoś potrzebuje pomocy medycznej?",
+        "Czy ktoś jest poszkodowany?",
+        "Czy ktoś odniósł obrażenia?",
+        "Czy są ranni?"
+      ]
+    },    
+    {
+      "tag": "assault_perpetrator_not_present",
+      "patterns": [
+        "Wydaje mi się, że sprawca już odszedł z tego miejsca, ale nie widzę go teraz",
+        "Nie jestem pewny, ale chyba napastnik już opuścił teren zdarzenia",
+        "Wydaje się, że zniknął, ale nie jestem pewien, gdzie poszedł",
+        "Chyba napastnik już odszedł, ale nie mam pewności, czy to prawda",
+        "Nie wiem dokładnie, gdzie poszedł, ale napastnik chyba zniknął",
+        "Nie widzę napastnika, ale coś mi mówi, że już go tu nie ma",
+        "Napastnik zniknął, chociaż nie wiem, czy jeszcze gdzieś jest",
+        "Gdzieś się oddalił, ale boję się sprawdzać jak bardzo",
+        "Nie wiem, gdzie on poszedł, ale napastnik już nie jest widoczny",
+        "Napastnik najprawdopodobniej oddalił się z tego miejsca, ale nie mam pewności",
+        "Napastnik mógł już opuścić miejsce, ale nie widzę go nigdzie",
+        "Nie widzę go już w okolicy, ale nie wiem, gdzie się podział",
+        "Nie widzę, gdzie poszedł napastnik, ale chyba już go tu nie ma",
+        "Trudno powiedzieć, ale wydaje mi się, że sprawca już się oddalił",
+        "Nie widzę żadnych śladów napastnika, ale może on jeszcze gdzieś tu być",
+        "Sprawca mógł już zniknąć, ale nie jestem pewny, gdzie poszedł"
+      ],
+      "responses": [
+        "Czy sprawca był uzbrojony? Jeśli tak, to w co?",
+        "Czy napastnik miał przy sobie broń?",
+        "Czy widziałeś jakąś broń u napastnika?",
+        "Czy sprawca posiadał jakieś narzędzie?",
+        "Czy napastnik miał broń?"
+      ]
+    },    
+    {
+      "tag": "assault_perpetrator_not_present_has_gun",
+      "patterns": [
+        "Tak, on trzymał coś w ręku, co wyglądało jak broń palna, ale nie jestem pewny",
+        "Napastnik miał broń, ale nie zauważyłem, jaką dokładnie",
+        "Napastnik mógł mieć broń, ale nie widziałem jej wyraźnie",
+        "Miał coś w ręku, ale nie jestem pewien, czy to była broń palna",
+        "Napastnik trzymał przedmiot przypominający nóż, ale nie wiem, czy to był nóż",
+        "Nie mogę powiedzieć, czy napastnik miał broń, bo nie widziałem jej dokładnie",
+        "Napastnik miał coś, co mogło być bronią, ale nie mogę tego potwierdzić",
+        "Sprawca miał przedmiot przypominający broń, ale nie jestem pewny, czy to była broń",
+        "Tak, sprawca miał broń, ale nie mogłem dostrzec, co to za rodzaj",
+        "Napastnik miał coś, co wyglądało na nóż, ale nie wiem, czy to był nóż",
+        "Wydaje mi się, że napastnik miał broń, ale nie jestem pewny",
+        "On uzył kija baseballowego jako broni",
+        "Sprawca trzymał coś, co wyglądało na maczetę, ale nie jestem pewny",
+        "Nie wiem, czy napastnik miał broń, bo nie widziałem jej wyraźnie",
+        "Tak, miał coś w ręku, co wyglądało na pistolet, ale nie jestem pewny",
+        "Miał w ręku coś, co wyglądało na broń, ale mogło to być coś innego",
+        "Napastnik miał coś w ręku, co wyglądało na broń, ale nie widziałem dokładnie, co to było",
+        "Napastnik miał coś w ręku, ale nie mogłem rozpoznać, co to było",
+        "Tak, napastnik trzymał coś w ręku, co wyglądało na broń, ale nie wiem, co to było"
+      ],
+      "responses": [
+        "Czy ktoś został ranny?",
+        "Czy ktoś potrzebuje pomocy medycznej?",
+        "Czy ktoś odniósł obrażenia?",
+        "Czy są poszkodowani?",
+        "Czy są ranni?"
+      ]
+    },
+    {
+      "tag": "assault_is_someone_hurt",
+      "patterns": [
+        "Osoba została poważnie ranna i nie może się ruszać",
+        "Wydaje mi się, że napadnięta osoba straciła dużo krwi",
+        "Poszkodowany jest w bardzo złym stanie, potrzebuje pilnej pomocy",
+        "Osoba, która została zaatakowana, nie jest w stanie poruszać się samodzielnie",
+        "Napadnięta osoba wymaga transportu do szpitala",
+        "Napadnięta osoba nie może się poruszać z powodu poważnych obrażeń",
+        "Poszkodowany potrzebuje natychmiastowego leczenia, ma widoczne obrażenia",
+        "Rany są głębokie i wymaga to interwencji specjalistów",
+        "Widać, że ta osoba jest bardzo poważnie kontuzjowana",
+        "Poszkodowany ma złamaną nogę, nie jest w stanie się poruszać",
+        "Napadnięta osoba cierpi na mocne krwawienie",
+        "Mam nabitego siniaka, ale nic mi nie będzie",
+        "Wydaje się, że ta osoba straciła dużo krwi i wymaga pomocy medycznej",
+        "Ta osoba jest w stanie krytycznym, pilnie potrzebuje pomocy",
+        "Napadnięta osoba nie oddycha prawidłowo, potrzebuje pomocy",
+        "Osoba potrzebuje transportu do szpitala, jej stan jest bardzo poważny",
+        "Ktoś doznał poważnych obrażeń i wymaga natychmiastowej pomocy",
+        "Osoba została raniona i jest w stanie krytycznym",
+        "Rany tej osoby wymagają natychmiastowej pomocy medycznej",
+        "Poszkodowany jest w szoku, wymaga opieki specjalistycznej"
+      ],
+      "responses": [
+        "Czy coś zostało skradzione?",
+        "Czy napastnik coś zabrał?",
+        "Czy coś zginęło?",
+        "Czy sprawca coś ukradł?",
+        "Czy coś zostało zabrane?"
+      ]
+    },    
+    {
+      "tag": "assault_nothing_stollen",
+      "patterns": [
+        "Podczas incydentu nikt nie stracił żadnych przedmiotów",
+        "W wyniku zdarzenia nie doszło do żadnej utraty rzeczy",
+        "Po napadzie wszystko pozostało nietknięte, żadnych braków nie stwierdzono",
+        "Żadne rzeczy nie zostały zabrane przez sprawcę w czasie tego incydentu",
+        "Nie ma żadnych wskazówek na to, że coś zginęło w wyniku napadu",
+        "Pomimo zajścia nie brakowało żadnych rzeczy",
+        "Po tym zdarzeniu nie zgłoszono żadnych braków materialnych",
+        "Nie odkryto żadnych strat po tym, jak zdarzenie miało miejsce",
+        "Nie było żadnej straty rzeczy w trakcie tego incydentu",
+        "W wyniku napadu nie stwierdzono żadnej utraty mienia",
+        "Po zdarzeniu wszystko zostało na swoim miejscu, nie zginęły żadne rzeczy",
+        "Nie stwierdzono, aby jakiekolwiek przedmioty zginęły w czasie tego zajścia",
+        "Pomimo napadu nie było żadnych znikających rzeczy",
+        "Prawie zostałam okradziona, ale udało mi się obronić mój portfel",
+        "Nie zauważyłem żadnych braków po tym incydencie",
+        "Po zajściu nic nie zniknęło z mojego miejsca",
+        "Żadne przedmioty nie zostały skradzione po tym incydencie"
+      ],
+      "responses": [
+        "Podaj mi adres tego zdarzenia",
+        "Gdzie miało miejsce to zdarzenie?",
+        "Proszę podaj lokalizację zdarzenia",
+        "Jaki jest adres miejsca zdarzenia?",
+        "Gdzie dokładnie to się wydarzyło?"
+      ]
+    },    
+    {
+      "tag": "selling_alcohol_during_prohibition",
+      "patterns": [
+        "Pomimo zakazu sprzedaży alkoholu, sklep zaoferował napój alkoholowy po godzinach",
+        "Sklep sprzedawał piwo mimo, że obowiązywał zakaz sprzedaży napojów alkoholowych",
+        "W sklepie mimo prohibicji sprzedawano napój alkoholowy w godzinach wieczornych",
+        "Mimo wprowadzonych przepisów zakazujących sprzedaży, alkohol wciąż był dostępny w sklepie",
+        "Sprzedaż napojów alkoholowych odbyła się mimo godzinowego zakazu sprzedaży",
+        "Sklep naruszył przepisy, sprzedając alkohol po godzinach, kiedy obowiązywał zakaz",
+        "Piwo było sprzedawane wbrew wprowadzonym ograniczeniom godzinowym sprzedaży alkoholu",
+        "Pomimo obowiązującego zakazu, sklep sprzedawał alkohol w godzinach prohibicji",
+        "Mimo godzinowego zakazu sprzedaży, sklep wciąż oferował alkohol do sprzedaży",
+        "Sprzedaż napoju alkoholowego miała miejsce po godzinach zakazu sprzedaży alkoholu",
+        "Wbrew zakazowi, alkohol był sprzedawany po godzinach prohibicji",
+        "Piwo było dostępne w sklepie, mimo obowiązujących przepisów zakazujących sprzedaży",
+        "Alkohol sprzedawano mimo godzin, kiedy był wprowadzony zakaz sprzedaży napojów alkoholowych",
+        "Sklep naruszył godzinowy zakaz sprzedaży napojów alkoholowych",
+        "W moim sklepie osiedlowym pan sprzedawca sprzedaje alkohol mimo, że nie powinien",
+        "W godzinach prohibicji napój alkoholowy był sprzedawany w sklepie, mimo zakazu",
+        "Sprzedaż alkoholu miała miejsce mimo, że był to czas, kiedy obowiązywał zakaz",
+        "Alkohol był dostępny w sklepie mimo obowiązujących godzin zakazu",
+        "Sprzedawca zaoferował alkohol po godzinach zakazu sprzedaży, co stanowiło złamanie przepisów",
+        "Mimo godzinowego zakazu, alkohol wciąż był sprzedawany w sklepie spożywczym",
+        "W sklepie mimo zakazu sprzedaży, alkohol został sprzedany po godzinach"
+      ],
+      "responses": [
+        "Czy alkohol został sprzedany osobie pełnoletniej?",
+        "Czy osoba kupująca była pełnoletnia?",
+        "Czy kupujący alkohol był pełnoletni?",
+        "Czy sprzedaż odbyła się z pełnoletnią osobą?",
+        "Czy osoba, która kupiła alkohol, miała ukończone 18 lat?"
+      ]
+    },    
+    {
+      "tag": "selling_alcohol_during_prohibition_age_of_buyer",
+      "patterns": [
+        "Czy ta osoba mogła być pełnoletnia, skoro nie wyglądała na dorosłego?",
+        "Nie jestem pewien, czy sprzedano alkohol osobie, która miała 18 lat",
+        "Czy kupujący miał dowód, który potwierdzałby jego wiek?",
+        "Czy osoba, której sprzedano alkohol, była w wieku poniżej 18 lat?",
+        "Sprzedano alkohol osobie, która wydawała się młodsza niż 18 lat",
+        "Chłopak, który kupił tą wódkę miał na oko więcej niż 18 lat",
+        "Wydaje mi się, że osoba, która kupiła alkohol, mogła nie mieć 18 lat",
+        "Kupujący nie wyglądał na osobę dorosłą, ale nie jestem pewny jego wieku",
+        "Osoba ta wyglądała na młodszą, ale nie wiem, czy miała mniej niż 18 lat",
+        "Czy ktoś sprawdzał wiek osoby kupującej alkohol przed transakcją?",
+        "Nie jestem pewien, czy ta osoba rzeczywiście miała pełnoletność"
+      ],
+      "responses": [
+        "Czy zachodzi podejrzenie, że doszło do sprzedaży w wyniku zastraszania?",
+        "Czy istnieje możliwość, że sprzedaż alkoholu była wynikiem zastraszania?",
+        "Czy kupujący mógł zastraszać sprzedawcę, aby uzyskać alkohol?",
+        "Czy sprzedaż mogła mieć miejsce na skutek zastraszania sprzedawcy?",
+        "Czy istnieje podejrzenie, że sprzedawca został zastraszony?",
+        "Czy sprzedaż alkoholu mogła być wynikiem presji ze strony kupującego?",
+        "Czy są wskazówki sugerujące, że sprzedawca mógł być zmuszony do sprzedaży alkoholu?",
+        "Czy można podejrzewać, że zastraszenie miało wpływ na decyzję sprzedawcy?",
+        "Czy kupujący mógł próbować wymusić sprzedaż alkoholu?",
+        "Czy istnieją oznaki, że sprzedawca mógł być zastraszony lub wymuszony do sprzedaży?"
+      ]
+    },    
+    {
+      "tag": "selling_alcohol_during_prohibition_bullying",
+      "patterns": [
+        "Kupujący próbował używać gróźb, żeby wymusić sprzedaż alkoholu",
+        "Osoba ta była agresywna, a jej zachowanie wywołało u sprzedawcy strach",
+        "Nie jestem pewien, czy sprzedawca poczuł się zagrożony przez kupującego",
+        "Kupujący krzyczał, gdy sprzedawca próbował odmówić sprzedaży",
+        "Sprzedawca wyglądał na zaniepokojonego, gdy kupujący groził",
+        "Kupujący był złośliwy i próbował wymusić alkohol groźbami",
+        "Ta osoba była wyraźnie agresywna wobec pracownika sklepu",
+        "Nie trzeba było tego pana zastrzać aby to sprzedał",
+        "Nie wiem, czy doszło do zastraszania, ale atmosfera była napięta",
+        "Sprzedawca był ewidentnie pod dużym stresem przez zachowanie kupującego",
+        "Kupujący nie dawał sprzedawcy spokoju, cały czas grożąc mu",
+        "Sprzedawca wyglądał na osobę, która obawia się o swoje bezpieczeństwo",
+        "Kupujący wykrzykiwał groźby pod adresem kasjera, wywołując strach",
+        "Kupujący był wrogo nastawiony do sprzedawcy, co mogło wywołać zagrożenie",
+        "Kupujący wykazywał oznaki agresji, a sprzedawca starał się nie zwrócić uwagi",
+        "Osoba kupująca alkohol wciąż wywierała presję na sprzedawcę, mimo jego sprzeciwu"
+      ],
+      "responses": [
+        "Podaj adres tego zdarzenia.",
+        "Proszę podać adres, gdzie miało miejsce to zdarzenie.",
+        "Jaki jest adres sklepu, w którym miało miejsce to zdarzenie?",
+        "Gdzie doszło do tego zdarzenia? Podaj adres.",
+        "Podaj dokładny adres miejsca, w którym doszło do sprzedaży alkoholu.",
+        "Proszę o podanie adresu sklepu, gdzie doszło do tego incydentu.",
+        "Jaki jest dokładny adres miejsca, gdzie miało miejsce to zdarzenie?",
+        "Proszę o informację na temat lokalizacji sklepu, w którym doszło do incydentu."
+      ]
+    },    
+    {
+      "tag": "domestic_violence",
+      "patterns": [
+        "W mieszkaniu sąsiadów regularnie dochodzi do przemocy domowej, słyszę krzyki",
+        "Mój przyjaciel doświadcza przemocy domowej w swoim związku",
+        "Sąsiad stosuje przemoc domową wobec swojej partnerki, to słychać każdego dnia",
+        "Zauważyłem, że w sąsiedztwie występują przypadki przemocy domowej",
+        "W bloku słyszę codziennie przemoc domową, dzieci płaczą",
+        "Mój znajomy boi się swojego ojca, który stosuje wobec niego przemoc domową",
+        "W moim otoczeniu słyszę o wielu przypadkach przemocy domowej",
+        "Sąsiadka przyznała, że jej mąż regularnie stosuje przemoc domową",
+        "Słyszałem, jak ojciec mojego kolegi bił go w domu, to przemoc domowa",
+        "Mój brat jest ofiarą przemocy domowej, boję się o niego",
+        "Codziennie słyszę krzyki i uderzenia w mieszkaniu obok, przemoc domowa jest oczywista",
+        "Przemoc domowa w mojej kamienicy dotyka wielu osób, słychać to każdego dnia",
+        "Kiedy sąsiad wraca pijany, regularnie dochodzi do przemocy domowej w ich mieszkaniu"
+      ],
+      "responses": [
+        "Czy agresor jest pod wpływem alkoholu lub innych środków odurzających?",
+        "Czy wiesz, czy osoba stosująca przemoc jest pod wpływem alkoholu lub innych substancji?",
+        "Czy osoba, która stosuje przemoc, jest pod wpływem alkoholu lub narkotyków?",
+        "Czy sprawca przemocy jest w stanie nietrzeźwym lub pod wpływem innych środków?",
+        "Czy agresor spożywał alkohol lub używał innych środków odurzających?",
+        "Czy wiesz, czy sprawca przemocy jest pod wpływem alkoholu lub narkotyków?",
+        "Czy osoba stosująca przemoc jest pod wpływem używek?",
+        "Czy sprawca był pijany lub pod wpływem innych substancji?",
+        "Czy w trakcie przemocy agresor był pod wpływem alkoholu lub narkotyków?",
+        "Czy sprawca przemocy wyglądał na nietrzeźwego lub pod wpływem substancji odurzających?"
+      ]
+    },    
+    {
+      "tag": "domestic_violence_alcohol_or_drugs",
+      "patterns": [
+        "Mężczyzna, który był sprawcą, wyglądał na pijaka",
+        "Agresor zachowywał się w sposób, który sugerował, że może być pod wpływem alkoholu",
+        "Nie wiem, czy on pił alkohol, ale jego reakcje były jakby był naćpany",
+        "Zachowanie tej osoby przypominało osobę, która zażywała narkotyki",
+        "Sprawca wydaje się nie panować nad sobą, możliwe, że jest pod wpływem alkoholu",
+        "Ten człowiek sprawia wrażenie, jakby był po narkotykach, nie był w stanie utrzymać równowagi",
+        "Wydaje się, że sprawca miał problemy z koncentracją, mógł być pod wpływem substancji psychoaktywnych",
+        "Sprawca wyglądał na oszołomionego, być może jest pod wpływem alkoholu lub narkotyków",
+        "Nie jestem pewny, ale widzę, że ten człowiek ma problemy z chodzeniem, może to być efekt alkoholu",
+        "Zachowanie tego mężczyzny wygląda na osobę, która jest naćpana, coś brał",
+        "Sprawca zachowywał się chaotycznie, nie wiem, czy to może być skutek alkoholu czy narkotyków",
+        "Ten człowiek wyraźnie sprawia wrażenie osoby pod wpływem jakiegoś środka, nie wygląda na trzeźwego",
+        "Wydaje się, że ten agresor miał trudności w komunikowaniu się, co może sugerować, że był pijany",
+        "Agresor wygląda na osobę, która nie jest w stanie w pełni kontrolować swojego ciała, możliwe, że jest pod wpływem substancji",
+        "Ten człowiek nie był w stanie utrzymać kontaktu wzrokowego, może to być związane z alkoholem",
+        "Sprawca był bardzo pobudzony, jego zachowanie wyglądało na skutek zażycia narkotyków",
+        "Wygląda na to, że ten człowiek może być pod wpływem alkoholu lub narkotyków, jego reakcje były nienaturalne",
+        "Zachowanie tego mężczyzny jest dziwne, wydaje się być w stanie nietrzeźwym",
+        "Wydaje się, że sprawca był w stanie odurzenia, nie wiem, czy to alkohol czy narkotyki, ale nie zachowywał się normalnie",
+        "Sprawca miał trudności w mówieniu, sprawia wrażenie osoby pijanej lub naćpanej",
+        "Nie wiem, czy sprawca był po narkotykach, ale jego zachowanie wskazuje na to, że był pod wpływem jakiegoś środka",
+        "Agresor wygląda na niezdolnego do utrzymania równowagi, może to być skutek alkoholu",
+        "Sprawca jest bardzo rozkojarzony, jego dziwne zachowanie wskazuje na to, że może być pod wpływem narkotyków",
+        "Nie jestem pewny, ale mam wrażenie, że ten człowiek był pod wpływem narkotyków, jego reakcje są nietypowe",
+        "Mężczyzna wyraźnie miał problemy z koordynacją, może to być efekt zażycia alkoholu"
+      ],
+      "responses": [
+        "Czy w zdarzenie zaangażowane są dzieci?",
+        "Czy wiesz, czy w domu są obecne dzieci?",
+        "Czy w sytuacji biorą udział dzieci?",
+        "Czy są dzieci, które mogą być zagrożone?",
+        "Czy dzieci są świadkami tej przemocy?",
+        "Czy w tej sytuacji obecne są dzieci?",
+        "Czy w miejscu zdarzenia są dzieci?",
+        "Czy dzieci są w pobliżu podczas tego zdarzenia?",
+        "Czy w domu są obecne dzieci, które mogą być narażone?",
+        "Czy w trakcie przemocy w domu są obecne dzieci?"
+      ]
+    },    
+    {
+      "tag": "domestic_violence_kids",
+      "patterns": [
+        "Dzieci w tym domu mogą być świadkami przemocy, ale nie wiem, jak bardzo są zaangażowane",
+        "Obawiam się, że dzieci mogą widzieć, jak dochodzi do przemocy, ale nie jestem tego pewny",
+        "Nie jestem pewny, ale wydaje mi się, że dzieci słyszały, co się działo w mieszkaniu",
+        "Dzieci mogą być w niebezpieczeństwie, ale nie wiem, czy były świadkami całej sytuacji",
+        "Wydaje się, że dzieci były świadkami tej kłótni, ale nie wiem, czy rozumiały, co się działo",
+        "Dzieci, które są w pobliżu, mogą widzieć przemoc, ale nie wiem, czy miały kontakt z agresorem",
+        "Słyszałem dziecięce głosy, ale nie jestem pewien, czy to były świadkowie tej sytuacji",
+        "Z tego, co wiem, dzieci mogły słyszeć krzyki, ale nie wiem, czy były bezpośrednio obecne",
+        "Wydaje mi się, że dzieci mogły być świadkami przemocy, ale nie wiem, jak blisko były zdarzenia",
+        "Dzieci mogą być zagrożone, ale nie wiem, czy były świadkami fizycznej przemocy"
+      ],
+      "responses": [
+        "Jak często to się zdarza?",
+        "Jak często występują takie incydenty?",
+        "Czy to ma miejsce regularnie?",
+        "Jakie jest częstotliwość takich sytuacji?",
+        "Czy są jakieś wzorce czasowe dla tych incydentów?",
+        "Czy można określić, jak często dochodzi do takich incydentów?",
+        "Czy są jakieś określone okresy czasu, kiedy te incydenty mają miejsce?",
+        "Jak często są zgłaszane przypadki przemocy w tej rodzinie?",
+        "Czy zdarzenia te mają miejsce o określonych porach roku lub miesiącu?",
+        "Czy są znane okresy, kiedy przemoc nasila się w tej rodzinie?"
+      ]
+    },    
+    {
+      "tag": "domestic_violence_frequency",
+      "patterns": [
+        "Ta rodzina ma regularne awantury każdego dnia",
+        "To dzieje się codziennie, krzyki i hałasy to już norma",
+        "Każdego dnia mają awantury, są to regularne incydenty przemocy",
+        "W tej rodzinie przemoc zdarza się prawie zawsze, każdego dnia",
+        "Zdarza się to codziennie, a przemoc powtarza się jak w rytuale",
+        "Codziennie są jakieś konflikty i przemoc, to się nie zmienia",
+        "W tej rodzinie awantury to codzienny element życia",
+        "Codziennie dochodzi do jakiejś formy przemocy w tym domu",
+        "Każdego dnia w tej rodzinie wybuchają kłótnie, a potem dochodzi do przemocy",
+        "To nie jest rzadkie, w tej rodzinie przemoc występuje codziennie",
+        "Awantury są częścią codziennego dnia w tej rodzinie",
+        "W tej rodzinie każdy dzień to nowa sytuacja przemocy",
+        "Nie kontroluję tego, ale zdarza się to coraz częściej",
+        "Codziennie dochodzi do jakiejś przemocy, to się powtarza każdego dnia",
+        "Przemoc jest częścią codziennego życia w tej rodzinie",
+        "Codziennie są nowe incydenty, awantury i przemoc",
+        "W tej rodzinie awantury są stałym elementem każdego dnia",
+        "To się powtarza każdego dnia, nie ma dnia bez przemocy",
+        "W tej rodzinie przemoc to nie wyjątek, to codzienność",
+        "Takie incydenty zdarzają się niemal każdego dnia, codziennie powtarzają się kłótnie",
+        "W tej rodzinie każdego dnia występują jakieś incydenty przemocy"
+      ],
+      "responses": [
+        "Podaj adres tego zdarzenia.",
+        "Gdzie dokładnie miało miejsce to zdarzenie?",
+        "Gdzie dokładnie dzieje się to regularnie?",
+        "Proszę o podanie adresu lub lokalizacji miejsca zdarzeń.",
+        "Jaki jest dokładny adres, gdzie regularnie dochodzi do przemocy?",
+        "Czy możesz podać adres, gdzie przemoc zdarza się często?",
+        "Proszę o dokładną lokalizację miejsca, gdzie przemoc ma miejsce.",
+        "Podaj adres, gdzie incydenty przemocy występują tak często.",
+        "Gdzie dokładnie dochodzi do tych regularnych incydentów?",
+        "Jakie jest dokładne miejsce, gdzie te przemocowe sytuacje mają miejsce?"
+      ]
+    },      
+    {
+      "tag": "Fight",
+      "patterns": [
+        "Zgłoszenie dotyczy bójki, która trwa od kilku minut w pobliżu dworca",
+        "Na skrzyżowaniu ulicy X i Y doszło do fizycznej konfrontacji dwóch grup ludzi",
+        "W parku obok szkoły widzę, jak dwie osoby walczą, słychać krzyki i odgłosy uderzeń",
+        "Obserwuję bójkę, która zaczęła się w okolicy klubu, kilka osób bierze w niej udział",
+        "Jestem świadkiem, jak grupa mężczyzn zaczyna się bić na rogu ulicy",
+        "Na chodniku przed sklepem doszło do rękoczynów, wygląda to na poważną bójkę",
+        "Widzę awanturę, która przerodziła się w bójkę, w której biorą udział mężczyźni i kobiety",
+        "W pobliżu placu zabaw wybuchła bójka pomiędzy młodzieżą",
+        "Przy wjeździe na parking kilka osób walczy, widać uderzenia i słyszę krzyki",
+        "Na skrzyżowaniu kilku mężczyzn bije się przy wysokim budynku",
+        "Zauważyłem, że kilka osób bije się w pobliżu centrum handlowego, widać, że sytuacja jest napięta",
+        "W parku, gdzie odbywały się wcześniej zajęcia sportowe, grupa osób zaczęła się bić",
+        "W okolicy banku doszło do zamieszania, kilka osób walczy na chodniku",
+        "Na chodniku, obok stacji metra, trwa bójka, widać grupę osób walczących ze sobą",
+        "W centrum miasta odbywa się bójka, słychać odgłosy uderzeń i krzyki"
+      ],
+      "responses": [
+        "Czy ktoś z uczestników bójki już opuścił miejsce zdarzenia?",
+        "Czy bójka zakończyła się, czy uczestnicy nadal walczą?",
+        "Czy sytuacja jest nadal napięta, czy doszło do jakiejś deeskalacji?",
+        "Czy widać, że ktoś z uczestników walki jest poważnie ranny?",
+        "Czy bójka jeszcze trwa, czy widać oznaki zakończenia?",
+        "Czy rozróba, którą obserwujesz, wydaje się mieć charakter ulicznej awantury?",
+        "Czy w okolicy widać już interwencję służb porządkowych?",
+        "Czy w tej chwili ktoś z grupy ludzi nadal bije się?",
+        "Czy na miejscu zdarzenia znajdują się osoby, które próbują zakończyć bójkę?",
+        "Czy sytuacja jest już opanowana, czy wciąż dochodzi do walk?"
+      ]
+    },    
+    {
+      "tag": "Fight_still_happening",
+      "patterns": [
+        "Bójka wciąż trwa, nic się nie zmienia",
+        "Nieprzerwana walka trwa na placu, nie widać końca",
+        "Choć próbowano przerwać, bójka nie ustała",
+        "Ludzie nadal walczą, sytuacja nie została opanowana",
+        "Osoby wciąż biorą udział w intensywnej bójce",
+        "Zdarzenie jest wciąż aktywne, bójka trwa bez przerwy",
+        "Sytuacja nie uległa zmianie, bójka wciąż trwa",
+        "Mimo wszelkich prób zakończenia, bójka wciąż trwa",
+        "Bójka nie jest zakończona, ludzie wciąż się biją",
+        "Cała sytuacja wciąż jest napięta, bójka w pełni trwa",
+        "Nie ma końca tej bójce, trwa ona nieprzerwanie",
+        "Widać, że bójka się nie kończy, wciąż trwa w pełni",
+        "Osoby zaangażowane w bójkę nie chcą się uspokoić",
+        "Bójka nie ustaje, trwa to już jakiś czas",
+        "Ludzie są w pełni zaangażowani w bójkę, nie widać końca",
+        "Bójka nie ustaje, nikt nie przerywa walki",
+        "Na placu nadal trwa zamieszanie, nikt nie ustaje",
+        "Zauważam, że bójka wciąż trwa, nie widzę końca",
+        "Bójka trwa dalej, nie ma śladu po jej zakończeniu"
+      ],
+      "responses": [
+        "Czy ktoś został ranny?",
+        "Czy w wyniku bójki ktoś odniósł obrażenia?",
+        "Czy widzisz, żeby ktoś był ranny?",
+        "Czy są osoby, które wymagają pomocy medycznej?",
+        "Czy zauważyłeś kogoś, kto wygląda na rannego?",
+        "Czy ktokolwiek potrzebuje natychmiastowej pomocy?",
+        "Czy ktoś z uczestników bójki doznał poważnych obrażeń?",
+        "Czy są jakieś widoczne obrażenia u osób biorących udział w bójce?",
+        "Czy ktoś wymaga pomocy lekarskiej?",
+        "Czy sytuacja mogła spowodować obrażenia?"
+      ]
+    },
+    {
+      "tag": "Fight_finished",
+      "patterns": [
+        "Wszystko skończone, bójka przestała istnieć",
+        "Nie ma już walki, ludzie rozeszli się po bójce",
+        "Po zakończeniu bójki, wszyscy wrócili do normy",
+        "Wszystko się uspokoiło, bójka przestała być zagrożeniem",
+        "Bójka zakończona, żadnych dalszych konfrontacji",
+        "Walki ustały, nikt już nie uczestniczy w konflikcie",
+        "Już się uspokoili",
+        "Wszystko w porządku, sytuacja opanowana po bójce",
+        "Sytuacja zakończona, nie ma już żadnych problemów",
+        "Zdarzenie dobiegło końca, nikogo już nie ma w walce",
+        "Bójka zakończona, nikt nie walczy już na ulicy"
+      ],
+      "responses": [
+        "Bójka zakończona, już po wszystkim.",
+        "Sytuacja zakończona, już nie ma żadnych walk.",
+        "Wszystko opanowane, bójka już się skończyła.",
+        "Konflikt zakończony, sytuacja uspokojona.",
+        "Bójka przestała być zagrożeniem, wszystko zakończone.",
+        "Ludzie się uspokoili, bójka już nie trwa.",
+        "Nie ma już walk, sytuacja została zakończona.",
+        "Zdarzenie zakończone, wszystko w porządku.",
+        "Bójka dobiegła końca, wszyscy się rozeszli.",
+        "Sytuacja jest pod kontrolą, bójka zakończona."
+      ]
+    },
+    {
+      "tag": "fight_is_someone_hurt",
+      "patterns": [
+        "Jeden z uczestników jest poważnie ranny, trzeba go natychmiast przetransportować do szpitala.",
+        "Nie mogę dokładnie ocenić sytuacji, ale ktoś wygląda na rannego, może mieć złamaną nogę.",
+        "Jeden z mężczyzn z bójki jest nieprzytomny, jego stan jest krytyczny.",
+        "Nie wiem dokładnie, co się stało, ale widzę, że ktoś jest wstrząśnięty i nie może się ruszać.",
+        "Jest ktoś, kto stracił przytomność po ciosie w głowę, potrzebuje pilnej pomocy medycznej.",
+        "W jednym miejscu znajduje się osoba, która nie rusza nogą, to może być złamanie.",
+        "Jeden z uczestników doznał urazu nogi, wygląda na to, że nie może chodzić.",
+        "Jest osoba, która leży na ziemi, wygląda na to, że nie reaguje, potrzebna jest pomoc.",
+        "Widzę krew na ziemi, jeden z uczestników ma poważne obrażenia.",
+        "Wszyscy wyglądają na zdrowych, nie widzę nikogo, kto byłby ranny, ale jedna osoba ma siniaki.",
+        "Jeden z uczestników wygląda na posiniaczonego, ale to nie powinno stanowić zagrożenia.",
+        "Po tej bójce nikt nie odniósł poważnych obrażeń, ale są drobne rany.",
+        "Nikt nie wygląda na poważnie rannego, jednak są lekkie obrażenia, które mogą wymagać pomocy.",
+        "Nie zauważyłem poważnych obrażeń, ale jest jedna osoba, która ma siniaki.",
+        "Jeden z uczestników jest ranny, ale nie potrzebuje pilnej pomocy.",
+        "Po bójce nikt nie odniósł większych obrażeń, sytuacja została opanowana.",
+        "Nikt nie jest ranny, ale jedna osoba ma siniaka na nodze, może to być nic poważnego.",
+        "Nie ma widocznych ran, ale jedna osoba wygląda na trochę oszołomioną, może potrzebować pomocy.",
+        "Nikt z uczestników tej bójki nie doznał poważnych obrażeń, wszystko wygląda na opanowane.",
+        "Wszystko wygląda na spokojne, nikt nie jest ranny, ale jest jedno drobne skaleczenie.",
+        "Sytuacja została opanowana, nikt nie doznał poważnych obrażeń, ale jedna osoba ma zadrapanie."
+      ],
+      "responses": [
+        "Gdzie dokładnie miała miejsce bójka?",
+        "Czy wiesz, w jakiej okolicy to się wydarzyło?",
+        "Na jakiej ulicy doszło do tej sytuacji?",
+        "Gdzie dokładnie znajdują się uczestnicy?",
+        "Czy to w pobliżu jakiegoś sklepu lub restauracji?",
+        "W jakiej lokalizacji doszło do tej bójki?",
+        "Czy możesz podać adres tego miejsca?",
+        "Czy możesz powiedzieć, gdzie dokładnie to miało miejsce?",
+        "Czy potrafisz określić dokładną lokalizację zdarzenia?",
+        "Na jakiej ulicy dokładnie znajdują się te osoby?",
+        "Czy wiesz, gdzie dokładnie to miało miejsce?",
+        "Czy zdarzenie miało miejsce w centrum miasta?",
+        "Czy wiesz, w jakiej dzielnicy to miało miejsce?",
+        "Gdzie dokładnie rozgrywa się ta sytuacja?",
+        "Czy zdarzenie miało miejsce w pobliżu jakiegoś punktu orientacyjnego?",
+        "Czy jesteś w stanie określić miejsce, gdzie to się dzieje?",
+        "W jakiej okolicy doszło do tego incydentu?",
+        "Czy możesz wskazać dokładną lokalizację tego miejsca?",
+        "Gdzie dokładnie jest to miejsce?",
+        "Czy możesz podać nazwę ulicy lub obiektu, gdzie to się dzieje?"
+      ]
+    },            
+    {
+      "tag": "disturbing_peace_and_quiet",
+      "patterns": [
+        "Mimo późnych godzin, ktoś z sąsiadów postanowił włączyć muzykę na pełen regulator",
+        "Hałas zza ściany utrudnia zarówno odpoczynek, jak i zasypianie",
+        "U sąsiadów trwa impreza, która swoim głośnym charakterem zakłóca nocną ciszę",
+        "Nocny spokój jest zakłócany przez sąsiedzkie krzyki i odgłosy muzyki",
+        "Nie jestem w stanie zasnąć przez ciągłe przesuwanie mebli w nocy",
+        "Pomimo że jest bardzo późno, od sąsiadów dochodzą głośne rozmowy i śmiechy",
+        "Głośne dźwięki muzyki i zabawy dobiegają z mieszkania piętro wyżej",
+        "W środku nocy ktoś z sąsiadów organizuje głośną zabawę, co nie pozwala zasnąć",
+        "Hałasy z sąsiedztwa naruszają spokój w moim mieszkaniu",
+        "Nieustanne tupanie i stukanie przeszkadzają w zasypianiu każdej nocy",
+        "Z sąsiedztwa słychać głośne dźwięki, które utrzymują się przez całą noc",
+        "Ktoś z sąsiadów gra na gitarze elektrycznej w środku nocy, co jest uciążliwe",
+        "Trudno odpocząć, bo sąsiedzi po raz kolejny hałasują w godzinach nocnych",
+        "Przez hałas od sąsiadów nie jestem w stanie skupić się ani wypocząć",
+        "Głośna muzyka i śmiechy w środku nocy wybudzają mnie ze snu",
+        "Od sąsiadów dochodzi ciągły hałas w godzinach nocnych, mimo wcześniejszych skarg",
+        "Sąsiad po północy zaczął głośno śpiewać, co zakłóca spokój",
+        "Krzyki, które słychać zza ściany, nie pozwalają spać w nocy",
+        "Dźwięki przesuwanych mebli i elektronarzędzi dochodzą z mieszkania obok późno w nocy",
+        "Sąsiedzi wydają głośne dźwięki w nocy, co poważnie narusza mój komfort"
+      ],
+      "responses": [
+        "Opisz czym objawia się to zakłócanie ciszy nocnej",
+        "Jakie konkretne dźwięki są słyszalne?",
+        "Czy dźwięki pochodzą z jednego źródła czy kilku?",
+        "Czy hałas jest spowodowany przez ludzi czy może sprzęt?",
+        "Czy hałas jest na tyle głośny, że trudno zasnąć?",
+        "Jakie dźwięki słyszysz? Muzyka, krzyki, głośne rozmowy?"
+      ]
+    },    
+    {
+      "tag": "disturbing_peace_and_quiet_description",
+      "patterns": [
+        "Sąsiedzi na górze przez całą noc przesuwali meble, co zakłócało mój sen",
+        "Dobiega do mnie głośny śmiech oraz rozmowy z mieszkania sąsiadów, co jest uciążliwe",
+        "Grupa młodzieży bawiła się pod moim oknem, nie zwracając uwagi na późną porę",
+        "Z mieszkania obok dochodzą odgłosy głośnej muzyki i tańca, które nie pozwalają zasnąć",
+        "Na klatce schodowej w godzinach nocnych trwała głośna dyskusja sąsiadów",
+        "Sąsiedzi zorganizowali spotkanie towarzyskie, którego hałas przenosi się przez ściany",
+        "Zza ściany słyszę odgłosy głośnego oglądania telewizji, co mnie irytuje",
+        "Sąsiedzi pod moim mieszkaniem prowadzili rozmowy na balkonach do późnych godzin",
+        "Na zewnątrz trwała impreza z głośną muzyką, śpiewem i śmiechem uczestników",
+        "Nie mogłem/ałam odpocząć z powodu hałasu maszyn dobiegającego z podwórka obok"
+      ],
+      "responses": [
+        "Czy były próby zwrócenia uwagi osobom hałasującym?",
+        "Czy próbowałeś/p próbowałaś skontaktować się z osobami robiącymi hałas?",
+        "Czy zgłaszałeś/aś to zakłócanie ciszy nocnej do zarządcy budynku lub do administracji?",
+        "Czy hałas był zgłaszany do służb porządkowych?",
+        "Jakie były reakcje osób hałasujących na próby zwrócenia im uwagi?",
+        "Czy próbowałeś/p próbowałaś wcisnąć dzwonek do mieszkania, z którego dochodzi hałas?",
+        "Czy udało się znaleźć sposób na rozwiązanie problemu z hałasem, czy nadal występuje?",
+        "Jakie działania podjąłeś/podjęłaś w celu rozwiązania problemu z hałasem?"
+      ]
+    },    
+    {
+      "tag": "disturbing_peace_and_quiet_asking_to_stop",
+      "patterns": [
+        "Wielokrotnie próbowałam interweniować w sprawie hałasu, ale zarówno administracja, jak i sąsiedzi pozostali bierni",
+        "Zgłaszałem zakłócenie ciszy nocnej do administracji budynku, jednak nie podjęli żadnych działań",
+        "Rozmawiałam z sąsiadami, tłumacząc, że ich hałas zakłóca nie tylko mój sen, ale również codzienne funkcjonowanie",
+        "Skontaktowałem się z zarządcą budynku, podkreślając, że ciągłe zakłócenia spokoju uniemożliwiają mi odpoczynek",
+        "Napisałam oficjalną skargę do administracji, wskazując na powtarzające się przypadki hałasu w godzinach nocnych",
+        "Prosiłem sąsiadów o zmniejszenie natężenia dźwięku, tłumacząc, że wpływa to negatywnie na moje zdrowie",
+        "Zwróciłem uwagę na głośne zachowanie w budynku, ale moje prośby były konsekwentnie ignorowane",
+        "Zgłosiłem problem hałasu, ale zamiast poprawy sytuacji, hałas stał się jeszcze bardziej uciążliwy",
+        "Próbowałam załatwić sprawę polubownie, ale sąsiedzi zupełnie nie przejmują się problemem, który powodują",
+        "Napisałem pismo do zarządcy z prośbą o podjęcie zdecydowanych działań w sprawie uciążliwego hałasu",
+        "Pomimo wielu rozmów z osobami odpowiedzialnymi za hałas, problem pozostaje nierozwiązany",
+        "Zgłaszałem problem zakłócania spokoju zarówno osobiście, jak i mailowo, ale żadna interwencja nie przyniosła efektów",
+        "Podjąłem próbę negocjacji z sąsiadami, tłumacząc, że ich hałaśliwe zachowanie jest nie do zniesienia, ale nie zmienili swojego zachowania",
+        "Skontaktowałam się z administracją, wyraźnie wskazując, że hałas zakłóca życie całej społeczności budynku",
+        "Pomimo licznych zgłoszeń i rozmów z sąsiadami, hałas w budynku utrzymuje się na tym samym poziomie",
+        "Zgłosiłem sprawę do administracji, prosząc o mediację w sprawie zakłócania spokoju przez hałaśliwych sąsiadów"
+      ],
+      "responses": [
+        "Czy to pierwszy taki przypadek?"
+      ]
+    },    
+    {
+      "tag": "vandalism",
+      "patterns": [
+        "Byłam świadkiem, jak kilku młodych ludzi niszczyło ławkę w miejskim parku, kopiąc ją i rzucając o ziemię",
+        "Ktoś porysował karoserie zaparkowanych samochodów i pozostawił obraźliwe hasła na ich szybach",
+        "Na osiedlu ktoś przewrócił kilka koszy na śmieci, rozsypując ich zawartość po chodniku",
+        "Widziałam, jak wandale malowali wulgarne słowa na elewacji nowego budynku szkoły podstawowej",
+        "Grupa osób podpaliła plastikowy pojemnik na odpady przy skrzyżowaniu",
+        "Na placu zabaw zniszczono zjeżdżalnię i pozostawiono na niej ślady sprayu",
+        "Widziałem, jak ludzie łamali świeżo posadzone drzewa w miejskim parku",
+        "Na przystanku autobusowym wybito szyby i pomazano farbą rozkład jazdy",
+        "W parku miejskim wandale porozrzucali ławki i połamali ich drewniane elementy",
+        "Ktoś rozlał farbę na chodnik i pomalował mur, pozostawiając duże plamy",
+        "Widziałam, jak grupa osób kopała w kosze uliczne, powodując ich przewrócenie",
+        "Na ulicy wyrwano barierki ochronne i wrzucono je do rowu melioracyjnego",
+        "Widziałem młodzież, która malowała graffiti na nowo wyremontowanym budynku",
+        "Na boisku sportowym ktoś uszkodził ogrodzenie i rozrzucił sprzęt sportowy",
+        "Grupa ludzi połamała słupki na ścieżce rowerowej i wrzuciła je do rzeki",
+        "Widziałam, jak ktoś próbował wyrwać hydrant z chodnika, co spowodowało zalanie ulicy",
+        "W miejskim parku zdewastowano pomnik, malując na nim obraźliwe napisy sprayem",
+        "Na ścianach klatki schodowej pojawiły się świeże napisy wykonane farbą w sprayu",
+        "Ktoś podłożył ogień pod drewnianą altanę w parku, niszcząc jej konstrukcję"
+      ],
+      "responses": [
+        "Co dokładnie zostało zniszczone - opisz"
+      ]
+    },    
+    {
+      "tag": "vandalism_what_was_damaged",
+      "patterns": [
+        "Nieznani sprawcy pomalowali drzewo będące pomnikiem przyrody farbą olejną",
+        "Zdewastowano budynek, który wcześniej był wykorzystywany do celów mieszkalnych",
+        "Wandal wykonał graffiti na ścianie opuszczonego domu w centrum miasta",
+        "Na placu w parku ktoś uszkodził wszystkie ławki oraz małe kosze na śmieci",
+        "Zabytkowy kościół został zniszczony poprzez oblanie farbą frontowej elewacji",
+        "Ktoś zdewastował moją posesję, niszcząc drewniane ogrodzenie i kwietniki",
+        "Sąsiad odkrył, że drzewa na jego działce zostały celowo zniszczone przez nieznane osoby",
+        "Ogrodzenie wokół ogródka działkowego zostało przewrócone i pocięte",
+        "Na fasadzie budynku mieszkalnego pojawiły się głębokie rysy wykonane ostrym narzędziem",
+        "Nieznani sprawcy przewrócili znak drogowy na poboczu ulicy",
+        "Mural, który powstał w ramach lokalnej inicjatywy artystycznej, został pokryty sprayem",
+        "Ktoś rozbił zabawki na placu zabaw i uszkodził zjeżdżalnię",
+        "Okna w budynku szkoły podstawowej zostały wybite przez wandali",
+        "Lampy oświetlające chodnik w parku miejskim zostały powyrywane z ziemi",
+        "Wandal zniszczył drewniany mostek, który prowadził na wyspę w miejskim parku",
+        "Elementy zdobnicze w centrum miasta zostały połamane i rozrzucone na ulicy",
+        "Lakier na moim samochodzie został porysowany na całej długości karoserii",
+        "Siatka ogrodzeniowa wokół boiska do gry w piłkę nożną została pocięta i zniszczona",
+        "Korytarze w budynku szkoły średniej zostały zdewastowane graffiti i napisami",
+        "Dekoracyjne sztukaterie na starym budynku miejskim zostały połamane przez wandali",
+        "Tablica informacyjna w pobliżu ścieżki rowerowej została zniszczona i wyrwana z podłoża",
+        "W średniowiecznym murze obronnym wybito dziurę i naniesiono graffiti",
+        "Miejska fontanna została zalana farbą i mechanicznie uszkodzona",
+        "Na placu zabaw złamano drewniane elementy i wyrwano metalowe śruby",
+        "Latarnie miejskie przy głównym deptaku zostały oblane substancją żrącą i rozbite"
+      ],
+      "responses": [
+        "Czy uszkodzony obiekt jest czyjąś własnością?"
+      ]
+    },    
+    {
+      "tag": "vandalism_private_or_public_property",
+      "patterns": [
+        "Zastanawiam się, czy ten teren należy do jakiejś prywatnej osoby, czy może to przestrzeń ogólnodostępna?",
+        "Miejsce to, chociaż wygląda na publiczne, nie jestem pewien, kto jest właścicielem tej nieruchomości",
+        "Może to być fragment infrastruktury miejskiej, ale nie wiem, kto go zarządza",
+        "To jest teren, który mogłaby zarządzać lokalna władza, ale nie jestem pewien, czy jest to obiekt publiczny",
+        "Nie jestem pewien, czy ta strefa rekreacyjna należy do gminy czy może jest to część prywatnego obiektu",
+        "Chociaż jest to przestrzeń publiczna, nie jestem pewny, kto ją utrzymuje",
+        "To ogrodzenie znajduje się na terenie, który wygląda na prywatny, ale nie wiem, czy jest ogólnodostępny",
+        "To jest plac zabaw, który w teorii powinien być publiczny, ale nie wiem, kto odpowiada za jego utrzymanie",
+        "Mam wrażenie, że ten obiekt należy do wspólnoty mieszkaniowej, ale nie mam pewności",
+        "Wygląda na to, że ta infrastruktura jest częścią przestrzeni publicznej, ale może zarządzać nią prywatna firma",
+        "Ten parking wydaje się być ogólnodostępny, ale nie wiem, czy jest własnością miasta",
+        "To jest teren, który prawdopodobnie należy do lokalnego przedsiębiorcy, ale nie jestem tego pewien",
+        "Teren ten wygląda na obiekt użyteczności publicznej, jednak nie jestem pewny, kto jest jego właścicielem",
+        "To jest fragment ścieżki rowerowej w mieście, ale nie wiem, kto ją utrzymuje",
+        "Obiekt ten jest ogrodzony i wygląda na prywatny, ale nie jestem pewien, kto go zarządza",
+        "Jest to przestrzeń, która prawdopodobnie jest częścią osiedla, ale nie jestem pewien, czy jest dostępna publicznie",
+        "Wydaje mi się, że to miejsce należy do miasta, ale nie jestem tego całkowicie pewny",
+        "Z tego co widzę, jest to obiekt należący do firmy prywatnej, ale dostępny dla wszystkich",
+        "Zastanawiam się, czy ten fragment chodnika jest częścią miejskiej infrastruktury, czy należy do kogoś prywatnego",
+        "To miejsce może być przestrzenią publiczną, ale nie jestem pewien, kto je zarządza"
+      ],
+      "responses": [
+        "Na czym polega uszkodzenie tego obiektu?"
+      ]
+    },    
+    {
+      "tag": "vandalism_scale_of_damage",
+      "patterns": [
+        "Zniszczenie ogrodzenia wokół parku było wynikiem nieodpowiedzialnego zachowania grupy osób",
+        "W wyniku akcji wandali, wszystkie okna w budynku zostały wybite, a mury pokryte sprayem",
+        "Ławki w parku zostały całkowicie zniszczone, zdewastowane przez młodzież",
+        "Znalazłem rozbite szyby w samochodzie po tym, jak ktoś wybił je podczas nocy",
+        "Płot został usunięty przez nieznane osoby, po czym przewrócono go na ziemię",
+        "Ogrodzenie wokół placu zabaw zostało uszkodzone przez próbę przeskoczenia",
+        "Dach budynku jest uszkodzony, widać ślady po uderzeniu dużego przedmiotu",
+        "Nieznani sprawcy zniszczyli część instalacji elektrycznej w okolicy",
+        "W wyniku silnych zniszczeń, fontanna w parku przestała działać",
+        "Zniszczono fragmenty drogi, powodując powstanie głębokich dziur",
+        "Skrzynka na listy w budynku została rozerwana na kawałki",
+        "W ogrodzie pozostały tylko ruiny, a elementy małej architektury zostały usunięte",
+        "Na ścianach budynku pojawiły się trwałe plamy farby, a część okien została poważnie zniszczona",
+        "Zniszczono całą infrastrukturę na boisku sportowym, ławki zostały wywrócone",
+        "Samochód, który stał zaparkowany, ma głębokie rysy i wybite szyby po zniszczeniu przez wandali",
+        "Wszystkie krzesła w parku zostały połamały się, po czym ktoś je porzucił na ziemi",
+        "Zawartość śmietnika została wyrzucona na chodnik, a sama konstrukcja zniszczona",
+        "Nieznane osoby wyłamały drzwi do budynku, powodując uszkodzenia na całej powierzchni",
+        "Rynny w całej okolicy zostały zerwane, powodując dużą szkodę w systemie wodociągowym",
+        "Witryna sklepu została rozbita przez grupę nieznanych sprawców, którzy uciekli",
+        "Rzeźba w parku została zniszczona, a jej fragmenty rozsypane na chodniku"
+      ],
+      "responses": [
+        "Podaj mi adres tego zdarzenia."
+      ]
+    },    
+    {
+      "tag": "address",
+      "patterns": [
+        "Chciałbym podać adres przy ulicy Grodzkiej, tuż obok mostu na Wiśle",
+        "Przy ulicy Polnej, niedaleko wylotu na obwodnicę, doszło do zdarzenia",
+        "Jestem przy skrzyżowaniu Długiej i Pięciomorgowej, to tutaj miało miejsce zdarzenie",
+        "Zdarzenie miało miejsce tuż przy Kościele Mariackim, tuż za rogiem",
+        "Na rogu Królewskiej i Dietla, w pobliżu Parku Jordana, miało miejsce zdarzenie",
+        "W pobliżu Wawelu, na rogu ulicy Floriańskiej i Rynek Główny, wystąpiła nieoczekiwana sytuacja",
+        "Na ulicy Pięciomorgowej, blisko wylotu na obwodnicę, zdarzenie miało miejsce",
+        "Zdarzenie zdarzyło się tuż przy Placu Inwalidów, w pobliżu przystanku tramwajowego",
+        "W okolicy Al. Jerozolimskich, przy stacji metra, miało miejsce zdarzenie",
+        "Tuż przy dworcu głównym, na rogu ulicy Stradomskiej, było to wydarzenie"
+      ],
+      "responses": [
+        "Podaj datę tego zdarzenia.",
+        "Kiedy miało miejsce to zdarzenie?",
+        "Proszę podaj datę tego zdarzenia.",
+        "Jaki jest termin tego zdarzenia?"
+      ]
+    },    
+    {
+      "tag": "date",
+      "patterns": [
+        "Zdarzenie miało miejsce trzy dni temu, dokładnie o godzinie 14:30",
+        "W poprzednią sobotę o 18:00, jakie to miało konsekwencje?",
+        "Zdarzenie miało miejsce na początku tego tygodnia, dokładnie w poniedziałek rano",
+        "Wczoraj, dokładnie o godzinie 16:00, miał miejsce wypadek",
+        "Stało się to wczoraj wieczorem, około godziny 22:00",
+        "Czy mogę podać szczegóły o zdarzeniu sprzed dwóch dni, kiedy to się wydarzyło?",
+        "Co wydarzyło się w zeszłym tygodniu, dokładnie w czwartek o 10 rano?",
+        "W przyszły piątek, tuż przed zamknięciem sklepu, zdarzyło się coś niezwykłego",
+        "Dokładnie na początku sierpnia, około godziny 9:00, doszło do nieporozumienia",
+        "Pół godziny temu, podczas wieczornego spotkania, zdarzył się incydent",
+        "Stało się to kilka minut temu, zaraz po rozpoczęciu konferencji",
+        "W przyszły poniedziałek, tuż po południu, odbędzie się spotkanie",
+        "Zdarzenie miało miejsce dokładnie przed kilkoma dniami, kiedy to ktoś zaginął",
+        "Po weekendzie, w poniedziałek, ktoś złożył reklamację o 13:00",
+        "W poprzednią środę, po południu, miało miejsce spotkanie",
+        "Zdarzenie miało miejsce wczoraj po pracy, dokładnie o 18:30",
+        "W dniu 1 maja tego roku, około godziny 11:00, miało miejsce spotkanie"
+      ],
+      "responses": [
+        "Podaj liczbę sprawców.",
+        "Ilu było sprawców?",
+        "Ile osób brało w tym udział?",
+        "Proszę podaj liczbę uczestników tego zdarzenia"
+      ]
+    },    
+    {
+      "tag": "number_of_perpetrators",
+      "patterns": [
+        "W grupie było pięciu ludzi, z czego dwóch miało długie włosy",
+        "Mężczyzna i kobieta razem z psem, w sumie cztery osoby",
+        "Było czterech mężczyzn, którzy wyglądali na robotników",
+        "Sześciu młodszych mężczyzn, w tym jeden z dużą torbą",
+        "Pięć osób w grupie, z czego cztery miały na sobie ciemne ubrania",
+        "Około siedmiu ludzi, w tym dwie młode dziewczyny",
+        "Trójka dorosłych mężczyzn i dwójka dzieci w wieku około 12 lat",
+        "Zespół składał się z 10 osób, w tym pięciu mężczyzn",
+        "Pięciu mężczyzn i dwie kobiety, w sumie siedem osób",
+        "Czwórka młodych ludzi, wszyscy w stylu casualowym",
+        "Trzy osoby, dwie z nich miały czarne ubrania",
+        "Osiem osób, z czego połowa to kobiety w średnim wieku",
+        "Pięciu młodych mężczyzn, wszyscy byli ubrani w podobny sposób",
+        "Cztery osoby, w tym jeden miał duży zegarek na ręce",
+        "Było chyba dwój sprawców",
+        "Nie mam pojęcia ilu było sprawców",
+        "Siedmiu mężczyzn w grupie, w tym jeden bardzo wysoki",
+        "W grupie siedmiu osób, cztery osoby miały na sobie ciemne kurtki",
+        "Trzy osoby, w tym dwójka miała tatuaże",
+        "Pięciu mężczyzn, w tym jeden wyglądał na obcokrajowca",
+        "Około dziesięciu mężczyzn, w tym jeden z siwymi włosami",
+        "W grupie były cztery osoby, dwie kobiety i dwóch mężczyzn w średnim wieku"
+      ],
+      "responses": [
+        "Podaj opis jak największej ilości widzianych sprawców.",
+        "Jak wyglądali sprawcy?",
+        "Proszę podaj jak najwięcej szczegółów dotyczących sprawców",
+        "Jakie były cechy charakterystyczne sprawców?"
+      ]
+    },    
+    {
+      "tag": "perpetrators_apperance",
+      "patterns": [
+        "Widziałem grupę osób w średnim wieku, w tym mężczyznę z okularami i kobietę w czerwonym płaszczu",
+        "W tłumie znajdowała się młoda para, oboje mieli na sobie sportowe ubrania, z plecakami",
+        "Widziałem trójkę ludzi: jeden miał długie włosy, drugi krótki zarost, a trzecia osoba była w eleganckiej sukience",
+        "Była tam grupa pięciu mężczyzn, z których jeden miał na sobie koszulkę z logo drużyny piłkarskiej, a reszta ubrania robocze",
+        "Dwoje dzieci w wieku około 10 lat szło z plecakami, obok nich była para starszych ludzi w ubraniach codziennych",
+        "Grupa sześciu młodszych osób, wszyscy mieli na sobie dżinsy, dwójka miała ciemne okulary, a jedna osoba miała na sobie kurtkę puchową",
+        "Zauważyłem parę, mężczyzna miał na sobie marynarkę, a kobieta sukienkę w kwiatki, wyglądali na turystów",
+        "Młoda kobieta i mężczyzna, oboje ubrani w dżinsy i koszulki, trzymali się za ręce",
+        "Pięciu młodszych mężczyzn, w tym dwóch miało plecaki i koszulki z logo znanej marki",
+        "Czwórka osób, dwóch mężczyzn w garniturach, kobieta w eleganckiej sukience i młodsza kobieta w kurtce zimowej",
+        "Starszy mężczyzna z laską, towarzyszyła mu młodsza kobieta w tatuażach, szli wolno razem",
+        "W grupie widziałem dwoje dzieci, oboje w sportowych ubraniach, obok nich dwoje dorosłych, którzy wyglądali na turystów",
+        "Jeden z mężczyzn miał na sobie czarny garnitur, a jego towarzyszka była ubrana w jaskrawą sukienkę",
+        "W grupie było pięciu młodszych mężczyzn, jeden z nich miał tatuaże, reszta ubrana była w sportowe ciuchy",
+        "Zauważyłem grupę ludzi w różnym wieku, każdy z nich miał na sobie jasne ubrania",
+        "Trzy kobiety w średnim wieku, wszystkie miały krótkie włosy, wyglądały na nauczycielki, a obok nich dwóch mężczyzn w dżinsach",
+        "Mężczyzna z siwymi włosami i kobieta z długimi włosami, szli razem, oboje byli ubrani w odzież codzienną",
+        "Zauważyłem młodą parę, oboje mieli na sobie eleganckie ubrania, wyglądali na nowożeńców, trzymali się za ręce",
+        "Byli tam mężczyźni w średnim wieku, którzy ubrani byli w garnitury, a kobieta w eleganckiej sukience wyglądała na ich towarzyszkę",
+        "W grupie było czterech mężczyzn, w tym dwóch w czarnych kurtkach, wszyscy wyglądali na młodszych, byli ubrani na sportowo"
+      ],
+      "responses": [
+        "Czy byli jacyś świadkowie? Jeśli tak to podaj do nich kontakty. Podaj również swoje dane kontaktowe.",
+        "Czy są jakieś osoby, które widziały zdarzenie? Podaj również swoje dane kontaktowe.",
+        "Czy byli świadkowie tego zdarzenia? Podaj również swoje dane kontaktowe.",
+        "Proszę podaj kontakty do świadków jeśli tacy byli. Podaj również swoje dane kontaktowe."
+      ]
+    },    
+    {
+      "tag": "witnesses",
+      "patterns": [
+        "Czy ktoś mógłby potwierdzić, co dokładnie miało miejsce? Niestety nie znam żadnych świadków",
+        "Tak, były osoby, które widziały, ale nie potrafię ich zidentyfikować. Możliwe, że byli to przechodnie",
+        "Jestem pewny, że w okolicy znajdowały się osoby, które mogły zobaczyć to zdarzenie, ale nie wiem, jak się z nimi skontaktować",
+        "Nie potrafię określić, kto dokładnie był świadkiem, ale widziałem kilku ludzi, którzy szli obok",
+        "Z tego, co wiem, to osoba w zielonej kurtce mogła być świadkiem, ale nie znam jej imienia ani numeru",
+        "Na pewno ktoś widział, co się stało, ale nie wiem, kto to był. Może ktoś z okolicznego biura coś wie",
+        "Zanim przyjechali policjanci, była tam kobieta, która mogła coś widzieć, ale szybko zniknęła",
+        "Widziałem kilku mężczyzn, ale nie wiem, czy byli świadkami, wyglądali na turystów, nie rozmawiali ze mną",
+        "Świadkiem zdarzenia mogła być para, która stała w pobliżu, ale nie jestem pewny, czy oni to widzieli",
+        "Sądzę, że ktoś w okolicy musiał to widzieć, ale nie wiem, kto to był, bo szybko się oddalili",
+        "Było kilku świadków, ale nikt nie chciał się zgłosić ani pomóc, niestety ich nie poznałem",
+        "Pamiętam, że widziałem kilku ludzi w pobliżu, ale nie znam ich nazwisk ani kontaktów",
+        "Nie wiem, kto widział zdarzenie, ale możliwe, że osoba stojąca przy sklepie mogła coś zauważyć",
+        "Było kilku świadków, ale ich identyfikacja jest trudna, ponieważ szybko odeszli, nie rozmawiałem z nimi",
+        "Były tam osoby, które na pewno coś widziały, ale niestety ich nie znałem i nie mam ich danych kontaktowych",
+        "Jestem pewny, że byli świadkowie, ale nie znam ich imion, bo nikt się nie zgłosił",
+        "Widzę, że było kilka osób w pobliżu, ale nie mam pewności, kto dokładnie był świadkiem tego zdarzenia",
+        "W pobliżu były osoby, ale nie wiem, czy coś widziały, nikt nie wydawał się tym zainteresowany",
+        "Niestety nie udało mi się zdobyć żadnych danych kontaktowych od świadków, ale było ich kilku",
+        "Z tego, co widziałem, na pewno była tam grupa ludzi, ale nie rozmawiałem z nimi, nie wiem, czy coś widzieli",
+        "Chociaż były osoby, które mogły widzieć to wydarzenie, żadne z nich nie podeszło do mnie, by pomóc",
+        "Nie potrafię powiedzieć, kto był świadkiem tego zdarzenia, ale wydaje mi się, że ktoś z pobliskiego biura mógł to widzieć"
+      ],
+      "responses": [
+        "Dziękuję za udzielone odpowiedzi",
+        "Dziękuję za informacje",
+        "Twoje zgłoszenie zostało przyjęte",
+        "Dzięki za podanie szczegółów",
+        "Dziękujemy za pomoc, będziemy dalej działać",
+        "Dziękujemy za udzielenie szczegółów, to pomoże w dalszym ściganiu sprawcy",
+        "Zgłoszenie zostało zapisane, prosimy o cierpliwość",
+        "Dziękujemy za podanie informacji, skontaktujemy się z Tobą, jeśli będziemy potrzebować więcej danych",
+        "Dziękuję za pomoc w wyjaśnieniu sytuacji",
+        "Będziemy potrzebować więcej szczegółów, ale dziękujemy za to, co już podałeś"
+      ]
+    }    
+  ]
+}
