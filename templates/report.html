@@ -72,12 +72,39 @@
                         <td>{{ report_data[2] }}</td>
                     </tr>
                     <tr>
+                        <th>Świadkowie</th>
+                        <td>
+                            {% for event_feature in event_features %}
+                                {% if event_feature.witnesses %}
+                                        {% for witness in event_feature.witnesses %}
+                                            {{ witness.info_contact }}
+                                        {% endfor %}
+                                {% else %}
+                                    <p>Brak świadków dla tego zdarzenia.</p>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Sprawcy</th>
+                        <td>
+                            {% for event_feature in event_features %}
+                                {% if event_feature.perpetrators %}
+                                        {% for perpetrator in event_feature.perpetrators %}
+                                            {{ perpetrator.appearance }}
+                                        {% endfor %}
+                                {% else %}
+                                    <p>Brak sprawców dla tego zdarzenia.</p>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
                         {% if session.get('role') == 'funkcjonariusz' %}
                         <th>Podejrzani</th>
                         <td id="no-hover-td">
                             {% for event_feature in event_features %}
                                 {% if event_feature.suspects %}
-                                    <h3>Szczegóły podejrzanych dla zdarzenia: {{ event_feature.event_description }}</h3>
                                     <table class="suspects-table" id="suspect-id">
                                         <tr>
                                             <th>Imię</th>

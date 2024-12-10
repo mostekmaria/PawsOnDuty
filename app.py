@@ -164,6 +164,7 @@ def send_confirmation():
     # Jeśli email jest pusty, pomiń wysyłanie wiadomości i zakończ funkcję
     if not email:
         logger.info("Adres e-mail nie podany. Zgłoszenie zapisane bez wysyłania potwierdzenia.")
+        flash("Zgłoszenie zostało dodane")
         return
     
     # Tworzymy wiadomość e-mail
@@ -270,6 +271,17 @@ def submit_form():
     # Tworzenie opisu sprawców
     appearance = f"{len(sprawcy_opisy)} - {', '.join(sprawcy_opisy)}"
 
+        # Pobieranie liczby świadków
+    liczba_swiadkow = int(request.form.get('liczba-swiadkow', '0'))
+    logger.debug(f"Liczba świadków: {liczba_swiadkow}")
+    # Pobieranie danych kontaktowych świadków
+    swiadkowie_info = [request.form.get(f'świadek{i}', '') for i in range(1, liczba_swiadkow + 1)]
+    swiadkowie_info = [info for info in swiadkowie_info if info]  # Filtrujemy puste dane
+    # Sprawdzamy, czy dane świadków zostały poprawnie pobrane
+    logger.debug(f"Dane świadków: {swiadkowie_info}")
+    # Przekonwertowanie listy świadków na jeden ciąg tekstowy
+    info_contact = ', '.join(swiadkowie_info) if swiadkowie_info else "Brak danych kontaktowych"
+
     # Tworzenie obiektu JSON
     report_data = {
         "title": title,
@@ -277,6 +289,7 @@ def submit_form():
         "address": address.strip(),
         "event_time": event_time.strip(),
         "appearance": appearance,
+        "info_contact": info_contact,  # Zmieniamy listę na string
         "info_contact": "anonimowy",
         "status": "Zgłoszono"
     }
@@ -306,7 +319,7 @@ def przegladanie():
 def register():
     if request.method == 'POST':
         # Pobranie danych z formularza
-        name = request.form['name']
+        name = request.form['suspect_name']
         surname = request.form['surname']
         email = request.form['email']
         login = request.form['login']
@@ -442,7 +455,9 @@ def moje_zgloszenia():
 
     cnx = mysql.connector.connect(**db_config)
     cursor = cnx.cursor()
-    query = "SELECT r.report_id, r.title, ef.event_description, ef.address, ef.event_time, p.appearance, w.info_contact, r.status FROM reports r JOIN event_features ef ON r.report_id = ef.report_id JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id JOIN witnesses w ON ef.event_feature_id = w.event_feature_id " \
+    query = "SELECT r.report_id, r.title, ef.event_description, ef.address, ef.event_time, p.appearance,\
+        w.info_contact,r.status FROM reports r JOIN event_features ef ON r.report_id = ef.report_id JOIN\
+        perpetrators p ON ef.event_feature_id = p.event_feature_id JOIN witnesses w ON ef.event_feature_id = w.event_feature_id " \
         "WHERE r.user_id = %s " \
         "ORDER BY ef.event_time DESC"
     cursor.execute(query, (user_id,))
@@ -459,15 +474,7 @@ def zgloszenia():
 
         if selected_date:
             query = """
-                SELECT 
-                    r.report_id, 
-                    r.title, 
-                    ef.event_description, 
-                    ef.address, 
-                    ef.event_time, 
-                    p.appearance, 
-                    w.info_contact, 
-                    r.status 
+                SELECT r.report_id, r.title, ef.event_description, ef.address, ef.event_time, p.appearance, w.info_contact, r.status 
                 FROM reports r 
                 JOIN event_features ef ON r.report_id = ef.report_id 
                 JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id 
@@ -519,7 +526,7 @@ def handle_suspects():
     report_id = request.args.get('report_id')  # Ustawienie report_id z zapytania GET
     if request.method == 'POST':
         # Pobieranie danych z formularza
-        name = request.form.get('name')
+        name = request.form.get('suspect_name')
         surname = request.form.get('surname')
         address = request.form.get('address')
         birthdate = request.form.get('birthdate')
@@ -692,13 +699,40 @@ def report(report_id):
                     "photo": photo_base64_sus
                 })
 
+
+                        # Pobranie świadków
+            query_witnesses = """
+                SELECT witness_id, info_contact
+                FROM witnesses
+                WHERE event_feature_id = %s
+            """
+            cursor.execute(query_witnesses, (event_feature_id,))
+            witnesses = cursor.fetchall()
+            witness_list = [
+                {"witness_id": witness_id, "info_contact": info_contact}
+                for witness_id, info_contact in witnesses
+            ]
+            # Pobranie sprawców
+            query_perpetrators = """
+                SELECT perpetrator_id, appearance
+                FROM perpetrators
+                WHERE event_feature_id = %s
+            """
+            cursor.execute(query_perpetrators, (event_feature_id,))
+            perpetrators = cursor.fetchall()
+            perpetrator_list = [
+                {"perpetrator_id": perpetrator_id, "appearance": appearance}
+                for perpetrator_id, appearance in perpetrators
+            ]
             event_feature_list.append({
                 "event_feature_id": event_feature_id,
                 "event_description": event_description,
                 "address": address,
                 "event_time": event_time,
                 "photos": photo_base64,
-                "suspects": suspect_list
+                "suspects": suspect_list,
+                "witnesses": witness_list,
+                "perpetrators": perpetrator_list
             })
 
         return render_template(

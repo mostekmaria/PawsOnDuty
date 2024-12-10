@@ -775,7 +775,6 @@ strong {
   border-radius: 4px; /* Zaokrąglone rogi pola */
   font-size: 20px; /* Rozmiar czcionki pola */
   border-color: #ffffff;
-  color: #768cd194;
   width: 98%;
   height: auto;
   box-sizing: border-box;
@@ -796,13 +795,20 @@ strong {
 }
 
 .half-input {
-  flex: 2; /* Każde pole zajmuje równą część dostępnej przestrzeni */
   margin-bottom: 15px; /* Odstęp poniżej pół */
   border-radius: 4px; /* Zaokrąglone rogi pól */
   font-size: 20px; /* Rozmiar czcionki pół */
   border-color: #ffffff;
-  color: #768cd194;
   box-sizing: border-box;
+}
+
+.half-input-code {
+  margin-bottom: 15px; /* Odstęp poniżej pół */
+  border-radius: 4px; /* Zaokrąglone rogi pól */
+  font-size: 20px; /* Rozmiar czcionki pół */
+  border-color: #ffffff;
+  box-sizing: border-box;
+  width: 30%;
 }
 
 .full-input:focus, .half-input:focus, #data:focus, #godzina:focus, #liczba:focus, #opis:focus, .sprawca:focus, .witness:focus, #liczba-swiadkow:focus {

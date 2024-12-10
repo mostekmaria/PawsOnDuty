@@ -99,7 +99,7 @@
                     <input type="text" class="full-input" placeholder="Miasto" id="locality-input" name = "locality-input"/>
                     <div class="half-input-container">
                         <input type="text" class="half-input" placeholder="Województwo" id="administrative_area_level_1-input" name="administrative_area_level_1-input"/>
-                        <input type="text" class="half-input" placeholder="Kod pocztowy" id="postal_code-input" name="postal_code-input" pattern="[0-9]{2}-[0-9]{3}"/>
+                        <input type="text" class="half-input-code" placeholder="Kod pocztowy" id="postal_code-input" name="postal_code-input" pattern="[0-9]{2}-[0-9]{3}"/>
                     </div>
                     </div>
                 </div>
@@ -174,8 +174,8 @@
                             <img class="sb-title-icon" src="{{ url_for('static', filename='user.png') }}" alt="">
                             <span class="sb-title">Dane kontaktowe do świadka</span>
                         </div>
-                        <input placeholder="Liczba świadków" type="number" id="liczba-swiadkow" name="liczba" min="0" max="10" oninput="this.value = Math.round(this.value);" required>
-                        <div id="divek-witnesses"></div>
+                        <input placeholder="Liczba świadków" type="number" id="liczba-swiadkow" name="liczba-swiadkow" min="0" max="10" oninput="this.value = Math.round(this.value);" required>
+                        <div id="divek-witnesses"></div>   
                 <!-- OBSŁUGA DODAWANIA SPRAWCÓW -->
                 <script src="{{ url_for('static', filename='js/witnesses.js') }}"></script>
                     </div>

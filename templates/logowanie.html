@@ -45,8 +45,8 @@
     </div>
     <nav class="navbar navbar-dark bg-primary">
         {% if not zalogowany %}
-        <a id="link1" class="has-tooltip" data-tooltip="Zarejestruj się" href=rejestracja.html>Zarejestruj się</a>
-        <a id="link2" class="has-tooltip" data-tooltip="Zaloguj się" href=logowanie.html>Zaloguj się</a>
+        <a id="baroption" href="{{ url_for('register') }}">Zarejestruj się</a>
+        <a id="baroption" href="{{ url_for('logowanie') }}">Zaloguj się</a>
         {% else %}
         <span id="name">{{ name }}</span>
         <a id="link2" class="has-tooltip" data-tooltip="Moje zgłoszenia" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>   
@@ -58,9 +58,8 @@
 </header>  
 
 <main id="mainlog">
-    <br><br><br><br>
+    <br><br><br>
     <h1>Zaloguj się</h1>
-    <br>
     {% if komunikat %}
     <p class="komunikat" style="color: red;">{{ komunikat }}</p>
     {% endif %}
