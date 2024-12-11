@@ -1,0 +1,5 @@
+Flask==2.3.3
+mysql-connector-python==9.1.0
+sendgrid==6.11.0
+torch==2.3.1
+transformers==4.42.4

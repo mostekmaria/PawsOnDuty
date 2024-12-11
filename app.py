@@ -13,12 +13,11 @@ import base64
 
 
 # Konfiguracja połączenia z bazą danych
-
 db_config = {
     'user': 'administrator',
     'password': os.environ.get('DB_PASS'),
     'host': '127.0.0.1',
-    'database': 'crimedb',
+    'database': 'crimedb', #tu sobie ja musze zmieniać na 2
     'raise_on_warnings': True
 }
 
@@ -165,7 +164,7 @@ def send_confirmation():
     # Jeśli email jest pusty, pomiń wysyłanie wiadomości i zakończ funkcję
     if not email:
         logger.info("Adres e-mail nie podany. Zgłoszenie zapisane bez wysyłania potwierdzenia.")
-        flash("Zgłoszenie zostało wysłane")
+        flash("Zgłoszenie zostało dodane")
         return
     
     # Tworzymy wiadomość e-mail
@@ -272,17 +271,14 @@ def submit_form():
     # Tworzenie opisu sprawców
     appearance = f"{len(sprawcy_opisy)} - {', '.join(sprawcy_opisy)}"
 
-    # Pobieranie liczby świadków
+        # Pobieranie liczby świadków
     liczba_swiadkow = int(request.form.get('liczba-swiadkow', '0'))
     logger.debug(f"Liczba świadków: {liczba_swiadkow}")
-
     # Pobieranie danych kontaktowych świadków
     swiadkowie_info = [request.form.get(f'świadek{i}', '') for i in range(1, liczba_swiadkow + 1)]
     swiadkowie_info = [info for info in swiadkowie_info if info]  # Filtrujemy puste dane
-
     # Sprawdzamy, czy dane świadków zostały poprawnie pobrane
     logger.debug(f"Dane świadków: {swiadkowie_info}")
-
     # Przekonwertowanie listy świadków na jeden ciąg tekstowy
     info_contact = ', '.join(swiadkowie_info) if swiadkowie_info else "Brak danych kontaktowych"
 
@@ -294,6 +290,7 @@ def submit_form():
         "event_time": event_time.strip(),
         "appearance": appearance,
         "info_contact": info_contact,  # Zmieniamy listę na string
+        "info_contact": "anonimowy",
         "status": "Zgłoszono"
     }
 
@@ -477,8 +474,7 @@ def zgloszenia():
 
         if selected_date:
             query = """
-                SELECT 
-                    r.report_id, r.title, ef.event_description, ef.address, ef.event_time, p.appearance, w.info_contact, r.status 
+                SELECT r.report_id, r.title, ef.event_description, ef.address, ef.event_time, p.appearance, w.info_contact, r.status 
                 FROM reports r 
                 JOIN event_features ef ON r.report_id = ef.report_id 
                 JOIN perpetrators p ON ef.event_feature_id = p.event_feature_id 
@@ -658,6 +654,9 @@ def report(report_id):
                 role=session.get('role')
             )
 
+        # Zmienna report_id, która będzie używana w późniejszych zapytaniach
+        report_id = report_data[0]
+
         # Pobranie event_feature_id dla danego report_id
         query_event_features = """
             SELECT 
@@ -672,13 +671,13 @@ def report(report_id):
         cursor.execute(query_event_features, (report_id,))
         event_features = cursor.fetchall()
 
+        # Przygotowanie listy na dane event_features
         event_feature_list = []
 
         for event_feature in event_features:
             event_feature_id, event_description, address, event_time, photos = event_feature
             photo_base64 = base64.b64encode(photos).decode('utf-8') if photos else None
 
-            # Pobranie podejrzanych
             query_suspects = """
                 SELECT suspect_id, name, surname, address, birthdate, photo
                 FROM suspects
@@ -700,7 +699,8 @@ def report(report_id):
                     "photo": photo_base64_sus
                 })
 
-            # Pobranie świadków
+
+                        # Pobranie świadków
             query_witnesses = """
                 SELECT witness_id, info_contact
                 FROM witnesses
@@ -708,12 +708,10 @@ def report(report_id):
             """
             cursor.execute(query_witnesses, (event_feature_id,))
             witnesses = cursor.fetchall()
-
             witness_list = [
                 {"witness_id": witness_id, "info_contact": info_contact}
                 for witness_id, info_contact in witnesses
             ]
-
             # Pobranie sprawców
             query_perpetrators = """
                 SELECT perpetrator_id, appearance
@@ -722,12 +720,10 @@ def report(report_id):
             """
             cursor.execute(query_perpetrators, (event_feature_id,))
             perpetrators = cursor.fetchall()
-
             perpetrator_list = [
                 {"perpetrator_id": perpetrator_id, "appearance": appearance}
                 for perpetrator_id, appearance in perpetrators
             ]
-
             event_feature_list.append({
                 "event_feature_id": event_feature_id,
                 "event_description": event_description,
@@ -759,6 +755,7 @@ def report(report_id):
     finally:
         cursor.close()
         cnx.close()
+
 
 
 @app.route('/chatbot', methods=['GET', 'POST'])

@@ -196,7 +196,6 @@ justify-content: center;
   justify-content: right;
 }
 
-
 #div {
   display: flex;
   flex-grow: 1;
@@ -284,7 +283,7 @@ input {
     height: auto;
   }
 
-  #report-come-back-button {
+  #report-come-back-button { 
     width: 100px;
     height: auto;
     font-size: 25px;
@@ -445,6 +444,7 @@ input {
   flex-direction:row;
   gap: 20px;
   padding-top: 20px;
+  width: 100%;
 }
 
 #photo-chatbot {
@@ -541,6 +541,19 @@ strong {
   footer {
     height: 50px !important;
   }
+
+  #user-email {
+    width: 50%;
+  }
+  
+  #photoForm {
+    width: 100%;
+  }
+  
+}
+
+#user-email {
+  width: 100%;
 }
 
 .table-border {
@@ -787,7 +800,6 @@ strong {
   font-size: 20px; /* Rozmiar czcionki pół */
   border-color: #ffffff;
   box-sizing: border-box;
-  width: 65%;
 }
 
 .half-input-code {
@@ -798,7 +810,6 @@ strong {
   box-sizing: border-box;
   width: 30%;
 }
-
 
 .full-input:focus, .half-input:focus, #data:focus, #godzina:focus, #liczba:focus, #opis:focus, .sprawca:focus, .witness:focus, #liczba-swiadkow:focus {
   outline: none; /* Usunięcie domyślnego podświetlenia przeglądarki */
@@ -1186,6 +1197,15 @@ nav, h5, #header, .title { display: none; }
 .sidebar {
   padding-top: 15px;
 }
+
+#user-email {
+  width: 100%;
+}
+
+.photoForm {
+  width: 100%;
+}
+
 }
 
 @media all and (min-width: 1100px) {

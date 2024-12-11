@@ -12,6 +12,7 @@ function areas() {
         divek.appendChild(textarea);
         divek.appendChild(br);
     }
+
 }
 
 // Wywołanie funkcji areas() przy zmianie wartości pola liczba

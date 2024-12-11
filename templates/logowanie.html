@@ -19,15 +19,15 @@
         <a href = ><img id="title-PawsOnDuty" data-tooltip="Przejdź do strony głównej" src="static/logo-napis.png" width="auto" height="80"></a>
         <br><br>
         {% if not zalogowany %}
-        <a id="baroption" href="{{ url_for('register') }}">Zarejestruj się</a>
-        <a id="baroption" href="{{ url_for('logowanie') }}">Zaloguj się</a>
-        <a id="baroption" href="{{ url_for('chatbot_clear') }}">Chatbot</a>
+        <a id="baroption" href="rejestracja.html">Zarejestruj się</a>
+        <a id="baroption" href="logowanie.html">Zaloguj się</a>
+        <a id="baroption" href="chatbot.html">Chatbot</a>
         {% else %}
         <a class ="bar" id="barname">{{ name }}</span>
         <br><br>
         <a id="baroption" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>
         <a id="baroption" href="{{ url_for('wyloguj') }}">Wyloguj się</a>
-        <a id="baroption" href="{{ url_for('chatbot') }}">Chatbot</a>
+        <a id="baroption" href="chatbot.html">Chatbot</a>
         {% endif %}
       </div>
     {% if komunikat %}
@@ -45,8 +45,8 @@
     </div>
     <nav class="navbar navbar-dark bg-primary">
         {% if not zalogowany %}
-        <a id="link1" class="has-tooltip" data-tooltip="Zarejestruj się" href=rejestracja.html>Zarejestruj się</a>
-        <a id="link2" class="has-tooltip" data-tooltip="Zaloguj się" href=logowanie.html>Zaloguj się</a>
+        <a id="baroption" href="{{ url_for('register') }}">Zarejestruj się</a>
+        <a id="baroption" href="{{ url_for('logowanie') }}">Zaloguj się</a>
         {% else %}
         <span id="name">{{ name }}</span>
         <a id="link2" class="has-tooltip" data-tooltip="Moje zgłoszenia" href="{{ url_for('moje_zgloszenia') }}">Moje zgłoszenia</a>   
