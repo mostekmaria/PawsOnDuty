@@ -791,7 +791,6 @@ strong {
   flex-direction: row; /* Zmieniamy układ na kolumnowy */
   gap: 0px;
   padding: 5px;
-  width: 100%;
 }
 
 .half-input {
@@ -808,7 +807,11 @@ strong {
   font-size: 20px; /* Rozmiar czcionki pół */
   border-color: #ffffff;
   box-sizing: border-box;
-  width: 30%;
+  width: 25%;
+}
+
+#administrative_area_level_1-input {
+  width:70%;
 }
 
 .full-input:focus, .half-input:focus, #data:focus, #godzina:focus, #liczba:focus, #opis:focus, .sprawca:focus, .witness:focus, #liczba-swiadkow:focus {
